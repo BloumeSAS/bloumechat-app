@@ -56,6 +56,9 @@ let tray: Tray | null = null;
 let mainWindow: BrowserWindow | null = null;
 let server: http.Server | null = null;
 let prodPort: number = 0;
+let voiceBadgeInterval: NodeJS.Timeout | null = null
+let isVoiceBadgeOn = false
+let currentBadgeCount = 0
 let isAppQuitting = false;
 
 // --- Port Detection for Development ---
@@ -525,17 +528,53 @@ function buildTrayMenu() {
 
   // --- Unread badge count from iframe ---
   ipcMain.on('set-badge-count', (_event, count: number) => {
+    currentBadgeCount = count
     if (process.platform === 'win32' && mainWindow) {
       if (count > 0) {
         const badgeIcon = createBadgeIcon(count)
         if (badgeIcon) {
           mainWindow.setOverlayIcon(badgeIcon, `${count} message(s) non lu(s)`)
         }
-      } else {
+      } else if (!voiceBadgeInterval) {
         mainWindow.setOverlayIcon(null, '')
       }
     }
     app.setBadgeCount(count)
+  })
+
+  ipcMain.on('set-voice-active', (_event, active: boolean) => {
+    if (process.platform !== 'win32' || !mainWindow) return
+
+    if (active) {
+      if (voiceBadgeInterval) return // Already running
+
+      voiceBadgeInterval = setInterval(() => {
+        isVoiceBadgeOn = !isVoiceBadgeOn
+        if (isVoiceBadgeOn) {
+          const voiceIcon = createVoiceBadgeIcon()
+          mainWindow?.setOverlayIcon(voiceIcon, 'Vocal actif')
+        } else {
+          // Fallback to message badge or null
+          if (currentBadgeCount > 0) {
+            mainWindow?.setOverlayIcon(createBadgeIcon(currentBadgeCount), `${currentBadgeCount} message(s) non lu(s)`)
+          } else {
+            mainWindow?.setOverlayIcon(null, '')
+          }
+        }
+      }, 800)
+    } else {
+      if (voiceBadgeInterval) {
+        clearInterval(voiceBadgeInterval)
+        voiceBadgeInterval = null
+      }
+      isVoiceBadgeOn = false
+      // Restore message badge or null
+      if (currentBadgeCount > 0) {
+        mainWindow.setOverlayIcon(createBadgeIcon(currentBadgeCount), `${currentBadgeCount} message(s) non lu(s)`)
+      } else {
+        mainWindow.setOverlayIcon(null, '')
+      }
+    }
   })
 
   // Stop flashing when window is focused
@@ -796,10 +835,20 @@ function createBadgeIcon(count: number): Electron.NativeImage | null {
       </svg>
     `.trim()
 
-    const dataUrl = `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`
-    return nativeImage.createFromDataURL(dataUrl)
+    return nativeImage.createFromBuffer(Buffer.from(svg, 'utf-8'), { scaleFactor: 2.0 })
   } catch (e) {
     console.error('Failed to create badge icon:', e)
     return null
   }
+}
+
+function createVoiceBadgeIcon(): Electron.NativeImage | null {
+  const size = 16
+  const svg = `
+    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="#22c55e"/>
+        <path d="M5 8l2 2 4-4" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  `
+  return nativeImage.createFromBuffer(Buffer.from(svg, 'utf-8'), { scaleFactor: 2.0 })
 }

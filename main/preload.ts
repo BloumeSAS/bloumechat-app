@@ -54,6 +54,7 @@ const handler = {
     ipcRenderer.invoke('get-screen-sources'),
   selectScreenSource: (sourceId: string) => ipcRenderer.send('select-screen-source', sourceId),
   cancelScreenSource: () => ipcRenderer.send('cancel-screen-source'),
+  setVoiceActive: (active: boolean) => ipcRenderer.send('set-voice-active', active),
 }
 
 contextBridge.exposeInMainWorld('ipc', handler)
