@@ -259,6 +259,7 @@ function buildTrayMenu() {
 
 ; (async () => {
   await app.whenReady()
+  app.userAgentFallback = 'BloumeChat/App'
 
   // ONLY start the local static server if the app is packaged.
   // This prevents conflicts when IS_PROD is true in config.json during development.
@@ -396,7 +397,8 @@ function buildTrayMenu() {
       preload: path.join(__dirname, 'preload.js'),
       partition: 'persist:main',
       webSecurity: true,
-      devTools: !isProd
+      devTools: !isProd,
+      spellcheck: true
     },
   })
 
