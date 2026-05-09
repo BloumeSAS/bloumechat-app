@@ -458,7 +458,8 @@ function buildTrayMenu() {
       url.startsWith(localOrigin) ||
       url.startsWith(devOrigin) ||
       url.startsWith(remoteOrigin) ||
-      url.startsWith(remoteOriginWww)
+      url.startsWith(remoteOriginWww) ||
+      url.startsWith('https://challenges.cloudflare.com')
     );
   };
 
