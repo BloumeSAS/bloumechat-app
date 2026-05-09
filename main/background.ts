@@ -259,9 +259,9 @@ function buildTrayMenu() {
 
 ; (async () => {
   await app.whenReady()
-  // Set a browser-like User Agent to avoid Cloudflare detection issues while keeping our identifier
-  const chromeVersion = process.versions.chrome;
-  app.userAgentFallback = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${chromeVersion} Safari/537.36 BloumeChat/App`
+  // Set a browser-like User Agent to avoid Cloudflare detection issues
+  app.userAgentFallback = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+  console.log(`[Startup] User Agent set to: ${app.userAgentFallback}`)
 
 
   // ONLY start the local static server if the app is packaged.
@@ -485,12 +485,14 @@ function buildTrayMenu() {
 
   // Handle top-level window navigation (main frame only — not iframes)
   // Using 'will-navigate' which only fires for the main frame
+  /*
   mainWindow.webContents.on('will-navigate', (event, url) => {
     if (isExternalUrl(url)) {
       event.preventDefault();
       shell.openExternal(url);
     }
   });
+  */
 
   // Handle navigations within sub-frames (iframes)
   // Only intercept truly external URLs — let bloumechat.com & local server navigate freely
