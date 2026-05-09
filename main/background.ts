@@ -259,7 +259,10 @@ function buildTrayMenu() {
 
 ; (async () => {
   await app.whenReady()
-  app.userAgentFallback = 'BloumeChat/App'
+  // Set a browser-like User Agent to avoid Cloudflare detection issues while keeping our identifier
+  const chromeVersion = process.versions.chrome;
+  app.userAgentFallback = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/${chromeVersion} Safari/537.36 BloumeChat/App`
+
 
   // ONLY start the local static server if the app is packaged.
   // This prevents conflicts when IS_PROD is true in config.json during development.
@@ -458,7 +461,8 @@ function buildTrayMenu() {
       url.startsWith(localOrigin) ||
       url.startsWith(devOrigin) ||
       url.startsWith(remoteOrigin) ||
-      url.startsWith(remoteOriginWww)
+      url.startsWith(remoteOriginWww) ||
+      url.startsWith('https://challenges.cloudflare.com')
     );
   };
 
