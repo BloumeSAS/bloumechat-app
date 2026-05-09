@@ -454,7 +454,7 @@ function buildTrayMenu() {
   const remoteOriginWww = remoteOrigin.replace('https://', 'https://www.').replace('http://', 'http://www.');
 
   const isAllowedUrl = (url: string): boolean => {
-    const port = isProd ? prodPort : (process.argv[2] || 8899);
+    const port = (app.isPackaged && isProd) ? prodPort : DEV_PORT;
     const localOrigin = `http://127.0.0.1:${port}`;
     const devOrigin = `http://localhost:${port}`;
     return (
