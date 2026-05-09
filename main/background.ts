@@ -454,16 +454,28 @@ function buildTrayMenu() {
   const remoteOriginWww = remoteOrigin.replace('https://', 'https://www.').replace('http://', 'http://www.');
 
   const isAllowedUrl = (url: string): boolean => {
+    // In development, allow any local port to avoid mismatches
+    if (!app.isPackaged && (url.startsWith('http://localhost:') || url.startsWith('http://127.0.0.1:'))) {
+      return true;
+    }
+
     const port = (app.isPackaged && isProd) ? prodPort : DEV_PORT;
     const localOrigin = `http://127.0.0.1:${port}`;
     const devOrigin = `http://localhost:${port}`;
-    return (
+    
+    const allowed = (
       url.startsWith(localOrigin) ||
       url.startsWith(devOrigin) ||
       url.startsWith(remoteOrigin) ||
       url.startsWith(remoteOriginWww) ||
       url.startsWith('https://challenges.cloudflare.com')
     );
+
+    if (!allowed && (url.startsWith('http:') || url.startsWith('https:'))) {
+      console.log(`[Navigation] URL rejected (opening externally): ${url}`);
+    }
+
+    return allowed;
   };
 
   const isExternalUrl = (url: string): boolean => {
