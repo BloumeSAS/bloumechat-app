@@ -259,10 +259,7 @@ function buildTrayMenu() {
 
 ; (async () => {
   await app.whenReady()
-  // Set a browser-like User Agent to avoid Cloudflare detection issues
-  app.userAgentFallback = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
-  console.log(`[Startup] User Agent set to: ${app.userAgentFallback}`)
-
+  app.userAgentFallback = 'BloumeChat/App'
 
   // ONLY start the local static server if the app is packaged.
   // This prevents conflicts when IS_PROD is true in config.json during development.
@@ -454,28 +451,15 @@ function buildTrayMenu() {
   const remoteOriginWww = remoteOrigin.replace('https://', 'https://www.').replace('http://', 'http://www.');
 
   const isAllowedUrl = (url: string): boolean => {
-    // In development, allow any local port to avoid mismatches
-    if (!app.isPackaged && (url.startsWith('http://localhost:') || url.startsWith('http://127.0.0.1:'))) {
-      return true;
-    }
-
-    const port = (app.isPackaged && isProd) ? prodPort : DEV_PORT;
+    const port = isProd ? prodPort : (process.argv[2] || 8899);
     const localOrigin = `http://127.0.0.1:${port}`;
     const devOrigin = `http://localhost:${port}`;
-    
-    const allowed = (
+    return (
       url.startsWith(localOrigin) ||
       url.startsWith(devOrigin) ||
       url.startsWith(remoteOrigin) ||
-      url.startsWith(remoteOriginWww) ||
-      url.startsWith('https://challenges.cloudflare.com')
+      url.startsWith(remoteOriginWww)
     );
-
-    if (!allowed && (url.startsWith('http:') || url.startsWith('https:'))) {
-      console.log(`[Navigation] URL rejected (opening externally): ${url}`);
-    }
-
-    return allowed;
   };
 
   const isExternalUrl = (url: string): boolean => {
@@ -485,14 +469,12 @@ function buildTrayMenu() {
 
   // Handle top-level window navigation (main frame only — not iframes)
   // Using 'will-navigate' which only fires for the main frame
-  /*
   mainWindow.webContents.on('will-navigate', (event, url) => {
     if (isExternalUrl(url)) {
       event.preventDefault();
       shell.openExternal(url);
     }
   });
-  */
 
   // Handle navigations within sub-frames (iframes)
   // Only intercept truly external URLs — let bloumechat.com & local server navigate freely
