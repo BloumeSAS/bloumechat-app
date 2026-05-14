@@ -1,4 +1,5 @@
 import path from 'path'
+import zlib from 'zlib'
 import { app, ipcMain, session, shell, Tray, Menu, nativeImage, BrowserWindow, Notification, globalShortcut, clipboard, desktopCapturer } from 'electron'
 import { createWindow } from './helpers'
 import { autoUpdater } from 'electron-updater'
@@ -402,6 +403,11 @@ function buildTrayMenu() {
     },
   })
 
+  // Suppress the native Electron context menu so React's onContextMenu handlers
+  // can fire unobstructed. Without this, spellcheck:true causes Electron to show
+  // a native overlay on right-click, blocking the in-app voice user menus.
+  mainWindow.webContents.on('context-menu', (e) => e.preventDefault())
+
   // --- Restore maximized state ---
   if (settingsStore.get('wasMaximized', false)) {
     mainWindow.maximize()
@@ -546,36 +552,47 @@ function buildTrayMenu() {
   })
 
   ipcMain.on('set-voice-active', (_event, active: boolean) => {
-    if (process.platform !== 'win32' || !mainWindow) return
+    if (!mainWindow) return
 
     if (active) {
-      if (voiceBadgeInterval) return // Already running
+      // Update tray tooltip to show voice status
+      tray?.setToolTip('BloumeChat — 🎙 Vocal actif')
 
-      voiceBadgeInterval = setInterval(() => {
-        isVoiceBadgeOn = !isVoiceBadgeOn
-        if (isVoiceBadgeOn) {
-          const voiceIcon = createVoiceBadgeIcon()
-          mainWindow?.setOverlayIcon(voiceIcon, 'Vocal actif')
-        } else {
-          // Fallback to message badge or null
-          if (currentBadgeCount > 0) {
-            mainWindow?.setOverlayIcon(createBadgeIcon(currentBadgeCount), `${currentBadgeCount} message(s) non lu(s)`)
-          } else {
-            mainWindow?.setOverlayIcon(null, '')
-          }
-        }
-      }, 800)
-    } else {
-      if (voiceBadgeInterval) {
-        clearInterval(voiceBadgeInterval)
-        voiceBadgeInterval = null
+      if (process.platform === 'win32') {
+        if (voiceBadgeInterval) return // Already running
+        voiceBadgeInterval = setInterval(() => {
+          isVoiceBadgeOn = !isVoiceBadgeOn
+          try {
+            if (isVoiceBadgeOn) {
+              const voiceIcon = createVoiceBadgeIcon()
+              mainWindow?.setOverlayIcon(voiceIcon, 'Vocal actif')
+            } else {
+              // Alternate with message badge to avoid hiding unread count
+              if (currentBadgeCount > 0) {
+                mainWindow?.setOverlayIcon(createBadgeIcon(currentBadgeCount), `${currentBadgeCount} message(s) non lu(s)`)
+              } else {
+                mainWindow?.setOverlayIcon(null, '')
+              }
+            }
+          } catch (e) { console.warn('[Voice badge] setOverlayIcon failed:', e) }
+        }, 800)
       }
-      isVoiceBadgeOn = false
-      // Restore message badge or null
-      if (currentBadgeCount > 0) {
-        mainWindow.setOverlayIcon(createBadgeIcon(currentBadgeCount), `${currentBadgeCount} message(s) non lu(s)`)
-      } else {
-        mainWindow.setOverlayIcon(null, '')
+    } else {
+      tray?.setToolTip('BloumeChat')
+
+      if (process.platform === 'win32') {
+        if (voiceBadgeInterval) {
+          clearInterval(voiceBadgeInterval)
+          voiceBadgeInterval = null
+        }
+        isVoiceBadgeOn = false
+        try {
+          if (currentBadgeCount > 0) {
+            mainWindow.setOverlayIcon(createBadgeIcon(currentBadgeCount), `${currentBadgeCount} message(s) non lu(s)`)
+          } else {
+            mainWindow.setOverlayIcon(null, '')
+          }
+        } catch (e) { console.warn('[Voice badge] restore overlay failed:', e) }
       }
     }
   })
@@ -705,6 +722,15 @@ if (process.platform === 'win32') {
   })
 }
 
+ipcMain.on('paste-text', (_event, text: string) => {
+  // Inject clipboard content then simulate Ctrl+V in the focused window
+  if (text) {
+    try { clipboard.writeText(text) } catch { /* ignore */ }
+  }
+  const win = BrowserWindow.getFocusedWindow()
+  if (win) win.webContents.paste()
+})
+
 ipcMain.on('window-minimize', () => { BrowserWindow.getFocusedWindow()?.minimize() })
 ipcMain.on('window-maximize', () => {
   const win = BrowserWindow.getFocusedWindow()
@@ -721,7 +747,19 @@ ipcMain.on('set-auto-launch', (_event, enable: boolean) => setAutoLaunch(enable)
 
 // --- Clipboard IPC ---
 ipcMain.on('write-clipboard', (_event, text: string) => {
-  clipboard.writeText(text)
+  try { clipboard.writeText(text) } catch (e) { console.error('[Clipboard] write failed:', e) }
+})
+
+ipcMain.handle('read-clipboard', () => {
+  try { return clipboard.readText() } catch { return '' }
+})
+
+// Keyboard shortcut Ctrl+C fallback: if the page doesn't handle it, copy selection via clipboard
+// This helps in cases where navigator.clipboard is unavailable (HTTP context on Windows)
+ipcMain.on('copy-selection', (_event, text: string) => {
+  if (text) {
+    try { clipboard.writeText(text) } catch (e) { console.error('[Clipboard] copy-selection failed:', e) }
+  }
 })
 
 // --- Zoom IPC ---
@@ -821,37 +859,102 @@ ipcMain.on('simulate-update', () => {
   })
 })
 
-// --- Badge Icon Generator (SVG-based, no native deps) ---
+// ─── PNG Icon Generator ───────────────────────────────────────────────────────
+// nativeImage.createFromBuffer requires real PNG/JPEG data; SVG strings are NOT
+// supported on Windows. We generate minimal 16x16 PNGs entirely in Node.js
+// using raw DEFLATE + CRC32 — no external dependencies.
+
+function crc32(buf: Buffer): number {
+  const table = (() => {
+    const t = new Uint32Array(256)
+    for (let n = 0; n < 256; n++) {
+      let c = n
+      for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1
+      t[n] = c
+    }
+    return t
+  })()
+  let crc = 0xFFFFFFFF
+  for (const byte of buf) crc = table[(crc ^ byte) & 0xff] ^ (crc >>> 8)
+  return (crc ^ 0xFFFFFFFF) | 0
+}
+
+function pngChunk(type: string, data: Buffer): Buffer {
+  const typeBytes = Buffer.from(type, 'ascii')
+  const len = Buffer.allocUnsafe(4); len.writeUInt32BE(data.length, 0)
+  const crcBuf = Buffer.allocUnsafe(4); crcBuf.writeInt32BE(crc32(Buffer.concat([typeBytes, data])), 0)
+  return Buffer.concat([len, typeBytes, data, crcBuf])
+}
+
+/** Create a 16×16 RGBA PNG with a filled circle of the given colour. */
+function createCirclePng(size: number, fill: [number, number, number], overlay?: (x: number, y: number) => [number, number, number, number]): Electron.NativeImage {
+  const pixels = Buffer.allocUnsafe(size * size * 4)
+  const cx = size / 2, cy = size / 2, r = size / 2
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const i = (y * size + x) * 4
+      const inCircle = (x - cx + 0.5) ** 2 + (y - cy + 0.5) ** 2 <= r * r
+      if (inCircle) {
+        if (overlay) {
+          const [or, og, ob, oa] = overlay(x, y)
+          pixels[i] = or; pixels[i+1] = og; pixels[i+2] = ob; pixels[i+3] = oa
+        } else {
+          pixels[i] = fill[0]; pixels[i+1] = fill[1]; pixels[i+2] = fill[2]; pixels[i+3] = 255
+        }
+      } else {
+        pixels[i] = 0; pixels[i+1] = 0; pixels[i+2] = 0; pixels[i+3] = 0
+      }
+    }
+  }
+
+  // PNG row filter byte (0 = None) prepended to each row
+  const filtered = Buffer.allocUnsafe(size * (1 + size * 4))
+  for (let y = 0; y < size; y++) {
+    filtered[y * (1 + size * 4)] = 0
+    pixels.copy(filtered, y * (1 + size * 4) + 1, y * size * 4, (y + 1) * size * 4)
+  }
+  const compressed = zlib.deflateSync(filtered)
+
+  const ihdr = Buffer.allocUnsafe(13)
+  ihdr.writeUInt32BE(size, 0); ihdr.writeUInt32BE(size, 4)
+  ihdr[8] = 8; ihdr[9] = 6; ihdr[10] = 0; ihdr[11] = 0; ihdr[12] = 0
+
+  const png = Buffer.concat([
+    Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]),
+    pngChunk('IHDR', ihdr),
+    pngChunk('IDAT', compressed),
+    pngChunk('IEND', Buffer.alloc(0)),
+  ])
+  return nativeImage.createFromBuffer(png)
+}
+
+/** Red badge with count label (up to 2 digits; 99+ for larger). */
 function createBadgeIcon(count: number): Electron.NativeImage | null {
   try {
+    // Draw a red circle; for count digits, we embed them via SVG data-URL (Chromium supports it)
     const label = count > 99 ? '99+' : String(count)
     const size = 16
-    const fontSize = label.length > 2 ? 8 : 10
-
-    const svg = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
-        <circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="#e53e3e"/>
-        <text x="${size / 2}" y="${size / 2}" text-anchor="middle" dominant-baseline="central"
-              fill="white" font-family="Arial,sans-serif" font-weight="bold" font-size="${fontSize}">
-          ${label}
-        </text>
-      </svg>
-    `.trim()
-
-    return nativeImage.createFromBuffer(Buffer.from(svg, 'utf-8'), { scaleFactor: 2.0 })
+    const fontSize = label.length > 2 ? 7 : 9
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><circle cx="${size/2}" cy="${size/2}" r="${size/2}" fill="#e53e3e"/><text x="${size/2}" y="${size/2}" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Arial,sans-serif" font-weight="bold" font-size="${fontSize}">${label}</text></svg>`
+    const dataUrl = 'data:image/svg+xml;base64,' + Buffer.from(svg).toString('base64')
+    const img = nativeImage.createFromDataURL(dataUrl)
+    // Fallback to plain red circle if SVG decode failed (returns empty on some builds)
+    return img.isEmpty() ? createCirclePng(size, [229, 62, 62]) : img
   } catch (e) {
     console.error('Failed to create badge icon:', e)
     return null
   }
 }
 
-function createVoiceBadgeIcon(): Electron.NativeImage | null {
-  const size = 16
-  const svg = `
-    <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" fill="#22c55e"/>
-        <path d="M5 8l2 2 4-4" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  `
-  return nativeImage.createFromBuffer(Buffer.from(svg, 'utf-8'), { scaleFactor: 2.0 })
+/** Green circle — shown in the taskbar overlay while the user is in a voice channel. */
+function createVoiceBadgeIcon(): Electron.NativeImage {
+  return createCirclePng(16, [34, 197, 94], (x, y) => {
+    // Draw a simple white checkmark inside the circle
+    // Pixels that form the check: left leg (5,8→6,9) and right leg (6,9→10,5)
+    const onCheck =
+      (x === 5 && y === 8) || (x === 6 && y === 9) ||
+      (x === 7 && y === 9) || (x === 8 && y === 8) ||
+      (x === 9 && y === 7) || (x === 10 && y === 6) || (x === 11 && y === 5)
+    return onCheck ? [255, 255, 255, 255] : [34, 197, 94, 255]
+  })
 }
