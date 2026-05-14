@@ -48,6 +48,9 @@ const handler = {
     return () => ipcRenderer.removeListener('deep-link', listener)
   },
   writeToClipboard: (text: string) => ipcRenderer.send('write-clipboard', text),
+  readFromClipboard: (): Promise<string> => ipcRenderer.invoke('read-clipboard'),
+  copySelection: (text: string) => ipcRenderer.send('copy-selection', text),
+  pasteText: (text?: string) => ipcRenderer.send('paste-text', text || ''),
 
   // --- Screen Share Picker ---
   getScreenSources: (): Promise<{ id: string; name: string; thumbnail: string }[]> =>
