@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react'
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
 import Head from 'next/head'
-
-const MIN_LOADING_MS = 3000
 
 const translations = {
   fr: {
@@ -30,8 +28,14 @@ export default function HomePage() {
   const [platform, setPlatform] = useState<string>('win32')
   const [isReady, setIsReady] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const loadingStartRef = useRef(Date.now())
+  const readySetRef = useRef(false)
   const t = useMemo(() => translations[detectLang()], [])
+
+  const markReady = useCallback(() => {
+    if (readySetRef.current) return
+    readySetRef.current = true
+    setIsReady(true)
+  }, [])
 
   // --- Apply system theme immediately on mount ---
   useEffect(() => {
@@ -63,28 +67,30 @@ export default function HomePage() {
     }
   }, [])
 
+  // Fallback: show app after 8s even if iframe never fires load or APP_READY
   useEffect(() => {
-    loadingStartRef.current = Date.now()
+    if (!siteUrl) return
+    const fallback = setTimeout(markReady, 8000)
+    return () => clearTimeout(fallback)
+  }, [siteUrl, markReady])
 
+  useEffect(() => {
     const fetchEnv = async () => {
       // @ts-ignore
       const baseUrl = await window.ipc.getEnv('NEXT_PUBLIC_SITE_URL') || 'https://bloumechat.com'
       setSiteUrl(`${baseUrl}/app?platform=desktop`)
 
       // @ts-ignore
-      const p = await window.ipc.invoke?.('get-platform') || 'win32'
+      const p = await window.ipc.getPlatform?.() || 'win32'
       setPlatform(p)
-
-      // Ensure minimum loading time of 5 seconds
-      const elapsed = Date.now() - loadingStartRef.current
-      const remaining = Math.max(0, MIN_LOADING_MS - elapsed)
-      setTimeout(() => setIsReady(true), remaining)
     }
     fetchEnv()
 
     // Listen for theme changes from the iframe (Bloumechat main site)
     const handleMessage = (event: MessageEvent) => {
-      if (event.data?.type === 'THEME_CHANGED') {
+      if (event.data?.type === 'APP_READY') {
+        markReady()
+      } else if (event.data?.type === 'THEME_CHANGED') {
         const theme = event.data.theme
         if (theme === 'dark') {
           document.documentElement.classList.add('dark')
@@ -97,6 +103,9 @@ export default function HomePage() {
       } else if (event.data?.type === 'SET_BADGE_COUNT') {
         // @ts-ignore
         window.ipc.setBadgeCount(event.data.count ?? 0)
+      } else if (event.data?.type === 'SET_VOICE_ACTIVE') {
+        // @ts-ignore
+        window.ipc.setVoiceActive(event.data.active === true)
       } else if (event.data?.type === 'IPC_INVOKE') {
         const { id, method, args } = event.data;
         const ipc = (window as any).ipc;
@@ -130,38 +139,32 @@ export default function HomePage() {
       }
     }
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('message', handleMessage)
+    window.addEventListener('message', handleMessage)
 
-      const unsubNotif = window.ipc.onNotificationClick((data: any) => {
-        if (iframeRef.current?.contentWindow) {
-          iframeRef.current.contentWindow.postMessage({
-            type: 'NAVIGATE',
-            channelPublicId: data.channelPublicId,
-            serverPublicId: data.serverPublicId,
-            authorPublicId: data.authorPublicId
-          }, '*')
-        }
-      })
-
-      // Listen for deep links
-      // @ts-ignore
-      const unsubDeepLink = window.ipc.onDeepLink?.((data: any) => {
-        if (iframeRef.current?.contentWindow) {
-          iframeRef.current.contentWindow.postMessage({
-            type: 'NAVIGATE',
-            ...data
-          }, '*')
-        }
-      })
-
-      return () => {
-        window.removeEventListener('message', handleMessage)
-        unsubNotif()
-        unsubDeepLink?.()
+    const unsubNotif = window.ipc.onNotificationClick((data: any) => {
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage({
+          type: 'NAVIGATE',
+          channelPublicId: data.channelPublicId,
+          serverPublicId: data.serverPublicId,
+          authorPublicId: data.authorPublicId
+        }, '*')
       }
+    })
+
+    // @ts-ignore
+    const unsubDeepLink = window.ipc.onDeepLink?.((data: any) => {
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage({ type: 'NAVIGATE', ...data }, '*')
+      }
+    })
+
+    return () => {
+      window.removeEventListener('message', handleMessage)
+      unsubNotif()
+      unsubDeepLink?.()
     }
-  }, [])
+  }, [markReady])
 
   const handleBack = () => {
     if (iframeRef.current?.contentWindow) {
@@ -297,6 +300,7 @@ export default function HomePage() {
             ref={iframeRef}
             src={siteUrl}
             allow="camera; microphone; display-capture; fullscreen"
+            onLoad={() => setTimeout(markReady, 500)}
             className="w-full h-full border-none absolute top-[30px] left-0 right-0 bottom-0"
             style={{
               height: 'calc(100vh - 30px)',
