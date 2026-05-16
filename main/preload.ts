@@ -14,6 +14,7 @@ const handler = {
     }
   },
   getEnv: (key: string) => ipcRenderer.invoke('get-env', key),
+  getPlatform: () => ipcRenderer.invoke('get-platform'),
   minimize: () => ipcRenderer.send('window-minimize'),
   maximize: () => ipcRenderer.send('window-maximize'),
   close: () => ipcRenderer.send('window-close'),
