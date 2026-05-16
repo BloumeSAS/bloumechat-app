@@ -1,0 +1,7 @@
+export { startLocalServer, PROD_PORT } from './server'
+export { handleDeepLink } from './deeplink'
+export { initPermissions } from './permissions'
+export { initTray, buildTrayMenu, getAppLocale, getI18n } from './tray'
+export { initUpdater } from './updater'
+export { prewarmBadgeCache, createBadgeIcon, createVoiceBadgeIcon, handleSetBadgeCount, handleSetVoiceActive, getCurrentBadgeCount } from './badge'
+export { registerIpcHandlers } from './ipc-handlers'
