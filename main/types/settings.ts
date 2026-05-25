@@ -8,4 +8,5 @@ export interface AppSettings {
   rpcShowUsing: boolean
   rpcShowBrowsing: boolean
   rpcShowListening: boolean
+  rpcShowPlaying: boolean
 }
