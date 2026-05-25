@@ -143,4 +143,23 @@ export function registerIpcHandlers(
       getMainWindow()?.webContents.send('rpc:activity', { type: 'none', name: '' })
     }
   })
+
+  // Per-type show flags (filtering happens client-side in RpcProvider)
+  ipcMain.handle('get-rpc-show-using', () => settingsStore.get('rpcShowUsing', true))
+  ipcMain.on('set-rpc-show-using', (_event, v: unknown) => {
+    if (typeof v !== 'boolean') return
+    settingsStore.set('rpcShowUsing', v)
+  })
+
+  ipcMain.handle('get-rpc-show-browsing', () => settingsStore.get('rpcShowBrowsing', true))
+  ipcMain.on('set-rpc-show-browsing', (_event, v: unknown) => {
+    if (typeof v !== 'boolean') return
+    settingsStore.set('rpcShowBrowsing', v)
+  })
+
+  ipcMain.handle('get-rpc-show-listening', () => settingsStore.get('rpcShowListening', true))
+  ipcMain.on('set-rpc-show-listening', (_event, v: unknown) => {
+    if (typeof v !== 'boolean') return
+    settingsStore.set('rpcShowListening', v)
+  })
 }
