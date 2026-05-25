@@ -16,6 +16,8 @@ import {
   registerIpcHandlers,
   getAppLocale,
   getI18n,
+  startRpcPolling,
+  stopRpcPolling,
 } from './services'
 
 // Route console.* to electron-log — writes to %APPDATA%\BloumeChat\logs\main.log in production
@@ -161,6 +163,11 @@ if (!isProd) {
   // IPC
   registerIpcHandlers(getMainWindow, getTray, settingsStore, appConfig, setAutoLaunch, getAppIconPath)
 
+  // Rich Presence — only on Windows (PowerShell-based)
+  if (process.platform === 'win32') {
+    startRpcPolling(getMainWindow, () => settingsStore.get('rpcEnabled', true))
+  }
+
   // Updater
   initUpdater(getMainWindow, getAppIconPath, getProdPort, isProd)
 
@@ -270,6 +277,7 @@ app.on('window-all-closed', () => {
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll()
+  stopRpcPolling()
   if (server) server.close(() => console.log('[Server] Closed.'))
 })
 
