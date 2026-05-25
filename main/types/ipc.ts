@@ -20,9 +20,10 @@ export interface ScreenSource {
 }
 
 export interface RpcActivity {
-  type: 'using' | 'browsing' | 'listening' | 'none'
+  type: 'using' | 'browsing' | 'listening' | 'playing' | 'none'
   name: string
   details?: string
+  startedAt?: number // unix ms, set client-side in RpcProvider
 }
 
 export type UpdateStatus =
