@@ -76,6 +76,8 @@ const handler = {
   setRpcShowBrowsing: (v: boolean) => ipcRenderer.send('set-rpc-show-browsing', v),
   getRpcShowListening: (): Promise<boolean> => ipcRenderer.invoke('get-rpc-show-listening'),
   setRpcShowListening: (v: boolean) => ipcRenderer.send('set-rpc-show-listening', v),
+  getRpcShowPlaying: (): Promise<boolean> => ipcRenderer.invoke('get-rpc-show-playing'),
+  setRpcShowPlaying: (v: boolean) => ipcRenderer.send('set-rpc-show-playing', v),
 }
 
 contextBridge.exposeInMainWorld('ipc', handler)
