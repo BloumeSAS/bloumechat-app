@@ -4,4 +4,5 @@ export interface AppSettings {
   wasMaximized: boolean
   trayNoticeShown: boolean
   minimizeToTray: boolean
+  rpcEnabled: boolean
 }
