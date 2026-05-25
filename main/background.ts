@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, ipcMain, session, shell, BrowserWindow, globalShortcut } from 'electron'
+import { app, ipcMain, session, shell, BrowserWindow, globalShortcut, powerMonitor } from 'electron'
 import { createWindow } from './helpers'
 import Store from 'electron-store'
 import fs from 'fs'
@@ -163,10 +163,23 @@ if (!isProd) {
   // IPC
   registerIpcHandlers(getMainWindow, getTray, settingsStore, appConfig, setAutoLaunch, getAppIconPath)
 
-  // Rich Presence — only on Windows (PowerShell-based)
-  if (process.platform === 'win32') {
+  // Rich Presence — Windows (PowerShell) + macOS (osascript)
+  if (process.platform === 'win32' || process.platform === 'darwin') {
     startRpcPolling(getMainWindow, () => settingsStore.get('rpcEnabled', true))
   }
+
+  // Lock / unlock screen — pause and resume RPC activity polling
+  powerMonitor.on('lock-screen', () => {
+    console.log('[RPC] Screen locked — pausing activity polling')
+    stopRpcPolling()
+    getMainWindow()?.webContents.send('rpc:activity', { type: 'none', name: '' })
+  })
+  powerMonitor.on('unlock-screen', () => {
+    console.log('[RPC] Screen unlocked — resuming activity polling')
+    if (settingsStore.get('rpcEnabled', true)) {
+      startRpcPolling(getMainWindow, () => settingsStore.get('rpcEnabled', true))
+    }
+  })
 
   // Updater
   initUpdater(getMainWindow, getAppIconPath, getProdPort, isProd)
