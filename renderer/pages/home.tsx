@@ -121,6 +121,12 @@ export default function HomePage() {
           'write-to-clipboard': 'writeToClipboard',
           'get-rpc-enabled': 'getRpcEnabled',
           'set-rpc-enabled': 'setRpcEnabled',
+          'get-rpc-show-using': 'getRpcShowUsing',
+          'set-rpc-show-using': 'setRpcShowUsing',
+          'get-rpc-show-browsing': 'getRpcShowBrowsing',
+          'set-rpc-show-browsing': 'setRpcShowBrowsing',
+          'get-rpc-show-listening': 'getRpcShowListening',
+          'set-rpc-show-listening': 'setRpcShowListening',
         };
 
         const targetMethod = methodMap[method] || method;
