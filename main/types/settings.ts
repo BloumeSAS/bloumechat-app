@@ -5,4 +5,7 @@ export interface AppSettings {
   trayNoticeShown: boolean
   minimizeToTray: boolean
   rpcEnabled: boolean
+  rpcShowUsing: boolean
+  rpcShowBrowsing: boolean
+  rpcShowListening: boolean
 }
