@@ -3,6 +3,7 @@ import Store from 'electron-store'
 import type { AppSettings } from '../types/settings'
 import type { NotificationPayload } from '../types/ipc'
 import { handleSetBadgeCount, handleSetVoiceActive } from './badge'
+import { startRpcPolling, stopRpcPolling } from './rpc'
 
 export function registerIpcHandlers(
   getMainWindow: () => BrowserWindow | null,
@@ -126,6 +127,20 @@ export function registerIpcHandlers(
     } catch (err) {
       console.error('[ScreenShare] Failed to get sources:', err)
       return []
+    }
+  })
+
+  // --- Rich Presence (RPC) ---
+  ipcMain.handle('get-rpc-enabled', () => settingsStore.get('rpcEnabled', true))
+  ipcMain.on('set-rpc-enabled', (_event, enable: unknown) => {
+    if (typeof enable !== 'boolean') return
+    settingsStore.set('rpcEnabled', enable)
+    if (enable) {
+      startRpcPolling(getMainWindow, () => settingsStore.get('rpcEnabled', true))
+    } else {
+      stopRpcPolling()
+      // Notify webapp that activity is cleared
+      getMainWindow()?.webContents.send('rpc:activity', { type: 'none', name: '' })
     }
   })
 }
