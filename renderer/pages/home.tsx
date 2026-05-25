@@ -118,7 +118,9 @@ export default function HomePage() {
           'set-minimize-to-tray': 'setMinimizeToTray',
           'get-zoom-level': 'getZoomLevel',
           'set-zoom-level': 'setZoomLevel',
-          'write-to-clipboard': 'writeToClipboard'
+          'write-to-clipboard': 'writeToClipboard',
+          'get-rpc-enabled': 'getRpcEnabled',
+          'set-rpc-enabled': 'setRpcEnabled',
         };
 
         const targetMethod = methodMap[method] || method;
@@ -159,10 +161,19 @@ export default function HomePage() {
       }
     })
 
+    // Rich Presence — forward IPC rpc:activity events into the webapp iframe
+    // @ts-ignore
+    const unsubRpc = window.ipc.onRpcActivity?.((activity: any) => {
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage({ type: 'RPC_ACTIVITY', activity }, '*')
+      }
+    })
+
     return () => {
       window.removeEventListener('message', handleMessage)
       unsubNotif()
       unsubDeepLink?.()
+      unsubRpc?.()
     }
   }, [markReady])
 
