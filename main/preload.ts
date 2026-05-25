@@ -68,6 +68,14 @@ const handler = {
   },
   getRpcEnabled: (): Promise<boolean> => ipcRenderer.invoke('get-rpc-enabled'),
   setRpcEnabled: (enable: boolean) => ipcRenderer.send('set-rpc-enabled', enable),
+
+  // Per-type show flags
+  getRpcShowUsing: (): Promise<boolean> => ipcRenderer.invoke('get-rpc-show-using'),
+  setRpcShowUsing: (v: boolean) => ipcRenderer.send('set-rpc-show-using', v),
+  getRpcShowBrowsing: (): Promise<boolean> => ipcRenderer.invoke('get-rpc-show-browsing'),
+  setRpcShowBrowsing: (v: boolean) => ipcRenderer.send('set-rpc-show-browsing', v),
+  getRpcShowListening: (): Promise<boolean> => ipcRenderer.invoke('get-rpc-show-listening'),
+  setRpcShowListening: (v: boolean) => ipcRenderer.send('set-rpc-show-listening', v),
 }
 
 contextBridge.exposeInMainWorld('ipc', handler)
