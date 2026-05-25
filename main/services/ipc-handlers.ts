@@ -162,4 +162,10 @@ export function registerIpcHandlers(
     if (typeof v !== 'boolean') return
     settingsStore.set('rpcShowListening', v)
   })
+
+  ipcMain.handle('get-rpc-show-playing', () => settingsStore.get('rpcShowPlaying', true))
+  ipcMain.on('set-rpc-show-playing', (_event, v: unknown) => {
+    if (typeof v !== 'boolean') return
+    settingsStore.set('rpcShowPlaying', v)
+  })
 }
