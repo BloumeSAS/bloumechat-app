@@ -19,6 +19,12 @@ export interface ScreenSource {
   thumbnail: string
 }
 
+export interface RpcActivity {
+  type: 'using' | 'browsing' | 'listening' | 'none'
+  name: string
+  details?: string
+}
+
 export type UpdateStatus =
   | { status: 'checking' }
   | { status: 'available'; info: { version: string } }
