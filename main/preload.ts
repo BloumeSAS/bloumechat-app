@@ -59,6 +59,15 @@ const handler = {
   selectScreenSource: (sourceId: string) => ipcRenderer.send('select-screen-source', sourceId),
   cancelScreenSource: () => ipcRenderer.send('cancel-screen-source'),
   setVoiceActive: (active: boolean) => ipcRenderer.send('set-voice-active', active),
+
+  // --- Rich Presence (RPC) ---
+  onRpcActivity: (cb: (activity: import('./types/ipc').RpcActivity) => void) => {
+    const listener = (_event: IpcRendererEvent, activity: import('./types/ipc').RpcActivity) => cb(activity)
+    ipcRenderer.on('rpc:activity', listener)
+    return () => ipcRenderer.removeListener('rpc:activity', listener)
+  },
+  getRpcEnabled: (): Promise<boolean> => ipcRenderer.invoke('get-rpc-enabled'),
+  setRpcEnabled: (enable: boolean) => ipcRenderer.send('set-rpc-enabled', enable),
 }
 
 contextBridge.exposeInMainWorld('ipc', handler)
