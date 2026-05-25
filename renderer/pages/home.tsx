@@ -127,6 +127,8 @@ export default function HomePage() {
           'set-rpc-show-browsing': 'setRpcShowBrowsing',
           'get-rpc-show-listening': 'getRpcShowListening',
           'set-rpc-show-listening': 'setRpcShowListening',
+          'get-rpc-show-playing': 'getRpcShowPlaying',
+          'set-rpc-show-playing': 'setRpcShowPlaying',
         };
 
         const targetMethod = methodMap[method] || method;
