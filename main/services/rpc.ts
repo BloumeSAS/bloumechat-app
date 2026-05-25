@@ -14,6 +14,22 @@ $x=Get-Process -Id $p -EA SilentlyContinue
 if($x -and $x.MainWindowTitle){'{"n":"'+$x.ProcessName+'","t":"'+($x.MainWindowTitle-replace'"','')+'"}'}`
 
 // ---------------------------------------------------------------------------
+// macOS osascript — gets foreground process name + window title
+// Returns "processName|windowTitle" on stdout
+// ---------------------------------------------------------------------------
+const MACOS_CMD = `
+tell application "System Events"
+  set fp to first application process whose frontmost is true
+  set pn to name of fp
+  try
+    set wt to title of first window of fp
+    return pn & "|" & wt
+  on error
+    return pn & "|"
+  end try
+end tell`
+
+// ---------------------------------------------------------------------------
 // Blocklist — processes we should never broadcast as activity
 // ---------------------------------------------------------------------------
 const BLOCKLIST = new Set([
@@ -33,6 +49,13 @@ const BLOCKLIST = new Set([
     'cmd',
     'powershell',
     'windowsterminal',
+    // macOS system processes
+    'finder',
+    'dock',
+    'loginwindow',
+    'notificationcenter',
+    'controlstrip',
+    'spotlight',
 ])
 
 // ---------------------------------------------------------------------------
@@ -97,6 +120,36 @@ const NAME_MAP: Record<string, string> = {
 }
 
 // ---------------------------------------------------------------------------
+// Games — process name → display name
+// ---------------------------------------------------------------------------
+const GAME_MAP: Record<string, string> = {
+    'valorant-win64-shipping': 'Valorant',
+    csgo:                      'CS:GO',
+    cs2:                       'CS2',
+    r5apex:                    'Apex Legends',
+    fortniteclient:            'Fortnite',
+    rocketleague:              'Rocket League',
+    'overwatch_retail':        'Overwatch 2',
+    dota2:                     'Dota 2',
+    javaw:                     'Minecraft',
+    eldenring:                 'Elden Ring',
+    cyberpunk2077:             'Cyberpunk 2077',
+    gtav:                      'GTA V',
+    tf2:                       'Team Fortress 2',
+    pubg:                      'PUBG',
+    leagueclient:              'League of Legends',
+    'rainbow6':                'Rainbow Six Siege',
+    deadcells:                 'Dead Cells',
+    hades:                     'Hades',
+    stardewvalley:             'Stardew Valley',
+    among_us:                  'Among Us',
+    witcher3:                  'The Witcher 3',
+    darksouls3:                'Dark Souls III',
+    hollowknight:              'Hollow Knight',
+}
+const GAME_SET = new Set(Object.keys(GAME_MAP))
+
+// ---------------------------------------------------------------------------
 // Process categories
 // ---------------------------------------------------------------------------
 const BROWSERS = new Set(['chrome', 'firefox', 'msedge', 'opera', 'brave', 'vivaldi'])
@@ -108,12 +161,26 @@ const MUSIC_PLAYERS = new Set(['spotify', 'vlc', 'musicbee', 'foobar2000', 'aimp
 function classifyActivity(processName: string, windowTitle: string): RpcActivity {
     const lc = processName.toLowerCase()
 
+    // 1. Games (highest priority — before music/browsers)
+    if (GAME_SET.has(lc)) {
+        return { type: 'playing', name: GAME_MAP[lc] as string }
+    }
+
+    // 2. Music players — Spotify gets rich parsing (Artist - Song)
     if (MUSIC_PLAYERS.has(lc)) {
+        if (lc === 'spotify' && windowTitle.includes(' - ')) {
+            const dashIdx = windowTitle.indexOf(' - ')
+            const artist = windowTitle.substring(0, dashIdx).trim()
+            const song = windowTitle.substring(dashIdx + 3).trim()
+            if (artist && song) {
+                return { type: 'listening', name: `${artist} — ${song}`, details: 'Spotify' }
+            }
+        }
         return { type: 'listening', name: NAME_MAP[lc] || processName }
     }
 
+    // 3. Browsers — strip browser name suffix, show page title
     if (BROWSERS.has(lc)) {
-        // Strip " - Browser Name" suffix from page titles for cleaner display
         const browseName = NAME_MAP[lc] || processName
         const details = windowTitle
             .replace(/ - Google Chrome$/, '')
@@ -127,6 +194,7 @@ function classifyActivity(processName: string, windowTitle: string): RpcActivity
         return { type: 'browsing', name: details || browseName, details: browseName }
     }
 
+    // 4. Generic apps
     const friendlyName = NAME_MAP[lc] || processName
     const details = windowTitle.substring(0, 64).trim() || undefined
     return { type: 'using', name: friendlyName, details }
@@ -143,6 +211,30 @@ let pollInterval: ReturnType<typeof setInterval> | null = null
 let lastActivityKey = ''
 
 // ---------------------------------------------------------------------------
+// Common result handler — shared between Windows + macOS poll paths
+// ---------------------------------------------------------------------------
+function handlePollResult(
+    processName: string,
+    windowTitle: string,
+    getWindow: () => BrowserWindow | null
+): void {
+    const lc = processName.toLowerCase().trim()
+    if (!lc || BLOCKLIST.has(lc)) return
+
+    const activity = classifyActivity(lc, windowTitle)
+    const key = activityKey(activity)
+
+    // Debounce — only send IPC if activity changed
+    if (key === lastActivityKey) return
+    lastActivityKey = key
+
+    const win = getWindow()
+    if (!win || win.isDestroyed()) return
+
+    win.webContents.send('rpc:activity', activity)
+}
+
+// ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
 export function startRpcPolling(
@@ -154,38 +246,39 @@ export function startRpcPolling(
     const poll = () => {
         if (!isEnabled()) return
 
-        execFile(
-            'powershell.exe',
-            ['-NoProfile', '-NonInteractive', '-WindowStyle', 'Hidden', '-Command', PS_CMD],
-            { timeout: 2500 },
-            (err, stdout) => {
-                if (err || !stdout.trim()) return
-
-                let parsed: { n: string; t: string }
-                try {
-                    parsed = JSON.parse(stdout.trim())
-                } catch {
-                    return
+        if (process.platform === 'win32') {
+            execFile(
+                'powershell.exe',
+                ['-NoProfile', '-NonInteractive', '-WindowStyle', 'Hidden', '-Command', PS_CMD],
+                { timeout: 2500 },
+                (err, stdout) => {
+                    if (err || !stdout.trim()) return
+                    let parsed: { n: string; t: string }
+                    try {
+                        parsed = JSON.parse(stdout.trim())
+                    } catch {
+                        return
+                    }
+                    handlePollResult(parsed.n || '', parsed.t || '', getWindow)
                 }
-
-                const processName = (parsed.n || '').toLowerCase().trim()
-                const windowTitle = (parsed.t || '').trim()
-
-                if (!processName || BLOCKLIST.has(processName)) return
-
-                const activity = classifyActivity(processName, windowTitle)
-                const key = activityKey(activity)
-
-                // Debounce — only send if activity changed
-                if (key === lastActivityKey) return
-                lastActivityKey = key
-
-                const win = getWindow()
-                if (!win || win.isDestroyed()) return
-
-                win.webContents.send('rpc:activity', activity)
-            }
-        )
+            )
+        } else if (process.platform === 'darwin') {
+            execFile(
+                'osascript',
+                ['-e', MACOS_CMD],
+                { timeout: 3000 },
+                (err, stdout) => {
+                    if (err || !stdout.trim()) return
+                    const raw = stdout.trim()
+                    const pipeIdx = raw.indexOf('|')
+                    if (pipeIdx === -1) return
+                    const procName = raw.substring(0, pipeIdx).trim()
+                    const winTitle = raw.substring(pipeIdx + 1).trim()
+                    handlePollResult(procName, winTitle, getWindow)
+                }
+            )
+        }
+        // Linux / other platforms: not supported (no reliable cross-distro foreground window API)
     }
 
     // Run immediately then every 10s
