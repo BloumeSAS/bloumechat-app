@@ -25,6 +25,7 @@ publish:
   provider: github
   owner: JulesZYTB
   repo: bloumechat-app
+  releaseType: release
 win:
   publisherName: ["Bloume SAS", "CN=Bloume SAS, O=Bloume SAS, L=Paris, C=FR"]
   signingHashAlgorithms:
