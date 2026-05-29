@@ -24,6 +24,7 @@ export interface RpcActivity {
   name: string
   details?: string
   startedAt?: number // unix ms, set client-side in RpcProvider
+  icon?: string // data URL of the app/game .exe icon (auto-extracted via app.getFileIcon)
 }
 
 export type UpdateStatus =
