@@ -28,6 +28,7 @@ export default function HomePage() {
   const [platform, setPlatform] = useState<string>('win32')
   const [isReady, setIsReady] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
+  const siteOriginRef = useRef('*') // narrowed once siteUrl is known
   const readySetRef = useRef(false)
   const t = useMemo(() => translations[detectLang()], [])
 
@@ -56,10 +57,7 @@ export default function HomePage() {
     applySystemTheme()
 
     // Listen for system theme changes (user switches Windows dark/light mode)
-    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-      // Only update if no iframe theme override has been received
-      applySystemTheme()
-    }
+    const handleSystemThemeChange = () => applySystemTheme()
     prefersDark.addEventListener('change', handleSystemThemeChange)
 
     return () => {
@@ -76,12 +74,11 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchEnv = async () => {
-      // @ts-ignore
-      const baseUrl = await window.ipc.getEnv('NEXT_PUBLIC_SITE_URL') || 'https://bloumechat.com'
+        const baseUrl = await window.ipc.getEnv('NEXT_PUBLIC_SITE_URL') || 'https://bloumechat.com'
+      try { siteOriginRef.current = new URL(String(baseUrl)).origin } catch { /* keep '*' */ }
       setSiteUrl(`${baseUrl}/app?platform=desktop`)
 
-      // @ts-ignore
-      const p = await window.ipc.getPlatform?.() || 'win32'
+        const p = await window.ipc.getPlatform?.() || 'win32'
       setPlatform(p)
     }
     fetchEnv()
@@ -98,17 +95,14 @@ export default function HomePage() {
           document.documentElement.classList.remove('dark')
         }
       } else if (event.data?.type === 'SHOW_NOTIFICATION') {
-        // @ts-ignore
         window.ipc.showNotification(event.data.notification)
       } else if (event.data?.type === 'SET_BADGE_COUNT') {
-        // @ts-ignore
         window.ipc.setBadgeCount(event.data.count ?? 0)
       } else if (event.data?.type === 'SET_VOICE_ACTIVE') {
-        // @ts-ignore
         window.ipc.setVoiceActive(event.data.active === true)
       } else if (event.data?.type === 'IPC_INVOKE') {
         const { id, method, args } = event.data;
-        const ipc = (window as any).ipc;
+        const ipc = window.ipc;
         
         // Convert dash-case from webapp to camelCase used in desktop app
         const methodMap: Record<string, string> = {
@@ -137,12 +131,12 @@ export default function HomePage() {
           Promise.resolve(ipc[targetMethod](...args))
             .then(result => {
               if (iframeRef.current?.contentWindow) {
-                iframeRef.current.contentWindow.postMessage({ type: 'IPC_RESPONSE', id, result }, '*');
+                iframeRef.current.contentWindow.postMessage({ type: 'IPC_RESPONSE', id, result }, siteOriginRef.current);
               }
             })
             .catch(error => {
               if (iframeRef.current?.contentWindow) {
-                iframeRef.current.contentWindow.postMessage({ type: 'IPC_RESPONSE', id, error: error.message }, '*');
+                iframeRef.current.contentWindow.postMessage({ type: 'IPC_RESPONSE', id, error: error.message }, siteOriginRef.current);
               }
             });
         }
@@ -158,22 +152,20 @@ export default function HomePage() {
           channelPublicId: data.channelPublicId,
           serverPublicId: data.serverPublicId,
           authorPublicId: data.authorPublicId
-        }, '*')
+        }, siteOriginRef.current)
       }
     })
 
-    // @ts-ignore
-    const unsubDeepLink = window.ipc.onDeepLink?.((data: any) => {
+    const unsubDeepLink = window.ipc.onDeepLink?.((data) => {
       if (iframeRef.current?.contentWindow) {
-        iframeRef.current.contentWindow.postMessage({ type: 'NAVIGATE', ...data }, '*')
+        iframeRef.current.contentWindow.postMessage({ type: 'NAVIGATE', ...data }, siteOriginRef.current)
       }
     })
 
     // Rich Presence — forward IPC rpc:activity events into the webapp iframe
-    // @ts-ignore
-    const unsubRpc = window.ipc.onRpcActivity?.((activity: any) => {
+    const unsubRpc = window.ipc.onRpcActivity?.((activity) => {
       if (iframeRef.current?.contentWindow) {
-        iframeRef.current.contentWindow.postMessage({ type: 'RPC_ACTIVITY', activity }, '*')
+        iframeRef.current.contentWindow.postMessage({ type: 'RPC_ACTIVITY', activity }, siteOriginRef.current)
       }
     })
 
@@ -187,13 +179,13 @@ export default function HomePage() {
 
   const handleBack = () => {
     if (iframeRef.current?.contentWindow) {
-      iframeRef.current.contentWindow.postMessage({ type: 'NAV_BACK' }, '*')
+      iframeRef.current.contentWindow.postMessage({ type: 'NAV_BACK' }, siteOriginRef.current)
     }
   }
 
   const handleForward = () => {
     if (iframeRef.current?.contentWindow) {
-      iframeRef.current.contentWindow.postMessage({ type: 'NAV_FORWARD' }, '*')
+      iframeRef.current.contentWindow.postMessage({ type: 'NAV_FORWARD' }, siteOriginRef.current)
     }
   }
 
@@ -244,7 +236,6 @@ export default function HomePage() {
           {platform === 'darwin' || platform === 'linux' ? (
             <div className="flex items-center space-x-2 px-2">
               <button
-                // @ts-ignore
                 onClick={() => window.ipc.close()}
                 className="w-3 h-3 rounded-full bg-[#ff5f56] hover:brightness-90 transition-all focus:outline-none shadow-sm flex items-center justify-center group"
                 title="Close"
@@ -252,7 +243,6 @@ export default function HomePage() {
                 <span className="text-[8px] text-black/50 opacity-0 group-hover:opacity-100 font-bold">×</span>
               </button>
               <button
-                // @ts-ignore
                 onClick={() => window.ipc.minimize()}
                 className="w-3 h-3 rounded-full bg-[#ffbd2e] hover:brightness-90 transition-all focus:outline-none shadow-sm flex items-center justify-center group"
                 title="Minimize"
@@ -260,7 +250,6 @@ export default function HomePage() {
                 <span className="text-[10px] text-black/50 opacity-0 group-hover:opacity-100 font-bold leading-[0]">-</span>
               </button>
               <button
-                // @ts-ignore
                 onClick={() => window.ipc.maximize()}
                 className="w-3 h-3 rounded-full bg-[#27c93f] hover:brightness-90 transition-all focus:outline-none shadow-sm flex items-center justify-center group"
                 title="Maximize"
@@ -271,7 +260,6 @@ export default function HomePage() {
           ) : (
             <div className="flex items-center">
               <button
-                // @ts-ignore
                 onClick={() => window.ipc.minimize()}
                 className="w-9 h-[30px] flex items-center justify-center hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors focus:outline-none"
               >
@@ -279,7 +267,6 @@ export default function HomePage() {
               </button>
 
               <button
-                // @ts-ignore
                 onClick={() => window.ipc.maximize()}
                 className="w-9 h-[30px] flex items-center justify-center hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors focus:outline-none"
               >
@@ -287,7 +274,6 @@ export default function HomePage() {
               </button>
 
               <button
-                // @ts-ignore
                 onClick={() => window.ipc.close()}
                 className="w-10 h-[30px] flex items-center justify-center hover:bg-red-500 hover:text-white text-muted-foreground transition-colors focus:outline-none"
               >
