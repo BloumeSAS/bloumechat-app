@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, ipcMain, session, shell, BrowserWindow, globalShortcut, powerMonitor } from 'electron'
+import { app, session, shell, BrowserWindow, globalShortcut, powerMonitor } from 'electron'
 import { createWindow } from './helpers'
 import Store from 'electron-store'
 import fs from 'fs'
