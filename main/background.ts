@@ -7,7 +7,6 @@ import log from 'electron-log'
 import type { AppSettings } from './types/settings'
 import {
   startLocalServer,
-  PROD_PORT,
   handleDeepLink,
   initPermissions,
   initTray,
