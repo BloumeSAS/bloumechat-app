@@ -12,6 +12,7 @@ import {
   initTray,
   initUpdater,
   prewarmBadgeCache,
+  initBadge,
   registerIpcHandlers,
   getAppLocale,
   getI18n,
@@ -106,7 +107,12 @@ if (!isProd) {
   await app.whenReady()
   app.userAgentFallback = 'BloumeChat/App'
 
-  // Pre-warm badge icon cache (1–20 counts + voice icon)
+  // Resolve tray icon path once — reused by initBadge + initTray
+  const trayIconFile = process.platform === 'win32' ? 'icon.ico' : 'icon.png'
+  const trayIconPath = app.isPackaged
+    ? path.join(process.resourcesPath, trayIconFile)
+    : path.join(app.getAppPath(), 'resources', trayIconFile)
+  initBadge(trayIconPath)
   prewarmBadgeCache()
 
   if (app.isPackaged && isProd) {
@@ -151,12 +157,7 @@ if (!isProd) {
   const savedZoom = settingsStore.get('zoomLevel', 0)
   mainWindow.webContents.setZoomLevel(savedZoom)
 
-  // Tray
-  const trayIconFile = process.platform === 'win32' ? 'icon.ico' : 'icon.png'
-  const trayIconPath = app.isPackaged
-    ? path.join(process.resourcesPath, trayIconFile)
-    : path.join(app.getAppPath(), 'resources', trayIconFile)
-
+  // Tray (reuses trayIconPath resolved above)
   tray = initTray(trayIconPath, settingsStore, getMainWindow, setAutoLaunch, v => { isAppQuitting = v })
 
   // IPC
@@ -205,15 +206,21 @@ if (!isProd) {
     )
   }
 
+  /** Only allow http/https through openExternal — blocks file://, javascript://, etc. */
+  const safeOpen = (url: string) => {
+    if (/^https?:\/\//i.test(url)) shell.openExternal(url)
+    else log.warn('[Navigation] Blocked unsafe URL:', url)
+  }
+
   mainWindow.webContents.on('will-navigate', (event, url) => {
-    if (!isAllowedUrl(url)) { event.preventDefault(); shell.openExternal(url) }
+    if (!isAllowedUrl(url)) { event.preventDefault(); safeOpen(url) }
   })
   mainWindow.webContents.on('will-frame-navigate', event => {
     if (event.frame === mainWindow?.webContents.mainFrame) return
-    if (!isAllowedUrl(event.url)) { event.preventDefault(); shell.openExternal(event.url) }
+    if (!isAllowedUrl(event.url)) { event.preventDefault(); safeOpen(event.url) }
   })
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (!isAllowedUrl(url)) { shell.openExternal(url); return { action: 'deny' } }
+    if (!isAllowedUrl(url)) { safeOpen(url); return { action: 'deny' } }
     return { action: 'allow' }
   })
 
