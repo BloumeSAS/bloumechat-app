@@ -83,7 +83,7 @@ export function registerIpcHandlers(
     try { clipboard.writeText(text) } catch (e) { console.error('[Clipboard] write failed:', e) }
   })
   ipcMain.handle('read-clipboard', () => {
-    try { return clipboard.readText() } catch { return '' }
+    try { return clipboard.readText() } catch (e) { console.debug('[Clipboard] read failed:', e); return '' }
   })
   ipcMain.on('copy-selection', (_event, text: unknown) => {
     if (typeof text !== 'string') return
