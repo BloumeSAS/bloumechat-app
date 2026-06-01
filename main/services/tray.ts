@@ -56,10 +56,11 @@ export function buildTrayMenu(
       },
     },
     { type: 'separator' },
-    {
+    // MS Store link only makes sense on Windows
+    ...(process.platform === 'win32' ? [{
       label: i18n.trayCheckUpdates,
       click: () => shell.openExternal('ms-windows-store://pdp/?productid=XPDBZMTB5GVG3L'),
-    },
+    }] : []),
     { label: i18n.trayReload, click: () => getMainWindow()?.webContents.reload() },
     { type: 'separator' },
     { label: i18n.trayQuit, click: () => { setIsAppQuitting(true); app.quit() } },
