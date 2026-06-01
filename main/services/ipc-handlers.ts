@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, clipboard, nativeImage, Notification, desktopCapturer, app } from 'electron'
+import { ipcMain, BrowserWindow, clipboard, nativeImage, Notification, desktopCapturer } from 'electron'
 import Store from 'electron-store'
 import type { AppSettings } from '../types/settings'
 import type { NotificationPayload } from '../types/ipc'
