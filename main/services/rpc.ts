@@ -365,7 +365,7 @@ export function startRpcPolling(
         if (process.platform === 'win32') {
             execFile(
                 'powershell.exe',
-                ['-NoProfile', '-NonInteractive', '-WindowStyle', 'Hidden', '-Command', PS_CMD],
+                ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-Command', PS_CMD],
                 { timeout: 2500 },
                 (err, stdout) => {
                     if (err || !stdout.trim()) return
