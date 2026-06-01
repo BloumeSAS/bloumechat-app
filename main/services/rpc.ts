@@ -345,7 +345,7 @@ async function handlePollResult(
     activity.icon = await getIconDataUrl(exePath)
 
     const win = getWindow()
-    if (!win || win.isDestroyed()) return
+    if (!win || win.isDestroyed() || !win.webContents) return
 
     win.webContents.send('rpc:activity', activity)
 }
