@@ -78,6 +78,9 @@ const handler = {
   setRpcShowListening: (v: boolean) => ipcRenderer.send('set-rpc-show-listening', v),
   getRpcShowPlaying: (): Promise<boolean> => ipcRenderer.invoke('get-rpc-show-playing'),
   setRpcShowPlaying: (v: boolean) => ipcRenderer.send('set-rpc-show-playing', v),
+
+  // --- External URL (opens in system browser, not Electron window) ---
+  openExternal: (url: string) => ipcRenderer.send('open-external', url),
 }
 
 contextBridge.exposeInMainWorld('ipc', handler)
