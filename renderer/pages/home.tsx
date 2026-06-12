@@ -123,6 +123,7 @@ export default function HomePage() {
           'set-rpc-show-listening': 'setRpcShowListening',
           'get-rpc-show-playing': 'getRpcShowPlaying',
           'set-rpc-show-playing': 'setRpcShowPlaying',
+          'open-external': 'openExternal',
         };
 
         const targetMethod = methodMap[method] || method;
