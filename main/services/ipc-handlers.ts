@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, clipboard, nativeImage, Notification, desktopCapturer } from 'electron'
+import { ipcMain, BrowserWindow, clipboard, nativeImage, Notification, desktopCapturer, shell } from 'electron'
 import Store from 'electron-store'
 import type { AppSettings } from '../types/settings'
 import type { NotificationPayload } from '../types/ipc'
@@ -167,5 +167,13 @@ export function registerIpcHandlers(
   ipcMain.on('set-rpc-show-playing', (_event, v: unknown) => {
     if (typeof v !== 'boolean') return
     settingsStore.set('rpcShowPlaying', v)
+  })
+
+  // --- External URL opener (opens in system browser, not Electron window) ---
+  ipcMain.on('open-external', (_event, url: unknown) => {
+    if (typeof url !== 'string') return
+    // Only allow https:// URLs to prevent shell injection
+    if (!url.startsWith('https://')) return
+    shell.openExternal(url)
   })
 }
