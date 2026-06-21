@@ -45,7 +45,16 @@ export async function startLocalServer(serveDir: string): Promise<{ server: http
         }
       }
 
-      const filePath = path.join(serveDir, pathname)
+      const serveDirResolved = path.resolve(serveDir)
+      const filePath = path.resolve(path.join(serveDir, pathname))
+
+      // Block path traversal — the resolved path must stay inside serveDir.
+      if (filePath !== serveDirResolved && !filePath.startsWith(serveDirResolved + path.sep)) {
+        res.writeHead(403)
+        res.end('Forbidden')
+        return
+      }
+
       const extname = String(path.extname(filePath)).toLowerCase()
       const contentType = MIME_TYPES[extname] || 'application/octet-stream'
 
