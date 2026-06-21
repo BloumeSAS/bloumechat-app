@@ -85,6 +85,10 @@ export default function HomePage() {
 
     // Listen for theme changes from the iframe (Bloumechat main site)
     const handleMessage = (event: MessageEvent) => {
+      // Only the bloumechat.com iframe is a legitimate sender — without this check,
+      // any compromised content with a handle to this window could drive window.ipc.
+      if (event.origin !== siteOriginRef.current) return
+
       if (event.data?.type === 'APP_READY') {
         markReady()
       } else if (event.data?.type === 'THEME_CHANGED') {
@@ -126,9 +130,11 @@ export default function HomePage() {
           'open-external': 'openExternal',
         };
 
-        const targetMethod = methodMap[method] || method;
+        // No fallback to the raw `method` string — only explicitly mapped methods are
+        // reachable from the iframe, never the full window.ipc surface (e.g. getEnv).
+        const targetMethod = methodMap[method];
 
-        if (ipc && typeof ipc[targetMethod] === 'function') {
+        if (targetMethod && ipc && typeof ipc[targetMethod] === 'function') {
           Promise.resolve(ipc[targetMethod](...args))
             .then(result => {
               if (iframeRef.current?.contentWindow) {
