@@ -64,9 +64,11 @@ export function registerIpcHandlers(
   ipcMain.on('window-close', () => BrowserWindow.getFocusedWindow()?.close())
 
   // --- Environment ---
+  // Only appConfig (config.json, public/non-secret values) is exposed — never process.env,
+  // which could contain unrelated secrets present in the user's environment.
   ipcMain.handle('get-env', (_event, key: unknown) => {
     if (typeof key !== 'string' || key.length > 128) return undefined
-    return appConfig[key] || process.env[key]
+    return appConfig[key]
   })
   ipcMain.handle('get-platform', () => process.platform)
 
