@@ -53,6 +53,11 @@ nsis:
   installerIcon: resources/icon.ico
   uninstallerIcon: resources/icon.ico
   installerHeaderIcon: resources/icon.ico
+  # appId stays constant across releases, so re-running the Setup.exe is already
+  # detected as an upgrade (same registry uninstall key + install dir), not a fresh
+  # install. Explicit here so it can never be flipped accidentally — user settings/
+  # store data live in %APPDATA%\BloumeChat, outside the install dir either way.
+  deleteAppDataOnUninstall: false
 
 mac:
   target:
