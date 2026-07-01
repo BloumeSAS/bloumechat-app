@@ -127,6 +127,9 @@ export default function HomePage() {
           'set-rpc-show-listening': 'setRpcShowListening',
           'get-rpc-show-playing': 'getRpcShowPlaying',
           'set-rpc-show-playing': 'setRpcShowPlaying',
+          'get-rpc-enabled-categories': 'getRpcEnabledCategories',
+          'set-rpc-enabled-categories': 'setRpcEnabledCategories',
+          'set-mute-state': 'setMuteState',
           'open-external': 'openExternal',
         };
 
@@ -176,11 +179,25 @@ export default function HomePage() {
       }
     })
 
+    // Taskbar thumbnail toolbar — forward mute/deafen button clicks into the webapp iframe
+    const unsubThumbarMute = window.ipc.onThumbarToggleMute?.(() => {
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage({ type: 'THUMBAR_TOGGLE_MUTE' }, siteOriginRef.current)
+      }
+    })
+    const unsubThumbarDeafen = window.ipc.onThumbarToggleDeafen?.(() => {
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.postMessage({ type: 'THUMBAR_TOGGLE_DEAFEN' }, siteOriginRef.current)
+      }
+    })
+
     return () => {
       window.removeEventListener('message', handleMessage)
       unsubNotif()
       unsubDeepLink?.()
       unsubRpc?.()
+      unsubThumbarMute?.()
+      unsubThumbarDeafen?.()
     }
   }, [markReady])
 
