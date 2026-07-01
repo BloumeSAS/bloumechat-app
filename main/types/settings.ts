@@ -9,4 +9,6 @@ export interface AppSettings {
   rpcShowBrowsing: boolean
   rpcShowListening: boolean
   rpcShowPlaying: boolean
+  /** Case-insensitive keywords (app/site names) that suppress a matching activity entirely. */
+  rpcEnabledCategories: string[]
 }
