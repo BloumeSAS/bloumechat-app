@@ -318,36 +318,48 @@ async function getIconDataUrl(exePath: string | undefined): Promise<string | und
 // ---------------------------------------------------------------------------
 // Polling state
 // ---------------------------------------------------------------------------
-let pollInterval: ReturnType<typeof setInterval> | null = null
+let pollTimer: ReturnType<typeof setTimeout> | null = null
 let lastActivityKey = ''
+
+// Adaptive interval — spawning a PowerShell/osascript process every tick has a
+// real cost. When the foreground activity hasn't changed for a while, back off
+// (up to MAX_POLL_INTERVAL_MS); any change snaps straight back to MIN so a
+// switch to a new app/game/site is still picked up quickly.
+const MIN_POLL_INTERVAL_MS = 10_000
+const MAX_POLL_INTERVAL_MS = 45_000
+const BACKOFF_STEP_MS = 5_000
+let currentIntervalMs = MIN_POLL_INTERVAL_MS
+let stableStreak = 0
 
 // ---------------------------------------------------------------------------
 // Common result handler — shared between Windows + macOS poll paths
 // ---------------------------------------------------------------------------
+/** Returns true if the activity changed (and was broadcast), false otherwise. */
 async function handlePollResult(
     processName: string,
     windowTitle: string,
     exePath: string,
     getWindow: () => BrowserWindow | null
-): Promise<void> {
+): Promise<boolean> {
     const rawName = sanitizeText(processName)
     const lc = rawName.toLowerCase().trim()
-    if (!lc || BLOCKLIST.has(lc)) return
+    if (!lc || BLOCKLIST.has(lc)) return false
 
     const activity = classifyActivity(rawName, sanitizeText(windowTitle), exePath || '')
     const key = activityKey(activity)
 
     // Debounce — only send IPC if activity changed
-    if (key === lastActivityKey) return
+    if (key === lastActivityKey) return false
     lastActivityKey = key
 
     // Auto-extract the real executable icon (any app/game). Best-effort.
     activity.icon = await getIconDataUrl(exePath)
 
     const win = getWindow()
-    if (!win || win.isDestroyed() || !win.webContents) return
+    if (!win || win.isDestroyed() || !win.webContents) return true
 
     win.webContents.send('rpc:activity', activity)
+    return true
 }
 
 // ---------------------------------------------------------------------------
@@ -357,10 +369,25 @@ export function startRpcPolling(
     getWindow: () => BrowserWindow | null,
     isEnabled: () => boolean
 ): void {
-    if (pollInterval !== null) return // already running
+    if (pollTimer !== null) return // already running
+
+    const scheduleNext = () => {
+        pollTimer = setTimeout(poll, currentIntervalMs)
+    }
+
+    const onPollSettled = (changed: boolean) => {
+        if (changed) {
+            currentIntervalMs = MIN_POLL_INTERVAL_MS
+            stableStreak = 0
+        } else {
+            stableStreak++
+            currentIntervalMs = Math.min(MAX_POLL_INTERVAL_MS, MIN_POLL_INTERVAL_MS + stableStreak * BACKOFF_STEP_MS)
+        }
+        scheduleNext()
+    }
 
     const poll = () => {
-        if (!isEnabled()) return
+        if (!isEnabled()) { scheduleNext(); return }
 
         if (process.platform === 'win32') {
             execFile(
@@ -368,14 +395,15 @@ export function startRpcPolling(
                 ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-WindowStyle', 'Hidden', '-Command', PS_CMD],
                 { timeout: 2500 },
                 (err, stdout) => {
-                    if (err || !stdout.trim()) return
+                    if (err || !stdout.trim()) { onPollSettled(false); return }
                     let parsed: { n: string; t: string; p?: string | null }
                     try {
                         parsed = JSON.parse(stdout.trim())
                     } catch {
+                        onPollSettled(false)
                         return
                     }
-                    void handlePollResult(parsed.n || '', parsed.t || '', parsed.p || '', getWindow)
+                    void handlePollResult(parsed.n || '', parsed.t || '', parsed.p || '', getWindow).then(onPollSettled)
                 }
             )
         } else if (process.platform === 'darwin') {
@@ -384,29 +412,34 @@ export function startRpcPolling(
                 ['-e', MACOS_CMD],
                 { timeout: 3000 },
                 (err, stdout) => {
-                    if (err || !stdout.trim()) return
+                    if (err || !stdout.trim()) { onPollSettled(false); return }
                     const raw = stdout.trim()
                     const pipeIdx = raw.indexOf('|')
-                    if (pipeIdx === -1) return
+                    if (pipeIdx === -1) { onPollSettled(false); return }
                     const procName = raw.substring(0, pipeIdx).trim()
                     const winTitle = raw.substring(pipeIdx + 1).trim()
                     // macOS: executable path not resolved here → icon falls back to brand/Lucide.
-                    void handlePollResult(procName, winTitle, '', getWindow)
+                    void handlePollResult(procName, winTitle, '', getWindow).then(onPollSettled)
                 }
             )
+        } else {
+            // Linux / other platforms: not supported (no reliable cross-distro foreground window API)
+            scheduleNext()
         }
-        // Linux / other platforms: not supported (no reliable cross-distro foreground window API)
     }
 
-    // Run immediately then every 10s
+    // Run immediately, then adapt the delay based on whether activity changes.
+    currentIntervalMs = MIN_POLL_INTERVAL_MS
+    stableStreak = 0
     poll()
-    pollInterval = setInterval(poll, 10_000)
 }
 
 export function stopRpcPolling(): void {
-    if (pollInterval !== null) {
-        clearInterval(pollInterval)
-        pollInterval = null
+    if (pollTimer !== null) {
+        clearTimeout(pollTimer)
+        pollTimer = null
     }
     lastActivityKey = ''
+    currentIntervalMs = MIN_POLL_INTERVAL_MS
+    stableStreak = 0
 }
