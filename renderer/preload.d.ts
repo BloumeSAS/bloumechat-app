@@ -62,6 +62,9 @@ interface WindowIpc {
   selectScreenSource(sourceId: string): void
   cancelScreenSource(): void
   setVoiceActive(active: boolean): void
+  setMuteState(isMuted: boolean, isDeafened: boolean): void
+  onThumbarToggleMute(cb: () => void): () => void
+  onThumbarToggleDeafen(cb: () => void): () => void
   onRpcActivity(cb: (activity: RpcActivity) => void): () => void
   getRpcEnabled(): Promise<boolean>
   setRpcEnabled(enable: boolean): void
@@ -73,6 +76,8 @@ interface WindowIpc {
   setRpcShowListening(v: boolean): void
   getRpcShowPlaying(): Promise<boolean>
   setRpcShowPlaying(v: boolean): void
+  getRpcEnabledCategories(): Promise<string[]>
+  setRpcEnabledCategories(v: string[]): void
 }
 
 declare global {
