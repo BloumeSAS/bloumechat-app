@@ -60,6 +60,19 @@ const handler = {
   cancelScreenSource: () => ipcRenderer.send('cancel-screen-source'),
   setVoiceActive: (active: boolean) => ipcRenderer.send('set-voice-active', active),
 
+  // --- Taskbar thumbnail toolbar (mute/deafen) ---
+  setMuteState: (isMuted: boolean, isDeafened: boolean) => ipcRenderer.send('set-mute-state', { isMuted, isDeafened }),
+  onThumbarToggleMute: (cb: () => void) => {
+    const listener = () => cb()
+    ipcRenderer.on('thumbar:toggle-mute', listener)
+    return () => ipcRenderer.removeListener('thumbar:toggle-mute', listener)
+  },
+  onThumbarToggleDeafen: (cb: () => void) => {
+    const listener = () => cb()
+    ipcRenderer.on('thumbar:toggle-deafen', listener)
+    return () => ipcRenderer.removeListener('thumbar:toggle-deafen', listener)
+  },
+
   // --- Rich Presence (RPC) ---
   onRpcActivity: (cb: (activity: import('./types/ipc').RpcActivity) => void) => {
     const listener = (_event: IpcRendererEvent, activity: import('./types/ipc').RpcActivity) => cb(activity)
@@ -78,6 +91,10 @@ const handler = {
   setRpcShowListening: (v: boolean) => ipcRenderer.send('set-rpc-show-listening', v),
   getRpcShowPlaying: (): Promise<boolean> => ipcRenderer.invoke('get-rpc-show-playing'),
   setRpcShowPlaying: (v: boolean) => ipcRenderer.send('set-rpc-show-playing', v),
+
+  // Per-app/site excluded keywords
+  getRpcEnabledCategories: (): Promise<string[]> => ipcRenderer.invoke('get-rpc-enabled-categories'),
+  setRpcEnabledCategories: (v: string[]) => ipcRenderer.send('set-rpc-enabled-categories', v),
 
   // --- External URL (opens in system browser, not Electron window) ---
   openExternal: (url: string) => ipcRenderer.send('open-external', url),
