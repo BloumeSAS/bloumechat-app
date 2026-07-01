@@ -23,6 +23,22 @@ function getLocaleStrings() {
   return locale.startsWith('fr') ? updateI18n.fr : updateI18n.en
 }
 
+const readyI18n = {
+  fr: {
+    title: 'BloumeChat — Mise à jour prête',
+    body: (v: string) => `La version ${v} a été téléchargée. Cliquez pour redémarrer et l'installer.`,
+  },
+  en: {
+    title: 'BloumeChat — Update ready',
+    body: (v: string) => `Version ${v} has been downloaded. Click to restart and install.`,
+  },
+} as const
+
+function getReadyLocaleStrings() {
+  const locale = app.getLocale()?.toLowerCase() || 'fr'
+  return locale.startsWith('fr') ? readyI18n.fr : readyI18n.en
+}
+
 export function initUpdater(
   getMainWindow: () => BrowserWindow | null,
   getAppIconPath: () => string,
@@ -30,7 +46,10 @@ export function initUpdater(
   isProd: boolean
 ) {
   autoUpdater.requestHeaders = { 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0' }
-  autoUpdater.autoDownload = false
+  // Download silently in the background as soon as an update is found — no click
+  // required to start fetching it. The user is only interrupted once it's ready
+  // to install (see 'update-downloaded' below).
+  autoUpdater.autoDownload = true
 
   let isUpdateIgnored = false
 
@@ -39,26 +58,9 @@ export function initUpdater(
   )
 
   autoUpdater.on('update-available', info => {
-    const mainWindow = getMainWindow()
-    mainWindow?.webContents.send('update-status', { status: 'available', info })
-    if (isUpdateIgnored) return
-
-    const { title, body } = getLocaleStrings()
-    const icon = nativeImage.createFromPath(getAppIconPath())
-
-    const notification = new Notification({ title, body: body(info.version), icon })
-
-    notification.on('click', () => {
-      mainWindow?.show()
-      mainWindow?.focus()
-      const port = getProdPort()
-      const updateUrl = isProd
-        ? `http://127.0.0.1:${port}/update`
-        : `http://localhost:${port}/update`
-      mainWindow?.loadURL(updateUrl)
-    })
-
-    notification.show()
+    // Just informs the renderer (e.g. a subtle "updating…" indicator) — the
+    // download already started automatically, so no click is needed here.
+    getMainWindow()?.webContents.send('update-status', { status: 'available', info })
   })
 
   autoUpdater.on('update-not-available', info =>
@@ -70,9 +72,21 @@ export function initUpdater(
   autoUpdater.on('download-progress', progressObj =>
     getMainWindow()?.webContents.send('update-status', { status: 'downloading', progress: progressObj })
   )
-  autoUpdater.on('update-downloaded', info =>
-    getMainWindow()?.webContents.send('update-status', { status: 'downloaded', info })
-  )
+
+  autoUpdater.on('update-downloaded', info => {
+    const mainWindow = getMainWindow()
+    mainWindow?.webContents.send('update-status', { status: 'downloaded', info })
+    if (isUpdateIgnored) return
+
+    const { title, body } = getReadyLocaleStrings()
+    const icon = nativeImage.createFromPath(getAppIconPath())
+    const notification = new Notification({ title, body: body(info.version), icon })
+
+    // Only action left for the user: click to restart & install (auto-download
+    // already happened, no OV/EV cert yet so SmartScreen may still warn on launch).
+    notification.on('click', () => autoUpdater.quitAndInstall(true, true))
+    notification.show()
+  })
 
   ipcMain.on('ignore-update', () => { isUpdateIgnored = true })
   ipcMain.on('quit-and-install', () => autoUpdater.quitAndInstall(true, true))
