@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, session, shell, BrowserWindow, globalShortcut, powerMonitor } from 'electron'
+import { app, session, shell, BrowserWindow, globalShortcut, powerMonitor, crashReporter } from 'electron'
 import { createWindow } from './helpers'
 import Store from 'electron-store'
 import fs from 'fs'
@@ -40,6 +40,24 @@ const isProd = appConfig.IS_PROD !== undefined
 if (process.platform === 'win32') {
   app.setAppUserModelId('com.bloumechat.app')
 }
+
+// Crash reporter — writes native minidumps locally AND, when a collection
+// endpoint is configured, uploads them to the admin panel (server/routes/crash-reports.ts)
+// so a crash can be diagnosed from any user's machine without relying on their
+// bug report alone. Falls back to local-only if CRASH_REPORT_URL isn't set
+// (e.g. a dev build without config.json wired up).
+const crashReportUrl = typeof appConfig.CRASH_REPORT_URL === 'string' ? appConfig.CRASH_REPORT_URL : ''
+app.setPath('crashDumps', path.join(app.getPath('userData'), 'CrashDumps'))
+crashReporter.start({
+  submitURL: crashReportUrl,
+  uploadToServer: Boolean(crashReportUrl),
+  compress: true,
+  ignoreSystemCrashHandler: false,
+  globalExtra: {
+    _version: app.getVersion(),
+    _platform: process.platform,
+  },
+})
 
 // Allow cookies in iframes (SameSite workaround for embedded Cloudflare challenges)
 app.commandLine.appendSwitch('disable-features', 'SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure')
@@ -133,6 +151,16 @@ if (!isProd) {
     app.isPackaged
   )
 
+  // Cold start — the home shell (served locally) embeds an iframe pointing at the
+  // real remote site (bloumechat.com). DNS + TLS handshake for that origin is the
+  // actual network-bound cost, so warm it up while the window/local server spin up.
+  try {
+    const preconnectOrigin = String(appConfig.NEXT_PUBLIC_SITE_URL || 'https://bloumechat.com')
+    mainSession.preconnect({ url: preconnectOrigin, numSockets: 2 })
+  } catch (e) {
+    console.warn('[Startup] Preconnect failed:', e)
+  }
+
   mainWindow = createWindow('main', {
     width: 1200,
     height: 800,
@@ -152,6 +180,17 @@ if (!isProd) {
   // Suppress native context menu so React onContextMenu handlers fire unobstructed
   mainWindow.webContents.on('context-menu', e => e.preventDefault())
 
+  // Renderer crash/OOM — log with as much detail as electron-log can persist,
+  // then reload in place so the user isn't left staring at a blank window.
+  mainWindow.webContents.on('render-process-gone', (_event, details) => {
+    console.error('[Renderer] Process gone:', details.reason, details.exitCode)
+    if (details.reason !== 'clean-exit' && !isAppQuitting) {
+      mainWindow?.webContents.reload()
+    }
+  })
+  mainWindow.webContents.on('unresponsive', () => console.warn('[Renderer] Became unresponsive'))
+  mainWindow.webContents.on('responsive', () => console.log('[Renderer] Responsive again'))
+
   if (settingsStore.get('wasMaximized', false)) mainWindow.maximize()
 
   const savedZoom = settingsStore.get('zoomLevel', 0)
@@ -159,6 +198,35 @@ if (!isProd) {
 
   // Tray (reuses trayIconPath resolved above)
   tray = initTray(trayIconPath, settingsStore, getMainWindow, setAutoLaunch, v => { isAppQuitting = v })
+
+  // Jump List (taskbar right-click) — kept to a single safe "Open" task for now.
+  // Dynamic entries like "New message" / "Set status" need a matching deep-link
+  // route (only 'channel'/'server' exist today, see services/deeplink.ts) and a
+  // real webapp destination for them — adding those is a follow-up, not a main-
+  // process concern on its own.
+  if (process.platform === 'win32') {
+    try {
+      const i18n = getI18n(getAppLocale())
+      app.setJumpList([
+        {
+          type: 'tasks',
+          items: [
+            {
+              type: 'task',
+              title: i18n.trayOpen,
+              description: i18n.trayOpen,
+              program: process.execPath,
+              args: app.isPackaged ? '' : `"${app.getAppPath()}"`,
+              iconPath: process.execPath,
+              iconIndex: 0,
+            },
+          ],
+        },
+      ])
+    } catch (e) {
+      console.warn('[JumpList] Failed to set:', e)
+    }
+  }
 
   // IPC
   registerIpcHandlers(getMainWindow, getTray, settingsStore, appConfig, setAutoLaunch, getAppIconPath)
