@@ -4,6 +4,7 @@ import type { AppSettings } from '../types/settings'
 import type { NotificationPayload } from '../types/ipc'
 import { handleSetBadgeCount, handleSetVoiceActive } from './badge'
 import { startRpcPolling, stopRpcPolling } from './rpc'
+import { handleThumbarVoiceActive, handleSetMuteState } from './thumbar'
 
 export function registerIpcHandlers(
   getMainWindow: () => BrowserWindow | null,
@@ -52,7 +53,11 @@ export function registerIpcHandlers(
 
   // --- Badge & Voice ---
   ipcMain.on('set-badge-count', (_event, count: unknown) => handleSetBadgeCount(count, getMainWindow()))
-  ipcMain.on('set-voice-active', (_event, active: unknown) => handleSetVoiceActive(active, getMainWindow(), getTray()))
+  ipcMain.on('set-voice-active', (_event, active: unknown) => {
+    handleSetVoiceActive(active, getMainWindow(), getTray())
+    if (typeof active === 'boolean') handleThumbarVoiceActive(active, getMainWindow())
+  })
+  ipcMain.on('set-mute-state', (_event, raw: unknown) => handleSetMuteState(raw, getMainWindow()))
 
   // --- Window Controls ---
   ipcMain.on('window-minimize', () => BrowserWindow.getFocusedWindow()?.minimize())
@@ -169,6 +174,13 @@ export function registerIpcHandlers(
   ipcMain.on('set-rpc-show-playing', (_event, v: unknown) => {
     if (typeof v !== 'boolean') return
     settingsStore.set('rpcShowPlaying', v)
+  })
+
+  // Per-app/site excluded keywords (case-insensitive substring match against activity name/details)
+  ipcMain.handle('get-rpc-enabled-categories', () => settingsStore.get('rpcEnabledCategories', []))
+  ipcMain.on('set-rpc-enabled-categories', (_event, v: unknown) => {
+    if (!Array.isArray(v) || !v.every((k) => typeof k === 'string')) return
+    settingsStore.set('rpcEnabledCategories', v.map((k) => k.trim()).filter(Boolean).slice(0, 50))
   })
 
   // --- External URL opener (opens in system browser, not Electron window) ---
