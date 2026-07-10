@@ -325,9 +325,9 @@ let lastActivityKey = ''
 // real cost. When the foreground activity hasn't changed for a while, back off
 // (up to MAX_POLL_INTERVAL_MS); any change snaps straight back to MIN so a
 // switch to a new app/game/site is still picked up quickly.
-const MIN_POLL_INTERVAL_MS = 10_000
-const MAX_POLL_INTERVAL_MS = 45_000
-const BACKOFF_STEP_MS = 5_000
+const MIN_POLL_INTERVAL_MS = 4_000
+const MAX_POLL_INTERVAL_MS = 20_000
+const BACKOFF_STEP_MS = 4_000
 let currentIntervalMs = MIN_POLL_INTERVAL_MS
 let stableStreak = 0
 
