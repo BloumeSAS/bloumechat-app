@@ -1,7 +1,7 @@
 import { BrowserWindow } from 'electron'
 
 const MAX_LENGTH = 512
-const VALID_ACTIONS = new Set(['channel', 'server'])
+const VALID_ACTIONS = new Set(['channel', 'server', 'gift'])
 const VALID_ID_REGEX = /^[a-zA-Z0-9_-]{1,64}$/
 
 export function handleDeepLink(url: string, mainWindow: BrowserWindow | null) {
