@@ -21,6 +21,10 @@ extraResources:
     to: icon.ico
   - from: resources/icon.png
     to: icon.png
+  - from: resources/voice
+    to: voice
+    filter:
+      - "**/*.png"
 publish:
   provider: github
   owner: JulesZYTB
