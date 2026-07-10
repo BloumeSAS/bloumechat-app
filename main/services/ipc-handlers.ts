@@ -5,6 +5,7 @@ import type { NotificationPayload } from '../types/ipc'
 import { handleSetBadgeCount, handleSetVoiceActive } from './badge'
 import { startRpcPolling, stopRpcPolling } from './rpc'
 import { handleThumbarVoiceActive, handleSetMuteState } from './thumbar'
+import { setTrayVoiceActive, setTrayMuteState } from './tray'
 
 export function registerIpcHandlers(
   getMainWindow: () => BrowserWindow | null,
@@ -55,9 +56,20 @@ export function registerIpcHandlers(
   ipcMain.on('set-badge-count', (_event, count: unknown) => handleSetBadgeCount(count, getMainWindow()))
   ipcMain.on('set-voice-active', (_event, active: unknown) => {
     handleSetVoiceActive(active, getMainWindow(), getTray())
-    if (typeof active === 'boolean') handleThumbarVoiceActive(active, getMainWindow())
+    if (typeof active === 'boolean') {
+      handleThumbarVoiceActive(active, getMainWindow())
+      setTrayVoiceActive(active)
+    }
   })
-  ipcMain.on('set-mute-state', (_event, raw: unknown) => handleSetMuteState(raw, getMainWindow()))
+  ipcMain.on('set-mute-state', (_event, raw: unknown) => {
+    handleSetMuteState(raw, getMainWindow())
+    if (raw && typeof raw === 'object') {
+      const data = raw as Record<string, unknown>
+      if (typeof data.isMuted === 'boolean' && typeof data.isDeafened === 'boolean') {
+        setTrayMuteState(data.isMuted, data.isDeafened)
+      }
+    }
+  })
 
   // --- Window Controls ---
   ipcMain.on('window-minimize', () => BrowserWindow.getFocusedWindow()?.minimize())
