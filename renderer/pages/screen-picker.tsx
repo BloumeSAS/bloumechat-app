@@ -1,31 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
-
-// ---- i18n (self-contained) ----
-const Dict = {
-    fr: {
-        title: 'Partage d\'écran | BloumeChat',
-        heading: 'Choisir quoi partager',
-        screens: 'Écrans',
-        windows: 'Fenêtres',
-        share: 'Partager',
-        cancel: 'Annuler',
-        loading: 'Chargement des sources...',
-        noSources: 'Aucune source disponible.',
-    },
-    en: {
-        title: 'Screen Share | BloumeChat',
-        heading: 'Choose what to share',
-        screens: 'Screens',
-        windows: 'Windows',
-        share: 'Share',
-        cancel: 'Cancel',
-        loading: 'Loading sources...',
-        noSources: 'No sources available.',
-    },
-}
-
-type Lang = keyof typeof Dict
+import { detectLang, getDict, SUPPORTED_LANGS, type SupportedLang } from '../lib/i18n'
 
 interface Source {
     id: string
@@ -35,18 +10,16 @@ interface Source {
 }
 
 export default function ScreenPickerPage() {
-    const [lang, setLang] = useState<Lang>('fr')
+    const [lang, setLang] = useState<SupportedLang>('fr')
     const [sources, setSources] = useState<Source[]>([])
     const [selected, setSelected] = useState<string | null>(null)
     const [tab, setTab] = useState<'screens' | 'windows'>('screens')
     const [loading, setLoading] = useState(true)
 
-    const d = Dict[lang]
+    const d = getDict(lang).screen_picker
 
     useEffect(() => {
-        // Detect lang from navigator
-        const loc = navigator.language?.toLowerCase() || 'fr'
-        setLang(loc.startsWith('fr') ? 'fr' : 'en')
+        setLang(detectLang())
 
         // Request sources from main process
         // @ts-ignore
@@ -96,11 +69,12 @@ export default function ScreenPickerPage() {
                     {d.heading}
                 </span>
                 <button
-                    onClick={() => setLang(l => l === 'fr' ? 'en' : 'fr')}
+                    onClick={() => setLang(l => l === 'en' ? 'fr' : 'en')}
                     className="text-[9px] font-black opacity-30 hover:opacity-100 transition-opacity uppercase"
                     style={{ WebkitAppRegion: 'no-drag' } as React.CSSProperties}
+                    title={SUPPORTED_LANGS.join(', ')}
                 >
-                    {lang === 'fr' ? 'EN' : 'FR'}
+                    {lang === 'en' ? 'FR' : 'EN'}
                 </button>
             </div>
 
