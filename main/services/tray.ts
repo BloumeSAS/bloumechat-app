@@ -2,33 +2,7 @@ import { Tray, Menu, nativeImage, BrowserWindow, shell, app } from 'electron'
 import Store from 'electron-store'
 import fs from 'fs'
 import type { AppSettings } from '../types/settings'
-
-const mainProcessI18n = {
-  fr: {
-    trayOpen: 'Ouvrir BloumeChat',
-    trayAutoLaunch: 'Lancer au démarrage',
-    trayCheckUpdates: 'Vérifier les mises à jour (Store)',
-    trayReload: 'Recharger',
-    trayQuit: 'Quitter',
-    trayNotice: "BloumeChat continue de tourner en arrière-plan. Cliquez sur l'icône pour rouvrir.",
-    trayMuteMic: 'Couper le micro',
-    trayUnmuteMic: 'Activer le micro',
-    trayDeafen: 'Couper le son',
-    trayUndeafen: 'Réactiver le son',
-  },
-  en: {
-    trayOpen: 'Open BloumeChat',
-    trayAutoLaunch: 'Launch at startup',
-    trayCheckUpdates: 'Check for updates (Store)',
-    trayReload: 'Reload',
-    trayQuit: 'Quit',
-    trayNotice: 'BloumeChat is still running in the background. Click the icon to reopen.',
-    trayMuteMic: 'Mute microphone',
-    trayUnmuteMic: 'Unmute microphone',
-    trayDeafen: 'Deafen',
-    trayUndeafen: 'Undeafen',
-  },
-} as const
+import { getLocaleDict, resolveSupportedLocale, type SupportedLocale } from './locales'
 
 // ─── Shared voice state (mirrors the thumbar) ──────────────────────────────────
 // Lets the tray menu expose mic / deafen toggles while in a call, so users always
@@ -53,15 +27,14 @@ export function setTrayMuteState(isMuted: boolean, isDeafened: boolean): void {
   rebuildTrayMenu?.()
 }
 
-export type AppLocale = keyof typeof mainProcessI18n
+export type AppLocale = SupportedLocale
 
 export function getAppLocale(): AppLocale {
-  const locale = app.getLocale()?.toLowerCase() || 'fr'
-  return locale.startsWith('fr') ? 'fr' : 'en'
+  return resolveSupportedLocale(app.getLocale())
 }
 
 export function getI18n(locale: AppLocale) {
-  return mainProcessI18n[locale]
+  return getLocaleDict(locale).tray
 }
 
 export function buildTrayMenu(
@@ -72,7 +45,7 @@ export function buildTrayMenu(
   getTray: () => Tray | null
 ): Electron.Menu {
   const isAutoLaunch = settingsStore.get('autoLaunch', false)
-  const i18n = mainProcessI18n[getAppLocale()]
+  const i18n = getI18n(getAppLocale())
 
   // Voice controls — only shown while in a call. They reuse the same IPC channels
   // as the thumbnail-toolbar buttons, so the webapp toggles mute/deafen for us.
