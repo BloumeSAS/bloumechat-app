@@ -1,27 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
 import Head from 'next/head'
-
-const translations = {
-  fr: {
-    loading: 'Chargement de BloumeChat...',
-    back: 'Précédent',
-    forward: 'Suivant',
-  },
-  en: {
-    loading: 'Loading BloumeChat...',
-    back: 'Back',
-    forward: 'Forward',
-  },
-} as const
-
-type Lang = keyof typeof translations
-
-function detectLang(): Lang {
-  if (typeof navigator === 'undefined') return 'fr'
-  const lang = navigator.language?.toLowerCase() || ''
-  if (lang.startsWith('fr')) return 'fr'
-  return 'en'
-}
+import { detectLang, getDict } from '../lib/i18n'
 
 export default function HomePage() {
   const [siteUrl, setSiteUrl] = useState('')
@@ -30,7 +9,7 @@ export default function HomePage() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const siteOriginRef = useRef('*') // narrowed once siteUrl is known
   const readySetRef = useRef(false)
-  const t = useMemo(() => translations[detectLang()], [])
+  const t = useMemo(() => getDict(detectLang()).home, [])
 
   const markReady = useCallback(() => {
     if (readySetRef.current) return
