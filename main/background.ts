@@ -18,6 +18,7 @@ import {
   getI18n,
   startRpcPolling,
   stopRpcPolling,
+  reapplyThumbar,
 } from './services'
 
 // Route console.* to electron-log — writes to %APPDATA%\BloumeChat\logs\main.log in production
@@ -316,6 +317,12 @@ if (!isProd) {
       settingsStore.set('zoomLevel', 0)
     }
   })
+
+  // Windows drops the taskbar thumbnail toolbar (mute/deafen buttons) whenever
+  // the window is hidden (minimize-to-tray) and shown again — re-apply it here
+  // instead of waiting for the next mute/deafen toggle to fix it incidentally.
+  mainWindow.on('show', () => reapplyThumbar(mainWindow))
+  mainWindow.on('restore', () => reapplyThumbar(mainWindow))
 
   app.on('before-quit', () => { isAppQuitting = true })
 
