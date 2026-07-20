@@ -75,3 +75,17 @@ export function handleSetMuteState(raw: unknown, win: BrowserWindow | null) {
     isDeafened = data.isDeafened
     if (win) applyThumbar(win)
 }
+
+/**
+ * Windows drops the thumbnail-toolbar registration whenever the window is
+ * hidden (minimize-to-tray) and later shown/restored again — DWM doesn't
+ * automatically re-apply it, `setThumbarButtons` has to be called again. This
+ * is why the mute/deafen buttons "worked on the tray icon but not in the
+ * taskbar hover preview": the tray context menu is rebuilt fresh each time,
+ * but the taskbar thumbnail toolbar silently stayed empty until the NEXT
+ * mute/deafen toggle re-triggered applyThumbar. Call this on the window's
+ * 'show' / 'restore' events so it's correct immediately on restore instead.
+ */
+export function reapplyThumbar(win: BrowserWindow | null) {
+    if (win && isVoiceActive) applyThumbar(win)
+}
