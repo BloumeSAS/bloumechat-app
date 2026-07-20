@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "BloumeChat yükleniyor...",
+        "back": "Öncesi",
+        "forward": "Takip etme"
+    },
+    "screen_picker": {
+        "title": "Ekran Paylaşımı | BloumeChat",
+        "heading": "Neyi paylaşacağınızı seçme",
+        "screens": "Ekranlar",
+        "windows": "Windows",
+        "share": "Paylaşmak",
+        "cancel": "İptal etmek",
+        "loading": "Kaynaklar yükleniyor...",
+        "noSources": "Kaynak yok."
+    },
+    "update": {
+        "title": "Güncelle | Bloumechat",
+        "system_update": "Sistem güncellemesi",
+        "checking": "Doğrulama...",
+        "available": "Güncelleme !",
+        "uptodate": "Güncel",
+        "downloading": "İndirmek",
+        "ready": "Kuruluma hazır",
+        "error": "Hata!",
+        "general_title": "Güncellemeler",
+        "checking_desc": "Sunucularımızda Bloumechat uygulamasının en son sürümünü arıyoruz.",
+        "available_desc": "Bloumechat ({{version}}) uygulamasının yeni bir sürümü mevcut.",
+        "uptodate_desc": "Tebrikler ! Bloumechat'ın en son sürümünü kullanıyorsunuz.",
+        "downloading_desc": "Yeni dosyalar alınıyor... Uygulamayı kapatmayın.",
+        "ready_desc": "Her şey hazır! Güncellemeyi yüklemek için aşağıdaki butona tıklayın.",
+        "idle_desc": "En yeni özelliklerden yararlanmak için uygulamanızı güncel tutun.",
+        "restart_button": "Yeniden Başlatın ve Yükleyin",
+        "check_button": "Şimdi kontrol et",
+        "download_button": "Güncellemeyi indirin",
+        "recheck_button": "Tekrar kontrol et",
+        "ignore_button": "Şimdilik görmezden gelin",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "BloumeChat'ı aç",
+        "trayAutoLaunch": "Başlangıçta başlat",
+        "trayCheckUpdates": "Güncellemeleri kontrol et (Mağaza)",
+        "trayReload": "Yeniden yükle",
+        "trayQuit": "ayrılmak",
+        "trayNotice": "BloumeChat arka planda çalışmaya devam ediyor. Yeniden açmak için simgeye tıklayın.",
+        "trayMuteMic": "Mikrofonun sesini kapat",
+        "trayUnmuteMic": "Mikrofonu etkinleştir",
+        "trayDeafen": "Sesi kapat",
+        "trayUndeafen": "Sesini açmak"
+    }
+}

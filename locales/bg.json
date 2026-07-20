@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Зарежда се BloumeChat...",
+        "back": "Предишен",
+        "forward": "Следване"
+    },
+    "screen_picker": {
+        "title": "Споделяне на екрана | BloumeChat",
+        "heading": "Избор какво да споделите",
+        "screens": "Екрани",
+        "windows": "Windows",
+        "share": "Споделете",
+        "cancel": "Отказ",
+        "loading": "Източниците се зареждат...",
+        "noSources": "Няма налични източници."
+    },
+    "update": {
+        "title": "Актуализиране | Bloumechat",
+        "system_update": "Актуализация на системата",
+        "checking": "Проверка...",
+        "available": "Актуализация!",
+        "uptodate": "В крак с времето",
+        "downloading": "Изтегляне",
+        "ready": "Готов за монтаж",
+        "error": "Опа!",
+        "general_title": "Актуализации",
+        "checking_desc": "Търсим най-новата версия на Bloumechat на нашите сървъри.",
+        "available_desc": "Налична е нова версия на Bloumechat ({{version}}).",
+        "uptodate_desc": "честито ! Използвате най-новата версия на Bloumechat.",
+        "downloading_desc": "Извличане на нови файлове... Не затваряйте приложението.",
+        "ready_desc": "Всичко е готово! Щракнете върху бутона по-долу, за да инсталирате актуализацията.",
+        "idle_desc": "Поддържайте приложението си актуализирано, за да се възползвате от най-новите функции.",
+        "restart_button": "Рестартирайте и инсталирайте",
+        "check_button": "Проверете сега",
+        "download_button": "Изтеглете актуализацията",
+        "recheck_button": "Повторна проверка",
+        "ignore_button": "Игнорирайте засега",
+        "footer": "BLOUME SAS • EST. 2026 г"
+    },
+    "tray": {
+        "trayOpen": "Отворете BloumeChat",
+        "trayAutoLaunch": "Стартиране при стартиране",
+        "trayCheckUpdates": "Проверка за актуализации (Магазин)",
+        "trayReload": "Презареди",
+        "trayQuit": "Да си тръгна",
+        "trayNotice": "BloumeChat продължава да работи във фонов режим. Щракнете върху иконата, за да отворите отново.",
+        "trayMuteMic": "Заглушете микрофона",
+        "trayUnmuteMic": "Активирайте микрофона",
+        "trayDeafen": "Заглушете звука",
+        "trayUndeafen": "Включване на звука"
+    }
+}

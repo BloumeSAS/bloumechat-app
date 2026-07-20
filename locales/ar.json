@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "جارٍ التحميل BloumeChat...",
+        "back": "سابق",
+        "forward": "التالي"
+    },
+    "screen_picker": {
+        "title": "مشاركة الشاشة | BloumeChat",
+        "heading": "اختيار ما تريد مشاركته",
+        "screens": "شاشات",
+        "windows": "ويندوز",
+        "share": "يشارك",
+        "cancel": "يلغي",
+        "loading": "جارٍ تحميل المصادر...",
+        "noSources": "لا توجد مصادر متاحة."
+    },
+    "update": {
+        "title": "تحديث | Bloumechat",
+        "system_update": "تحديث النظام",
+        "checking": "تَحَقّق...",
+        "available": "تحديث !",
+        "uptodate": "حتى الآن",
+        "downloading": "تحميل",
+        "ready": "جاهز للتثبيت",
+        "error": "أُووبس !",
+        "general_title": "التحديثات",
+        "checking_desc": "نحن نبحث عن أحدث إصدار من Bloumechat على خوادمنا.",
+        "available_desc": "يتوفر إصدار جديد من Bloumechat ({{version}}).",
+        "uptodate_desc": "تهانينا! أنت تستخدم أحدث إصدار من Bloumechat.",
+        "downloading_desc": "جاري استرجاع الملفات الجديدة... لا تغلق التطبيق.",
+        "ready_desc": "كل شيء جاهز! انقر فوق الزر أدناه لتثبيت التحديث.",
+        "idle_desc": "حافظ على تحديث تطبيقك للاستفادة من أحدث الميزات.",
+        "restart_button": "إعادة التشغيل والتثبيت",
+        "check_button": "تحقق الآن",
+        "download_button": "قم بتنزيل التحديث",
+        "recheck_button": "أعد الفحص",
+        "ignore_button": "تجاهل في الوقت الراهن",
+        "footer": "بلوم ساس • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "فتح BloumeChat",
+        "trayAutoLaunch": "إطلاق عند بدء التشغيل",
+        "trayCheckUpdates": "التحقق من وجود تحديثات (المتجر)",
+        "trayReload": "إعادة تحميل",
+        "trayQuit": "للمغادرة",
+        "trayNotice": "يستمر BloumeChat في العمل في الخلفية. انقر فوق الرمز لإعادة فتحه.",
+        "trayMuteMic": "كتم صوت الميكروفون",
+        "trayUnmuteMic": "تفعيل الميكروفون",
+        "trayDeafen": "كتم الصوت",
+        "trayUndeafen": "إلغاء كتم الصوت"
+    }
+}

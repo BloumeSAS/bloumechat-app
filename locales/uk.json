@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Завантаження BloumeChat...",
+        "back": "Попередній",
+        "forward": "Слідую"
+    },
+    "screen_picker": {
+        "title": "Спільний доступ до екрана | BloumeChat",
+        "heading": "Вибір, чим поділитися",
+        "screens": "Екрани",
+        "windows": "вікна",
+        "share": "Поділіться",
+        "cancel": "Скасувати",
+        "loading": "Завантаження джерел...",
+        "noSources": "Немає доступних джерел."
+    },
+    "update": {
+        "title": "Оновлення | Bloumechat",
+        "system_update": "Оновлення системи",
+        "checking": "Перевірка...",
+        "available": "Оновлення!",
+        "uptodate": "В актуальному стані",
+        "downloading": "Завантажити",
+        "ready": "Готовий до встановлення",
+        "error": "Ой!",
+        "general_title": "Оновлення",
+        "checking_desc": "Ми шукаємо останню версію Bloumechat на наших серверах.",
+        "available_desc": "Доступна нова версія Bloumechat ({{version}}).",
+        "uptodate_desc": "Щиро вітаю! Ви використовуєте останню версію Bloumechat.",
+        "downloading_desc": "Отримання нових файлів... Не закривайте програму.",
+        "ready_desc": "Все готово! Натисніть кнопку нижче, щоб установити оновлення.",
+        "idle_desc": "Оновлюйте свою програму, щоб користуватися найновішими функціями.",
+        "restart_button": "Перезавантажте та встановіть",
+        "check_button": "Перевір зараз",
+        "download_button": "Завантажте оновлення",
+        "recheck_button": "Повторна перевірка",
+        "ignore_button": "Поки що ігнорувати",
+        "footer": "BLOUME SAS • EST. 2026 рік"
+    },
+    "tray": {
+        "trayOpen": "Відкрити BloumeChat",
+        "trayAutoLaunch": "Запуск при запуску",
+        "trayCheckUpdates": "Перевірити наявність оновлень (Магазин)",
+        "trayReload": "Перезавантажити",
+        "trayQuit": "Щоб залишити",
+        "trayNotice": "BloumeChat продовжує працювати у фоновому режимі. Натисніть піктограму, щоб знову відкрити.",
+        "trayMuteMic": "Вимкніть мікрофон",
+        "trayUnmuteMic": "Увімкніть мікрофон",
+        "trayDeafen": "Вимкніть звук",
+        "trayUndeafen": "Увімкнути звук"
+    }
+}

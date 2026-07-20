@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Memuat BloumeChat...",
+        "back": "Sebelumnya",
+        "forward": "Mengikuti"
+    },
+    "screen_picker": {
+        "title": "Berbagi Layar | BloumeChat",
+        "heading": "Memilih apa yang akan dibagikan",
+        "screens": "Layar",
+        "windows": "jendela",
+        "share": "Membagikan",
+        "cancel": "Membatalkan",
+        "loading": "Memuat sumber...",
+        "noSources": "Tidak ada sumber yang tersedia."
+    },
+    "update": {
+        "title": "Pembaruan | Bloumechat",
+        "system_update": "Pembaruan sistem",
+        "checking": "Verifikasi...",
+        "available": "Memperbarui !",
+        "uptodate": "Terkini",
+        "downloading": "Unduh",
+        "ready": "Siap dipasang",
+        "error": "Ups!",
+        "general_title": "Pembaruan",
+        "checking_desc": "Kami mencari versi terbaru Bloumechat di server kami.",
+        "available_desc": "Versi baru Bloumechat ({{version}}) telah tersedia.",
+        "uptodate_desc": "Selamat ! Anda menggunakan Bloumechat versi terbaru.",
+        "downloading_desc": "Mengambil file baru... Jangan tutup aplikasi.",
+        "ready_desc": "Semuanya sudah siap! Klik tombol di bawah untuk menginstal pembaruan.",
+        "idle_desc": "Selalu perbarui aplikasi Anda untuk memanfaatkan fitur-fitur terbaru.",
+        "restart_button": "Nyalakan ulang dan Instal",
+        "check_button": "Periksa sekarang",
+        "download_button": "Unduh pembaruan",
+        "recheck_button": "Periksa kembali",
+        "ignore_button": "Abaikan untuk saat ini",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Buka BloumeChat",
+        "trayAutoLaunch": "Luncurkan saat startup",
+        "trayCheckUpdates": "Periksa pembaruan (Toko)",
+        "trayReload": "Muat ulang",
+        "trayQuit": "Untuk pergi",
+        "trayNotice": "BloumeChat terus berjalan di latar belakang. Klik ikon untuk membuka kembali.",
+        "trayMuteMic": "Matikan mikrofon",
+        "trayUnmuteMic": "Aktifkan mikrofon",
+        "trayDeafen": "Matikan suaranya",
+        "trayUndeafen": "Membunyikan"
+    }
+}

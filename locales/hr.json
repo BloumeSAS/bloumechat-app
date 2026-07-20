@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Učitavanje BloumeChat...",
+        "back": "Prethodno",
+        "forward": "Praćenje"
+    },
+    "screen_picker": {
+        "title": "Dijeljenje zaslona | BloumeChat",
+        "heading": "Odabir onoga što dijeliti",
+        "screens": "Zasloni",
+        "windows": "Windows",
+        "share": "Udio",
+        "cancel": "Otkazati",
+        "loading": "Učitavanje izvora...",
+        "noSources": "Nema dostupnih izvora."
+    },
+    "update": {
+        "title": "Ažuriranje | Bloumechat",
+        "system_update": "Ažuriranje sustava",
+        "checking": "Provjera...",
+        "available": "Ažuriranje !",
+        "uptodate": "Ažurno",
+        "downloading": "preuzimanje",
+        "ready": "Spremno za ugradnju",
+        "error": "Ups!",
+        "general_title": "Ažuriranja",
+        "checking_desc": "Tražimo najnoviju verziju Bloumechat na našim poslužiteljima.",
+        "available_desc": "Dostupna je nova verzija Bloumechat ({{version}}).",
+        "uptodate_desc": "svaka čast ! Koristite najnoviju verziju Bloumechat.",
+        "downloading_desc": "Dohvaćanje novih datoteka... Ne zatvarajte aplikaciju.",
+        "ready_desc": "Sve je spremno! Pritisnite gumb u nastavku da biste instalirali ažuriranje.",
+        "idle_desc": "Održavajte svoju aplikaciju ažuriranom kako biste imali koristi od najnovijih značajki.",
+        "restart_button": "Ponovno pokrenite i instalirajte",
+        "check_button": "Provjerite sada",
+        "download_button": "Preuzmite ažuriranje",
+        "recheck_button": "Ponovo provjerite",
+        "ignore_button": "Ignoriraj za sada",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Otvori BloumeChat",
+        "trayAutoLaunch": "Pokreni pri pokretanju",
+        "trayCheckUpdates": "Provjerite ima li ažuriranja (Trgovina)",
+        "trayReload": "Ponovno učitaj",
+        "trayQuit": "Da odem",
+        "trayNotice": "BloumeChat nastavlja raditi u pozadini. Pritisnite ikonu za ponovno otvaranje.",
+        "trayMuteMic": "Isključite mikrofon",
+        "trayUnmuteMic": "Aktiviraj mikrofon",
+        "trayDeafen": "Isključite zvuk",
+        "trayUndeafen": "Uključi zvuk"
+    }
+}

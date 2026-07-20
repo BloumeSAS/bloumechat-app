@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Laden BloumeChat...",
+        "back": "Vorherige",
+        "forward": "Nachfolgend"
+    },
+    "screen_picker": {
+        "title": "Bildschirmfreigabe | BloumeChat",
+        "heading": "Auswählen, was geteilt werden soll",
+        "screens": "Bildschirme",
+        "windows": "Windows",
+        "share": "Aktie",
+        "cancel": "Stornieren",
+        "loading": "Quellen werden geladen...",
+        "noSources": "Keine Quellen verfügbar."
+    },
+    "update": {
+        "title": "Aktualisieren | Bloumechat",
+        "system_update": "Systemaktualisierung",
+        "checking": "Überprüfung...",
+        "available": "Aktualisieren !",
+        "uptodate": "Auf dem neuesten Stand",
+        "downloading": "Herunterladen",
+        "ready": "Bereit zur Installation",
+        "error": "Ups!",
+        "general_title": "Aktualisierungen",
+        "checking_desc": "Wir suchen auf unseren Servern nach der neuesten Version von Bloumechat.",
+        "available_desc": "Eine neue Version von Bloumechat ({{version}}) ist verfügbar.",
+        "uptodate_desc": "Glückwunsch ! Sie verwenden die neueste Version von Bloumechat.",
+        "downloading_desc": "Neue Dateien werden abgerufen... Schließen Sie die Anwendung nicht.",
+        "ready_desc": "Alles ist fertig! Klicken Sie auf die Schaltfläche unten, um das Update zu installieren.",
+        "idle_desc": "Halten Sie Ihre App auf dem neuesten Stand, um von den neuesten Funktionen zu profitieren.",
+        "restart_button": "Neustart und Installation",
+        "check_button": "Jetzt prüfen",
+        "download_button": "Laden Sie das Update herunter",
+        "recheck_button": "Überprüfen Sie es noch einmal",
+        "ignore_button": "Vorerst ignorieren",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Öffnen Sie BloumeChat",
+        "trayAutoLaunch": "Beim Start starten",
+        "trayCheckUpdates": "Nach Updates suchen (Store)",
+        "trayReload": "Neu laden",
+        "trayQuit": "Gehen",
+        "trayNotice": "BloumeChat läuft weiterhin im Hintergrund. Klicken Sie auf das Symbol, um es erneut zu öffnen.",
+        "trayMuteMic": "Schalten Sie das Mikrofon stumm",
+        "trayUnmuteMic": "Mikrofon aktivieren",
+        "trayDeafen": "Schalten Sie den Ton stumm",
+        "trayUndeafen": "Stummschaltung aufheben"
+    }
+}

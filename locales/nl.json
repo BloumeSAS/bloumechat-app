@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "BloumeChat laden...",
+        "back": "Vorig",
+        "forward": "Volgende"
+    },
+    "screen_picker": {
+        "title": "Scherm delen | BloumeChat",
+        "heading": "Kiezen wat je wilt delen",
+        "screens": "Schermen",
+        "windows": "Ramen",
+        "share": "Deel",
+        "cancel": "Annuleren",
+        "loading": "Bronnen laden...",
+        "noSources": "Geen bronnen beschikbaar."
+    },
+    "update": {
+        "title": "Bijwerken | Bloumechat",
+        "system_update": "Systeemupdate",
+        "checking": "Verificatie...",
+        "available": "Update !",
+        "uptodate": "Up-to-date",
+        "downloading": "Downloaden",
+        "ready": "Klaar om te installeren",
+        "error": "Oeps!",
+        "general_title": "Updates",
+        "checking_desc": "We zijn op zoek naar de nieuwste versie van Bloumechat op onze servers.",
+        "available_desc": "Er is een nieuwe versie van Bloumechat ({{version}}) beschikbaar.",
+        "uptodate_desc": "Gefeliciteerd ! U gebruikt de meest recente versie van Bloumechat.",
+        "downloading_desc": "Nieuwe bestanden ophalen... Sluit de applicatie niet.",
+        "ready_desc": "Alles is klaar! Klik op de onderstaande knop om de update te installeren.",
+        "idle_desc": "Houd uw app up-to-date om te profiteren van de nieuwste functies.",
+        "restart_button": "Opnieuw opstarten en installeren",
+        "check_button": "Controleer nu",
+        "download_button": "Download de update",
+        "recheck_button": "Controleer opnieuw",
+        "ignore_button": "Negeer voorlopig",
+        "footer": "BLOUME SAS • GESCH. 2026"
+    },
+    "tray": {
+        "trayOpen": "Open BloumeChat",
+        "trayAutoLaunch": "Start bij het opstarten",
+        "trayCheckUpdates": "Controleren op updates (Winkel)",
+        "trayReload": "Herladen",
+        "trayQuit": "Om te vertrekken",
+        "trayNotice": "BloumeChat blijft op de achtergrond actief. Klik op het pictogram om opnieuw te openen.",
+        "trayMuteMic": "Demp de microfoon",
+        "trayUnmuteMic": "Activeer microfoon",
+        "trayDeafen": "Demp het geluid",
+        "trayUndeafen": "Dempen opheffen"
+    }
+}

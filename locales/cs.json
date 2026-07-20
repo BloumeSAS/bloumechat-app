@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Načítání BloumeChat...",
+        "back": "Předchozí",
+        "forward": "Následující"
+    },
+    "screen_picker": {
+        "title": "Sdílení obrazovky | BloumeChat",
+        "heading": "Výběr toho, co sdílet",
+        "screens": "Obrazovky",
+        "windows": "Windows",
+        "share": "Podíl",
+        "cancel": "Zrušit",
+        "loading": "Načítání zdrojů...",
+        "noSources": "Žádné dostupné zdroje."
+    },
+    "update": {
+        "title": "Aktualizovat | Bloumechat",
+        "system_update": "Aktualizace systému",
+        "checking": "Ověření...",
+        "available": "Aktualizovat!",
+        "uptodate": "Aktuální",
+        "downloading": "Stáhnout",
+        "ready": "Připraveno k instalaci",
+        "error": "Jejda!",
+        "general_title": "Aktualizace",
+        "checking_desc": "Na našich serverech hledáme nejnovější verzi Bloumechat.",
+        "available_desc": "K dispozici je nová verze Bloumechat ({{version}}).",
+        "uptodate_desc": "Gratulujeme! Používáte nejnovější verzi Bloumechat.",
+        "downloading_desc": "Načítání nových souborů... Nezavírejte aplikaci.",
+        "ready_desc": "Vše je připraveno! Kliknutím na tlačítko níže nainstalujete aktualizaci.",
+        "idle_desc": "Udržujte svou aplikaci aktualizovanou, abyste mohli využívat nejnovější funkce.",
+        "restart_button": "Restartujte a nainstalujte",
+        "check_button": "Zkontrolujte nyní",
+        "download_button": "Stáhněte si aktualizaci",
+        "recheck_button": "Znovu zkontrolujte",
+        "ignore_button": "Ignorovat prozatím",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Otevřít BloumeChat",
+        "trayAutoLaunch": "Spusťte při spuštění",
+        "trayCheckUpdates": "Vyhledat aktualizace (obchod)",
+        "trayReload": "Znovu načíst",
+        "trayQuit": "Odejít",
+        "trayNotice": "BloumeChat nadále běží na pozadí. Klepnutím na ikonu znovu otevřete.",
+        "trayMuteMic": "Ztlumit mikrofon",
+        "trayUnmuteMic": "Aktivujte mikrofon",
+        "trayDeafen": "Ztlumit zvuk",
+        "trayUndeafen": "Zapnout zvuk"
+    }
+}

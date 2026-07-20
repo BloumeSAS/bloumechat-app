@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "लोड हो रहा है BloumeChat...",
+        "back": "पहले का",
+        "forward": "अगले"
+    },
+    "screen_picker": {
+        "title": "स्क्रीन शेयरिंग | BloumeChat",
+        "heading": "यह चुनना कि क्या साझा करना है",
+        "screens": "स्क्रीन",
+        "windows": "खिड़कियाँ",
+        "share": "शेयर करना",
+        "cancel": "रद्द करना",
+        "loading": "स्रोत लोड हो रहे हैं...",
+        "noSources": "कोई स्रोत उपलब्ध नहीं है."
+    },
+    "update": {
+        "title": "अद्यतन | Bloumechat",
+        "system_update": "सिस्टम का आधुनिकीकरण",
+        "checking": "सत्यापन...",
+        "available": "अद्यतन !",
+        "uptodate": "अप टू डेट",
+        "downloading": "डाउनलोड करना",
+        "ready": "स्थापित करने के लिए तैयार",
+        "error": "उफ़!",
+        "general_title": "अपडेट",
+        "checking_desc": "हम अपने सर्वर पर Bloumechat के नवीनतम संस्करण की तलाश कर रहे हैं।",
+        "available_desc": "Bloumechat ({{version}}) का एक नया संस्करण उपलब्ध है।",
+        "uptodate_desc": "बधाई हो ! आप Bloumechat का नवीनतम संस्करण उपयोग कर रहे हैं।",
+        "downloading_desc": "नई फ़ाइलें पुनर्प्राप्त की जा रही हैं... एप्लिकेशन को बंद न करें।",
+        "ready_desc": "सभी कुछ तैयार है! अद्यतन स्थापित करने के लिए नीचे दिए गए बटन पर क्लिक करें।",
+        "idle_desc": "नवीनतम सुविधाओं का लाभ उठाने के लिए अपने ऐप को अपडेट रखें।",
+        "restart_button": "रीबूट करें और इंस्टॉल करें",
+        "check_button": "अब जांचें",
+        "download_button": "अद्यतन डाउनलोड करें",
+        "recheck_button": "री-चेक",
+        "ignore_button": "अभी के लिए नजरअंदाज करें",
+        "footer": "ब्लूम एसएएस • ईएसटी। 2026"
+    },
+    "tray": {
+        "trayOpen": "BloumeChat खोलें",
+        "trayAutoLaunch": "स्टार्टअप पर लॉन्च करें",
+        "trayCheckUpdates": "अद्यतनों की जाँच करें (स्टोर)",
+        "trayReload": "पुनः लोड करें",
+        "trayQuit": "छोड़ जाना",
+        "trayNotice": "BloumeChat पृष्ठभूमि में चलता रहता है। पुनः खोलने के लिए आइकन पर क्लिक करें.",
+        "trayMuteMic": "माइक्रोफ़ोन म्यूट करें",
+        "trayUnmuteMic": "माइक्रोफ़ोन सक्रिय करें",
+        "trayDeafen": "ध्वनि म्यूट करें",
+        "trayUndeafen": "अनम्यूट"
+    }
+}

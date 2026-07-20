@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Laster inn BloumeChat...",
+        "back": "Tidligere",
+        "forward": "Følgende"
+    },
+    "screen_picker": {
+        "title": "Skjermdeling | BloumeChat",
+        "heading": "Velge hva du vil dele",
+        "screens": "Skjermer",
+        "windows": "Windows",
+        "share": "Dele",
+        "cancel": "Kansellere",
+        "loading": "Laster inn kilder ...",
+        "noSources": "Ingen kilder tilgjengelig."
+    },
+    "update": {
+        "title": "Oppdater | Bloumechat",
+        "system_update": "Systemoppdatering",
+        "checking": "Bekreftelse...",
+        "available": "Oppdatering!",
+        "uptodate": "Oppdatert",
+        "downloading": "Last ned",
+        "ready": "Klar til å installere",
+        "error": "Oops!",
+        "general_title": "Oppdateringer",
+        "checking_desc": "Vi ser etter den nyeste versjonen av Bloumechat på våre servere.",
+        "available_desc": "En ny versjon av Bloumechat ({{version}}) er tilgjengelig.",
+        "uptodate_desc": "Gratulerer! Du bruker den nyeste versjonen av Bloumechat.",
+        "downloading_desc": "Henter nye filer... Ikke lukk programmet.",
+        "ready_desc": "Alt er klart! Klikk på knappen nedenfor for å installere oppdateringen.",
+        "idle_desc": "Hold appen din oppdatert for å dra nytte av de nyeste funksjonene.",
+        "restart_button": "Start på nytt og installer",
+        "check_button": "Sjekk nå",
+        "download_button": "Last ned oppdateringen",
+        "recheck_button": "Sjekk på nytt",
+        "ignore_button": "Ignorer foreløpig",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Åpne BloumeChat",
+        "trayAutoLaunch": "Lansering ved oppstart",
+        "trayCheckUpdates": "Se etter oppdateringer (butikk)",
+        "trayReload": "Last inn på nytt",
+        "trayQuit": "Å forlate",
+        "trayNotice": "BloumeChat fortsetter å kjøre i bakgrunnen. Klikk på ikonet for å åpne igjen.",
+        "trayMuteMic": "Demp mikrofonen",
+        "trayUnmuteMic": "Aktiver mikrofon",
+        "trayDeafen": "Demp lyden",
+        "trayUndeafen": "Slå på lyden"
+    }
+}

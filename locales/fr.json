@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Chargement de BloumeChat...",
+        "back": "Précédent",
+        "forward": "Suivant"
+    },
+    "screen_picker": {
+        "title": "Partage d'écran | BloumeChat",
+        "heading": "Choisir quoi partager",
+        "screens": "Écrans",
+        "windows": "Fenêtres",
+        "share": "Partager",
+        "cancel": "Annuler",
+        "loading": "Chargement des sources...",
+        "noSources": "Aucune source disponible."
+    },
+    "update": {
+        "title": "Mise à jour | Bloumechat",
+        "system_update": "Mise à jour du système",
+        "checking": "Vérification...",
+        "available": "Mise à jour !",
+        "uptodate": "À jour",
+        "downloading": "Téléchargement",
+        "ready": "Prêt à installer",
+        "error": "Oups !",
+        "general_title": "Mises à jour",
+        "checking_desc": "Nous recherchons la dernière version de Bloumechat sur nos serveurs.",
+        "available_desc": "Une nouvelle version de Bloumechat ({{version}}) est disponible.",
+        "uptodate_desc": "Félicitations ! Vous utilisez la version la plus récente de Bloumechat.",
+        "downloading_desc": "Récupération des nouveaux fichiers... Ne fermez pas l'application.",
+        "ready_desc": "Tout est prêt ! Cliquez sur le bouton ci-dessous pour installer la mise à jour.",
+        "idle_desc": "Maintenez votre application à jour pour bénéficier des dernières fonctionnalités.",
+        "restart_button": "Redémarrer et Installer",
+        "check_button": "Vérifier maintenant",
+        "download_button": "Télécharger la mise à jour",
+        "recheck_button": "Re-vérifier",
+        "ignore_button": "Ignorer pour l'instant",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Ouvrir BloumeChat",
+        "trayAutoLaunch": "Lancer au démarrage",
+        "trayCheckUpdates": "Vérifier les mises à jour (Store)",
+        "trayReload": "Recharger",
+        "trayQuit": "Quitter",
+        "trayNotice": "BloumeChat continue de tourner en arrière-plan. Cliquez sur l'icône pour rouvrir.",
+        "trayMuteMic": "Couper le micro",
+        "trayUnmuteMic": "Activer le micro",
+        "trayDeafen": "Couper le son",
+        "trayUndeafen": "Réactiver le son"
+    }
+}

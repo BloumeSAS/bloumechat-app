@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "BloumeChat 로드 중...",
+        "back": "이전의",
+        "forward": "수행원"
+    },
+    "screen_picker": {
+        "title": "화면 공유 | BloumeChat",
+        "heading": "무엇을 공유할지 선택하기",
+        "screens": "스크린",
+        "windows": "윈도우",
+        "share": "공유하다",
+        "cancel": "취소",
+        "loading": "소스 로드 중...",
+        "noSources": "사용 가능한 소스가 없습니다."
+    },
+    "update": {
+        "title": "업데이트 | Bloumechat",
+        "system_update": "시스템 업데이트",
+        "checking": "확인...",
+        "available": "업데이트 !",
+        "uptodate": "최신",
+        "downloading": "다운로드",
+        "ready": "설치 준비 완료",
+        "error": "이런!",
+        "general_title": "업데이트",
+        "checking_desc": "우리 서버에서 최신 버전의 Bloumechat을(를) 찾고 있습니다.",
+        "available_desc": "Bloumechat({{version}})의 새 버전을 사용할 수 있습니다.",
+        "uptodate_desc": "축하해요 ! Bloumechat의 최신 버전을 사용하고 있습니다.",
+        "downloading_desc": "새 파일을 검색하는 중... 애플리케이션을 닫지 마세요.",
+        "ready_desc": "모든 것이 준비되었습니다! 업데이트를 설치하려면 아래 버튼을 클릭하세요.",
+        "idle_desc": "최신 기능을 활용하려면 앱을 최신 상태로 유지하세요.",
+        "restart_button": "재부팅 및 설치",
+        "check_button": "지금 확인하세요",
+        "download_button": "업데이트 다운로드",
+        "recheck_button": "재확인",
+        "ignore_button": "지금은 무시하세요",
+        "footer": "블룸 SAS • EST. 2026년"
+    },
+    "tray": {
+        "trayOpen": "BloumeChat 열기",
+        "trayAutoLaunch": "시작 시 실행",
+        "trayCheckUpdates": "업데이트 확인(스토어)",
+        "trayReload": "새로고침",
+        "trayQuit": "떠나다",
+        "trayNotice": "BloumeChat은(는) 백그라운드에서 계속 실행됩니다. 다시 열려면 아이콘을 클릭하세요.",
+        "trayMuteMic": "마이크 음소거",
+        "trayUnmuteMic": "마이크 활성화",
+        "trayDeafen": "소리를 음소거",
+        "trayUndeafen": "음소거 해제"
+    }
+}

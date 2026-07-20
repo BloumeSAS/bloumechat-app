@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Caricamento BloumeChat...",
+        "back": "Precedente",
+        "forward": "Seguente"
+    },
+    "screen_picker": {
+        "title": "Condivisione dello schermo | BloumeChat",
+        "heading": "Scegliere cosa condividere",
+        "screens": "Schermi",
+        "windows": "Finestre",
+        "share": "Condividere",
+        "cancel": "Cancellare",
+        "loading": "Caricamento fonti...",
+        "noSources": "Nessuna fonte disponibile."
+    },
+    "update": {
+        "title": "Aggiorna | Bloumechat",
+        "system_update": "Aggiornamento del sistema",
+        "checking": "Verifica...",
+        "available": "Aggiornamento !",
+        "uptodate": "Aggiornato",
+        "downloading": "Scaricamento",
+        "ready": "Pronto per l'installazione",
+        "error": "Ops!",
+        "general_title": "Aggiornamenti",
+        "checking_desc": "Stiamo cercando l'ultima versione di Bloumechat sui nostri server.",
+        "available_desc": "È disponibile una nuova versione di Bloumechat ({{version}}).",
+        "uptodate_desc": "Congratulazioni! Stai utilizzando la versione più recente di Bloumechat.",
+        "downloading_desc": "Recupero di nuovi file... Non chiudere l'applicazione.",
+        "ready_desc": "Tutto è pronto! Fare clic sul pulsante in basso per installare l'aggiornamento.",
+        "idle_desc": "Mantieni aggiornata la tua app per beneficiare delle funzionalità più recenti.",
+        "restart_button": "Riavvia e installa",
+        "check_button": "Controlla ora",
+        "download_button": "Scarica l'aggiornamento",
+        "recheck_button": "Ricontrolla",
+        "ignore_button": "Ignora per ora",
+        "footer": "BLOUME SAS •EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Apri BloumeChat",
+        "trayAutoLaunch": "Avvia all'avvio",
+        "trayCheckUpdates": "Verifica aggiornamenti (Store)",
+        "trayReload": "Ricaricare",
+        "trayQuit": "Andarsene",
+        "trayNotice": "BloumeChat continua a funzionare in background. Fare clic sull'icona per riaprire.",
+        "trayMuteMic": "Disattiva il microfono",
+        "trayUnmuteMic": "Attiva il microfono",
+        "trayDeafen": "Disattiva l'audio",
+        "trayUndeafen": "Riattiva"
+    }
+}

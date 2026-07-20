@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Laddar BloumeChat...",
+        "back": "Tidigare",
+        "forward": "Följande"
+    },
+    "screen_picker": {
+        "title": "Skärmdelning | BloumeChat",
+        "heading": "Att välja vad som ska delas",
+        "screens": "Skärmar",
+        "windows": "Windows",
+        "share": "Dela",
+        "cancel": "Avboka",
+        "loading": "Laddar källor...",
+        "noSources": "Inga källor tillgängliga."
+    },
+    "update": {
+        "title": "Uppdatera | Bloumechat",
+        "system_update": "Systemuppdatering",
+        "checking": "Kontroll...",
+        "available": "Uppdatering!",
+        "uptodate": "Uppdaterad",
+        "downloading": "Ladda ner",
+        "ready": "Klar att installera",
+        "error": "Hoppsan!",
+        "general_title": "Uppdateringar",
+        "checking_desc": "Vi letar efter den senaste versionen av Bloumechat på våra servrar.",
+        "available_desc": "En ny version av Bloumechat ({{version}}) är tillgänglig.",
+        "uptodate_desc": "Grattis! Du använder den senaste versionen av Bloumechat.",
+        "downloading_desc": "Hämtar nya filer... Stäng inte programmet.",
+        "ready_desc": "Allt är klart! Klicka på knappen nedan för att installera uppdateringen.",
+        "idle_desc": "Håll din app uppdaterad för att dra nytta av de senaste funktionerna.",
+        "restart_button": "Starta om och installera",
+        "check_button": "Kolla nu",
+        "download_button": "Ladda ner uppdateringen",
+        "recheck_button": "Kontrollera igen",
+        "ignore_button": "Ignorera för nu",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Öppna BloumeChat",
+        "trayAutoLaunch": "Starta vid start",
+        "trayCheckUpdates": "Sök efter uppdateringar (butik)",
+        "trayReload": "Ladda om",
+        "trayQuit": "Att lämna",
+        "trayNotice": "BloumeChat fortsätter att köras i bakgrunden. Klicka på ikonen för att öppna igen.",
+        "trayMuteMic": "Stäng av mikrofonen",
+        "trayUnmuteMic": "Aktivera mikrofonen",
+        "trayDeafen": "Stäng av ljudet",
+        "trayUndeafen": "Slå på ljudet"
+    }
+}

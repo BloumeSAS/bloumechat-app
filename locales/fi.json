@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Ladataan BloumeChat...",
+        "back": "Edellinen",
+        "forward": "Jälkeen"
+    },
+    "screen_picker": {
+        "title": "Näytön jakaminen | BloumeChat",
+        "heading": "Jakamisen valitseminen",
+        "screens": "Näytöt",
+        "windows": "Windows",
+        "share": "Jakaa",
+        "cancel": "Peruuttaa",
+        "loading": "Ladataan lähteitä...",
+        "noSources": "Lähteitä ei ole saatavilla."
+    },
+    "update": {
+        "title": "Päivitä | Bloumechat",
+        "system_update": "Järjestelmän päivitys",
+        "checking": "Vahvistus...",
+        "available": "Päivitä!",
+        "uptodate": "Ajan tasalla",
+        "downloading": "Lataa",
+        "ready": "Valmis asennettavaksi",
+        "error": "Hups!",
+        "general_title": "Päivitykset",
+        "checking_desc": "Etsimme palvelimiltamme uusinta versiota Bloumechat:sta.",
+        "available_desc": "Uusi versio Bloumechat:sta ({{version}}) on saatavilla.",
+        "uptodate_desc": "Onnittelut! Käytät ohjelman Bloumechat uusinta versiota.",
+        "downloading_desc": "Haetaan uusia tiedostoja... Älä sulje sovellusta.",
+        "ready_desc": "Kaikki on valmista! Napsauta alla olevaa painiketta asentaaksesi päivityksen.",
+        "idle_desc": "Pidä sovelluksesi ajan tasalla, jotta voit hyötyä uusimmista ominaisuuksista.",
+        "restart_button": "Käynnistä uudelleen ja asenna",
+        "check_button": "Tarkista nyt",
+        "download_button": "Lataa päivitys",
+        "recheck_button": "Tarkista uudelleen",
+        "ignore_button": "Ohita toistaiseksi",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Avaa BloumeChat",
+        "trayAutoLaunch": "Käynnistä käynnistyksen yhteydessä",
+        "trayCheckUpdates": "Tarkista päivitykset (Store)",
+        "trayReload": "Lataa uudelleen",
+        "trayQuit": "lähteä",
+        "trayNotice": "BloumeChat jatkaa toimintaansa taustalla. Avaa uudelleen napsauttamalla kuvaketta.",
+        "trayMuteMic": "Mykistä mikrofoni",
+        "trayUnmuteMic": "Aktivoi mikrofoni",
+        "trayDeafen": "Mykistä ääni",
+        "trayUndeafen": "Poista mykistys"
+    }
+}

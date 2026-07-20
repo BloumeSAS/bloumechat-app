@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "BloumeChat betöltése...",
+        "back": "Előző",
+        "forward": "Következő"
+    },
+    "screen_picker": {
+        "title": "Képernyőmegosztás | BloumeChat",
+        "heading": "A megosztandó tartalmak kiválasztása",
+        "screens": "Képernyők",
+        "windows": "Windows",
+        "share": "Részesedés",
+        "cancel": "Mégse",
+        "loading": "Források betöltése...",
+        "noSources": "Nincs elérhető forrás."
+    },
+    "update": {
+        "title": "Frissítés | Bloumechat",
+        "system_update": "Rendszerfrissítés",
+        "checking": "Ellenőrzés...",
+        "available": "Frissítés!",
+        "uptodate": "Naprakész",
+        "downloading": "Letöltés",
+        "ready": "Telepítésre kész",
+        "error": "Hoppá !",
+        "general_title": "Frissítések",
+        "checking_desc": "A Bloumechat legújabb verzióját keressük szervereinken.",
+        "available_desc": "Elérhető a Bloumechat ({{version}}) új verziója.",
+        "uptodate_desc": "Gratulálok ! Ön a Bloumechat legújabb verzióját használja.",
+        "downloading_desc": "Új fájlok lekérése... Ne zárja be az alkalmazást.",
+        "ready_desc": "Minden készen áll! Kattintson az alábbi gombra a frissítés telepítéséhez.",
+        "idle_desc": "Tartsa naprakészen alkalmazását, hogy élvezhesse a legújabb funkciókat.",
+        "restart_button": "Indítsa újra és telepítse",
+        "check_button": "Ellenőrizze most",
+        "download_button": "Töltse le a frissítést",
+        "recheck_button": "Ellenőrizze újra",
+        "ignore_button": "Egyelőre figyelmen kívül hagyja",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Megnyitás BloumeChat",
+        "trayAutoLaunch": "Indítás indításkor",
+        "trayCheckUpdates": "Frissítések keresése (Üzlet)",
+        "trayReload": "Újratöltés",
+        "trayQuit": "Elmenni",
+        "trayNotice": "A BloumeChat továbbra is fut a háttérben. Kattintson az ikonra az újranyitáshoz.",
+        "trayMuteMic": "Némítsa el a mikrofont",
+        "trayUnmuteMic": "Aktiválja a mikrofont",
+        "trayDeafen": "Elnémítja a hangot",
+        "trayUndeafen": "Némítás feloldása"
+    }
+}

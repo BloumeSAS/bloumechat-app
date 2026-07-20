@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Ładowanie BloumeChat...",
+        "back": "Poprzedni",
+        "forward": "Następny"
+    },
+    "screen_picker": {
+        "title": "Udostępnianie ekranu | BloumeChat",
+        "heading": "Wybieranie tego, co chcesz udostępnić",
+        "screens": "Ekrany",
+        "windows": "Okna",
+        "share": "Udział",
+        "cancel": "Anulować",
+        "loading": "Ładowanie źródeł...",
+        "noSources": "Brak dostępnych źródeł."
+    },
+    "update": {
+        "title": "Aktualizacja | Bloumechat",
+        "system_update": "Aktualizacja systemu",
+        "checking": "Weryfikacja...",
+        "available": "Aktualizacja !",
+        "uptodate": "Aktualne",
+        "downloading": "Pobierać",
+        "ready": "Gotowy do montażu",
+        "error": "Ups!",
+        "general_title": "Aktualizacje",
+        "checking_desc": "Poszukujemy najnowszej wersji Bloumechat na naszych serwerach.",
+        "available_desc": "Dostępna jest nowa wersja Bloumechat ({{version}}).",
+        "uptodate_desc": "Gratulacje! Używasz najnowszej wersji Bloumechat.",
+        "downloading_desc": "Pobieranie nowych plików... Nie zamykaj aplikacji.",
+        "ready_desc": "Wszystko jest gotowe! Kliknij przycisk poniżej, aby zainstalować aktualizację.",
+        "idle_desc": "Aktualizuj swoją aplikację, aby móc korzystać z najnowszych funkcji.",
+        "restart_button": "Uruchom ponownie i zainstaluj",
+        "check_button": "Sprawdź teraz",
+        "download_button": "Pobierz aktualizację",
+        "recheck_button": "Sprawdź ponownie",
+        "ignore_button": "Ignoruj ​​na razie",
+        "footer": "BLUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Otwórz BloumeChat",
+        "trayAutoLaunch": "Uruchom przy starcie",
+        "trayCheckUpdates": "Sprawdź aktualizacje (Sklep)",
+        "trayReload": "Przeładować",
+        "trayQuit": "Wyjechać",
+        "trayNotice": "BloumeChat nadal działa w tle. Kliknij ikonę, aby ponownie otworzyć.",
+        "trayMuteMic": "Wycisz mikrofon",
+        "trayUnmuteMic": "Aktywuj mikrofon",
+        "trayDeafen": "Wycisz dźwięk",
+        "trayUndeafen": "Wyłącz wyciszenie"
+    }
+}

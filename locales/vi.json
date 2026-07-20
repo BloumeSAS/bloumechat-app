@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Đang tải BloumeChat...",
+        "back": "Trước",
+        "forward": "Tiếp theo"
+    },
+    "screen_picker": {
+        "title": "Chia sẻ màn hình | BloumeChat",
+        "heading": "Lựa chọn nội dung để chia sẻ",
+        "screens": "Màn hình",
+        "windows": "cửa sổ",
+        "share": "Chia sẻ",
+        "cancel": "Hủy bỏ",
+        "loading": "Đang tải nguồn...",
+        "noSources": "Không có nguồn nào có sẵn."
+    },
+    "update": {
+        "title": "Cập nhật | Bloumechat",
+        "system_update": "Cập nhật hệ thống",
+        "checking": "Xác minh...",
+        "available": "Cập nhật !",
+        "uptodate": "Cập nhật",
+        "downloading": "Tải xuống",
+        "ready": "Sẵn sàng để cài đặt",
+        "error": "Ối !",
+        "general_title": "Cập nhật",
+        "checking_desc": "Chúng tôi đang tìm kiếm phiên bản mới nhất của Bloumechat trên máy chủ của chúng tôi.",
+        "available_desc": "Đã có phiên bản mới của Bloumechat ({{version}}).",
+        "uptodate_desc": "Chúc mừng ! Bạn đang sử dụng phiên bản mới nhất của Bloumechat.",
+        "downloading_desc": "Đang truy xuất tập tin mới... Không đóng ứng dụng.",
+        "ready_desc": "Mọi thứ đã sẵn sàng! Nhấp vào nút bên dưới để cài đặt bản cập nhật.",
+        "idle_desc": "Luôn cập nhật ứng dụng của bạn để hưởng lợi từ các tính năng mới nhất.",
+        "restart_button": "Khởi động lại và cài đặt",
+        "check_button": "Kiểm tra ngay",
+        "download_button": "Tải xuống bản cập nhật",
+        "recheck_button": "Kiểm tra lại",
+        "ignore_button": "Bỏ qua bây giờ",
+        "footer": "HOA SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Mở BloumeChat",
+        "trayAutoLaunch": "Khởi chạy khi khởi động",
+        "trayCheckUpdates": "Kiểm tra cập nhật (Cửa hàng)",
+        "trayReload": "Tải lại",
+        "trayQuit": "rời đi",
+        "trayNotice": "BloumeChat tiếp tục chạy ở chế độ nền. Bấm vào biểu tượng để mở lại.",
+        "trayMuteMic": "Tắt tiếng micrô",
+        "trayUnmuteMic": "Kích hoạt micrô",
+        "trayDeafen": "Tắt âm thanh",
+        "trayUndeafen": "Bật tiếng"
+    }
+}

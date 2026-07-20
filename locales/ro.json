@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Se încarcă BloumeChat...",
+        "back": "Anterior",
+        "forward": "Urmând"
+    },
+    "screen_picker": {
+        "title": "Partajarea ecranului | BloumeChat",
+        "heading": "Alegerea ce să împărtășești",
+        "screens": "Ecrane",
+        "windows": "Windows",
+        "share": "Distribuie",
+        "cancel": "Anula",
+        "loading": "Se încarcă sursele...",
+        "noSources": "Nu există surse disponibile."
+    },
+    "update": {
+        "title": "Actualizare | Bloumechat",
+        "system_update": "Actualizare de sistem",
+        "checking": "Verificare...",
+        "available": "Actualizare!",
+        "uptodate": "La zi",
+        "downloading": "Descărcați",
+        "ready": "Gata de instalat",
+        "error": "Hopa!",
+        "general_title": "Actualizări",
+        "checking_desc": "Căutăm cea mai recentă versiune a Bloumechat pe serverele noastre.",
+        "available_desc": "Este disponibilă o nouă versiune a Bloumechat ({{version}}).",
+        "uptodate_desc": "Felicitări! Utilizați cea mai recentă versiune a Bloumechat.",
+        "downloading_desc": "Se preiau fișiere noi... Nu închideți aplicația.",
+        "ready_desc": "Totul este gata! Faceți clic pe butonul de mai jos pentru a instala actualizarea.",
+        "idle_desc": "Țineți-vă aplicația actualizată pentru a beneficia de cele mai recente funcții.",
+        "restart_button": "Reporniți și instalați",
+        "check_button": "Verificați acum",
+        "download_button": "Descărcați actualizarea",
+        "recheck_button": "Verificați din nou",
+        "ignore_button": "Ignora deocamdata",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Deschide BloumeChat",
+        "trayAutoLaunch": "Lansați la pornire",
+        "trayCheckUpdates": "Verificați actualizările (Magazin)",
+        "trayReload": "Reîncărcați",
+        "trayQuit": "Să plece",
+        "trayNotice": "BloumeChat continuă să ruleze în fundal. Faceți clic pe pictogramă pentru a redeschide.",
+        "trayMuteMic": "Dezactivați microfonul",
+        "trayUnmuteMic": "Activați microfonul",
+        "trayDeafen": "Dezactivați sunetul",
+        "trayUndeafen": "Activați sunetul"
+    }
+}

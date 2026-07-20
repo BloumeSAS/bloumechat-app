@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Loading BloumeChat...",
+        "back": "Back",
+        "forward": "Forward"
+    },
+    "screen_picker": {
+        "title": "Screen Share | BloumeChat",
+        "heading": "Choose what to share",
+        "screens": "Screens",
+        "windows": "Windows",
+        "share": "Share",
+        "cancel": "Cancel",
+        "loading": "Loading sources...",
+        "noSources": "No sources available."
+    },
+    "update": {
+        "title": "Update | Bloumechat",
+        "system_update": "System Update",
+        "checking": "Checking...",
+        "available": "Update available !",
+        "uptodate": "Up to date",
+        "downloading": "Downloading",
+        "ready": "Ready to install",
+        "error": "Oops !",
+        "general_title": "Updates",
+        "checking_desc": "We are looking for the latest version of Bloumechat on our servers.",
+        "available_desc": "A new version of Bloumechat ({{version}}) is available.",
+        "uptodate_desc": "Congratulations ! You are already using the most recent version of Bloumechat.",
+        "downloading_desc": "Downloading new files... Please do not close the application.",
+        "ready_desc": "Everything is ready ! Click the button below to install the update.",
+        "idle_desc": "Keep your application up to date to enjoy the latest features.",
+        "restart_button": "Restart and Install",
+        "check_button": "Check now",
+        "download_button": "Download update",
+        "recheck_button": "Re-check",
+        "ignore_button": "Ignore for now",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Open BloumeChat",
+        "trayAutoLaunch": "Launch at startup",
+        "trayCheckUpdates": "Check for updates (Store)",
+        "trayReload": "Reload",
+        "trayQuit": "Quit",
+        "trayNotice": "BloumeChat is still running in the background. Click the icon to reopen.",
+        "trayMuteMic": "Mute microphone",
+        "trayUnmuteMic": "Unmute microphone",
+        "trayDeafen": "Deafen",
+        "trayUndeafen": "Undeafen"
+    }
+}

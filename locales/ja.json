@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "BloumeChatを読み込んでいます...",
+        "back": "前の",
+        "forward": "続く"
+    },
+    "screen_picker": {
+        "title": "画面共有 | BloumeChat",
+        "heading": "共有するものを選択する",
+        "screens": "スクリーン",
+        "windows": "窓",
+        "share": "共有",
+        "cancel": "キャンセル",
+        "loading": "ソースを読み込んでいます...",
+        "noSources": "利用可能なソースはありません。"
+    },
+    "update": {
+        "title": "更新 | Bloumechat",
+        "system_update": "システムアップデート",
+        "checking": "検証...",
+        "available": "アップデート ！",
+        "uptodate": "最新の",
+        "downloading": "ダウンロード",
+        "ready": "インストールの準備ができました",
+        "error": "おっと！",
+        "general_title": "アップデート",
+        "checking_desc": "サーバー上で Bloumechat の最新バージョンを探しています。",
+        "available_desc": "新しいバージョンの Bloumechat ({{version}}) が利用可能です。",
+        "uptodate_desc": "おめでとう ！最新バージョンの Bloumechat を使用しています。",
+        "downloading_desc": "新しいファイルを取得しています... アプリケーションを閉じないでください。",
+        "ready_desc": "すべて準備完了です！アップデートをインストールするには、下のボタンをクリックしてください。",
+        "idle_desc": "最新の機能を活用するには、アプリを常に最新の状態に保ってください。",
+        "restart_button": "再起動してインストールする",
+        "check_button": "今すぐチェック",
+        "download_button": "アップデートをダウンロードする",
+        "recheck_button": "再確認",
+        "ignore_button": "今のところ無視してください",
+        "footer": "ブルームSAS •EST。 2026年"
+    },
+    "tray": {
+        "trayOpen": "BloumeChat を開く",
+        "trayAutoLaunch": "起動時に起動する",
+        "trayCheckUpdates": "アップデートを確認する（ストア）",
+        "trayReload": "リロード",
+        "trayQuit": "出発するには",
+        "trayNotice": "BloumeChat はバックグラウンドで実行され続けます。アイコンをクリックして再度開きます。",
+        "trayMuteMic": "マイクをミュートにする",
+        "trayUnmuteMic": "マイクをアクティブにする",
+        "trayDeafen": "音を消します",
+        "trayUndeafen": "ミュートを解除する"
+    }
+}

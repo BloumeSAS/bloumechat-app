@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Cargando BloumeChat...",
+        "back": "Anterior",
+        "forward": "Siguiente"
+    },
+    "screen_picker": {
+        "title": "Compartir pantalla | BloumeChat",
+        "heading": "Elegir qué compartir",
+        "screens": "Pantallas",
+        "windows": "ventanas",
+        "share": "Compartir",
+        "cancel": "Cancelar",
+        "loading": "Cargando fuentes...",
+        "noSources": "No hay fuentes disponibles."
+    },
+    "update": {
+        "title": "Actualización | Bloumechat",
+        "system_update": "Actualización del sistema",
+        "checking": "Verificación...",
+        "available": "Actualizar !",
+        "uptodate": "A hoy",
+        "downloading": "Descargar",
+        "ready": "Listo para instalar",
+        "error": "Ups !",
+        "general_title": "Actualizaciones",
+        "checking_desc": "Estamos buscando la última versión de Bloumechat en nuestros servidores.",
+        "available_desc": "Está disponible una nueva versión de Bloumechat ({{version}}).",
+        "uptodate_desc": "¡Felicitaciones! Estás utilizando la versión más reciente de Bloumechat.",
+        "downloading_desc": "Recuperando archivos nuevos... No cierre la aplicación.",
+        "ready_desc": "¡Todo está listo! Haga clic en el botón a continuación para instalar la actualización.",
+        "idle_desc": "Mantenga su aplicación actualizada para beneficiarse de las últimas funciones.",
+        "restart_button": "Reiniciar e instalar",
+        "check_button": "Compruébalo ahora",
+        "download_button": "Descarga la actualización",
+        "recheck_button": "Vuelva a comprobar",
+        "ignore_button": "ignorar por ahora",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Abierto BloumeChat",
+        "trayAutoLaunch": "Lanzar al inicio",
+        "trayCheckUpdates": "Buscar actualizaciones (Tienda)",
+        "trayReload": "Recargar",
+        "trayQuit": "dejar",
+        "trayNotice": "BloumeChat continúa ejecutándose en segundo plano. Haga clic en el icono para volver a abrir.",
+        "trayMuteMic": "Silenciar el micrófono",
+        "trayUnmuteMic": "Activar micrófono",
+        "trayDeafen": "silenciar el sonido",
+        "trayUndeafen": "Dejar de silenciar"
+    }
+}

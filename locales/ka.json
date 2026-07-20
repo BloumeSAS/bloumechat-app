@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "იტვირთება BloumeChat...",
+        "back": "წინა",
+        "forward": "მიჰყვება"
+    },
+    "screen_picker": {
+        "title": "ეკრანის გაზიარება | BloumeChat",
+        "heading": "არჩევა რა გააზიაროთ",
+        "screens": "ეკრანები",
+        "windows": "ფანჯრები",
+        "share": "გააზიარეთ",
+        "cancel": "გაუქმება",
+        "loading": "იტვირთება წყაროები...",
+        "noSources": "წყაროები არ არის ხელმისაწვდომი."
+    },
+    "update": {
+        "title": "განახლება | Bloumechat",
+        "system_update": "სისტემის განახლება",
+        "checking": "დადასტურება...",
+        "available": "განახლება!",
+        "uptodate": "განახლებული",
+        "downloading": "ჩამოტვირთვა",
+        "ready": "მზადაა ინსტალაციისთვის",
+        "error": "უი !",
+        "general_title": "განახლებები",
+        "checking_desc": "ჩვენ ვეძებთ Bloumechat-ის უახლეს ვერსიას ჩვენს სერვერებზე.",
+        "available_desc": "ხელმისაწვდომია Bloumechat ({{version}}) ახალი ვერსია.",
+        "uptodate_desc": "გილოცავ ! თქვენ იყენებთ Bloumechat-ის უახლეს ვერსიას.",
+        "downloading_desc": "მიმდინარეობს ახალი ფაილების მოძიება... არ დახუროთ აპლიკაცია.",
+        "ready_desc": "ყველაფერი მზადაა! დააჭირეთ ქვემოთ მოცემულ ღილაკს განახლების დასაყენებლად.",
+        "idle_desc": "განაახლეთ თქვენი აპლიკაცია, რომ ისარგებლოთ უახლესი ფუნქციებით.",
+        "restart_button": "გადატვირთეთ და დააინსტალირეთ",
+        "check_button": "შეამოწმეთ ახლა",
+        "download_button": "ჩამოტვირთეთ განახლება",
+        "recheck_button": "ხელახლა შეამოწმეთ",
+        "ignore_button": "იგნორირება ჯერ",
+        "footer": "BLOUME SAS • EST. 2026 წელი"
+    },
+    "tray": {
+        "trayOpen": "გახსნა BloumeChat",
+        "trayAutoLaunch": "გაშვება გაშვებისთანავე",
+        "trayCheckUpdates": "შეამოწმეთ განახლებები (მაღაზია)",
+        "trayReload": "გადატვირთვა",
+        "trayQuit": "რომ წავიდეს",
+        "trayNotice": "BloumeChat აგრძელებს მუშაობას ფონზე. დააწკაპუნეთ ხატულაზე ხელახლა გასახსნელად.",
+        "trayMuteMic": "მიკროფონის დადუმება",
+        "trayUnmuteMic": "მიკროფონის გააქტიურება",
+        "trayDeafen": "დადუმეთ ხმა",
+        "trayUndeafen": "დადუმების მოხსნა"
+    }
+}

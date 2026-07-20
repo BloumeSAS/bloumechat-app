@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Indlæser BloumeChat...",
+        "back": "Tidligere",
+        "forward": "Følge"
+    },
+    "screen_picker": {
+        "title": "Skærmdeling | BloumeChat",
+        "heading": "At vælge, hvad der skal deles",
+        "screens": "Skærme",
+        "windows": "Windows",
+        "share": "Dele",
+        "cancel": "Ophæve",
+        "loading": "Indlæser kilder...",
+        "noSources": "Ingen tilgængelige kilder."
+    },
+    "update": {
+        "title": "Opdatering | Bloumechat",
+        "system_update": "Systemopdatering",
+        "checking": "Verifikation...",
+        "available": "Opdatering!",
+        "uptodate": "Op til dato",
+        "downloading": "Download",
+        "ready": "Klar til at installere",
+        "error": "Ups!",
+        "general_title": "Opdateringer",
+        "checking_desc": "Vi leder efter den seneste version af Bloumechat på vores servere.",
+        "available_desc": "En ny version af Bloumechat ({{version}}) er tilgængelig.",
+        "uptodate_desc": "Tillykke! Du bruger den seneste version af Bloumechat.",
+        "downloading_desc": "Henter nye filer... Luk ikke programmet.",
+        "ready_desc": "Alt er klar! Klik på knappen nedenfor for at installere opdateringen.",
+        "idle_desc": "Hold din app opdateret for at drage fordel af de nyeste funktioner.",
+        "restart_button": "Genstart og installer",
+        "check_button": "Tjek nu",
+        "download_button": "Download opdateringen",
+        "recheck_button": "Tjek igen",
+        "ignore_button": "Ignorer lige nu",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Åbn BloumeChat",
+        "trayAutoLaunch": "Start ved opstart",
+        "trayCheckUpdates": "Tjek for opdateringer (butik)",
+        "trayReload": "Genindlæs",
+        "trayQuit": "At forlade",
+        "trayNotice": "BloumeChat fortsætter med at køre i baggrunden. Klik på ikonet for at genåbne.",
+        "trayMuteMic": "Slå mikrofonen fra",
+        "trayUnmuteMic": "Aktiver mikrofon",
+        "trayDeafen": "Slå lyden fra",
+        "trayUndeafen": "Slå lyden til"
+    }
+}

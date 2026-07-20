@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "Carregando BloumeChat...",
+        "back": "Anterior",
+        "forward": "Seguindo"
+    },
+    "screen_picker": {
+        "title": "Compartilhamento de tela | BloumeChat",
+        "heading": "Escolhendo o que compartilhar",
+        "screens": "Telas",
+        "windows": "Windows",
+        "share": "Compartilhar",
+        "cancel": "Cancelar",
+        "loading": "Carregando fontes...",
+        "noSources": "Nenhuma fonte disponível."
+    },
+    "update": {
+        "title": "Atualização | Bloumechat",
+        "system_update": "Atualização do sistema",
+        "checking": "Verificação...",
+        "available": "Atualizar !",
+        "uptodate": "Atualizado",
+        "downloading": "Download",
+        "ready": "Pronto para instalar",
+        "error": "Ops!",
+        "general_title": "Atualizações",
+        "checking_desc": "Estamos procurando a versão mais recente do Bloumechat em nossos servidores.",
+        "available_desc": "Uma nova versão de Bloumechat ({{version}}) está disponível.",
+        "uptodate_desc": "Parabéns! Você está usando a versão mais recente do Bloumechat.",
+        "downloading_desc": "Recuperando novos arquivos... Não feche o aplicativo.",
+        "ready_desc": "Está tudo pronto! Clique no botão abaixo para instalar a atualização.",
+        "idle_desc": "Mantenha seu aplicativo atualizado para aproveitar os recursos mais recentes.",
+        "restart_button": "Reinicialize e instale",
+        "check_button": "Verifique agora",
+        "download_button": "Baixe a atualização",
+        "recheck_button": "Verifique novamente",
+        "ignore_button": "Ignorar por enquanto",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "Abra BloumeChat",
+        "trayAutoLaunch": "Lançar na inicialização",
+        "trayCheckUpdates": "Verifique se há atualizações (Loja)",
+        "trayReload": "Recarregar",
+        "trayQuit": "Para sair",
+        "trayNotice": "BloumeChat continua sendo executado em segundo plano. Clique no ícone para reabrir.",
+        "trayMuteMic": "Silenciar o microfone",
+        "trayUnmuteMic": "Ativar microfone",
+        "trayDeafen": "Silenciar o som",
+        "trayUndeafen": "Ativar som"
+    }
+}

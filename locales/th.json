@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "กำลังโหลด BloumeChat...",
+        "back": "ก่อนหน้า",
+        "forward": "กำลังติดตาม"
+    },
+    "screen_picker": {
+        "title": "การแชร์หน้าจอ | BloumeChat",
+        "heading": "การเลือกสิ่งที่จะแบ่งปัน",
+        "screens": "หน้าจอ",
+        "windows": "หน้าต่าง",
+        "share": "แบ่งปัน",
+        "cancel": "ยกเลิก",
+        "loading": "กำลังโหลดแหล่งที่มา...",
+        "noSources": "ไม่มีแหล่งที่มา"
+    },
+    "update": {
+        "title": "อัพเดท | Bloumechat",
+        "system_update": "การอัปเดตระบบ",
+        "checking": "กำลังยืนยัน...",
+        "available": "อัปเดต !",
+        "uptodate": "ถึงวันที่",
+        "downloading": "ดาวน์โหลด",
+        "ready": "พร้อมติดตั้ง",
+        "error": "อ๊ะ !",
+        "general_title": "อัพเดท",
+        "checking_desc": "เรากำลังมองหา Bloumechat เวอร์ชันล่าสุดบนเซิร์ฟเวอร์ของเรา",
+        "available_desc": "Bloumechat ({{version}}) เวอร์ชันใหม่พร้อมใช้งานแล้ว",
+        "uptodate_desc": "ยินดีด้วย ! คุณกำลังใช้ Bloumechat เวอร์ชันล่าสุด",
+        "downloading_desc": "กำลังเรียกไฟล์ใหม่... อย่าปิดแอปพลิเคชัน",
+        "ready_desc": "ทุกอย่างพร้อมแล้ว! คลิกปุ่มด้านล่างเพื่อติดตั้งการอัปเดต",
+        "idle_desc": "อัปเดตแอปของคุณอยู่เสมอเพื่อรับประโยชน์จากคุณสมบัติล่าสุด",
+        "restart_button": "รีบูทและติดตั้ง",
+        "check_button": "ตรวจสอบตอนนี้",
+        "download_button": "ดาวน์โหลดการอัพเดต",
+        "recheck_button": "ตรวจสอบอีกครั้ง",
+        "ignore_button": "ละเว้นตอนนี้",
+        "footer": "BLOUME SAS • EST. 2026"
+    },
+    "tray": {
+        "trayOpen": "เปิด BloumeChat",
+        "trayAutoLaunch": "เปิดตัวเมื่อเริ่มต้น",
+        "trayCheckUpdates": "ตรวจสอบการอัปเดต (ร้านค้า)",
+        "trayReload": "โหลดซ้ำ",
+        "trayQuit": "เพื่อออกเดินทาง",
+        "trayNotice": "BloumeChat ยังคงทำงานอยู่เบื้องหลัง คลิกที่ไอคอนเพื่อเปิดอีกครั้ง",
+        "trayMuteMic": "ปิดเสียงไมโครโฟน",
+        "trayUnmuteMic": "เปิดใช้งานไมโครโฟน",
+        "trayDeafen": "ปิดเสียง",
+        "trayUndeafen": "เปิดเสียง"
+    }
+}

@@ -1,0 +1,52 @@
+{
+    "home": {
+        "loading": "正在加载 BloumeChat...",
+        "back": "以前的",
+        "forward": "下列的"
+    },
+    "screen_picker": {
+        "title": "屏幕共享 | BloumeChat",
+        "heading": "选择要分享的内容",
+        "screens": "屏幕",
+        "windows": "视窗",
+        "share": "分享",
+        "cancel": "取消",
+        "loading": "正在加载源...",
+        "noSources": "没有可用的来源。"
+    },
+    "update": {
+        "title": "更新 | Bloumechat",
+        "system_update": "系统更新",
+        "checking": "确认...",
+        "available": "更新 ！",
+        "uptodate": "最新",
+        "downloading": "下载",
+        "ready": "准备安装",
+        "error": "哎呀！",
+        "general_title": "更新",
+        "checking_desc": "我们正在我们的服务器上寻找最新版本的 Bloumechat。",
+        "available_desc": "新版本的 Bloumechat ({{version}}) 现已推出。",
+        "uptodate_desc": "恭喜！您正在使用最新版本的 Bloumechat。",
+        "downloading_desc": "正在检索新文件...请勿关闭应用程序。",
+        "ready_desc": "一切准备就绪！单击下面的按钮安装更新。",
+        "idle_desc": "保持您的应用程序更新以受益于最新功能。",
+        "restart_button": "重新启动并安装",
+        "check_button": "立即查看",
+        "download_button": "下载更新",
+        "recheck_button": "重新检查",
+        "ignore_button": "暂时忽略",
+        "footer": "布卢姆 SAS • EST。 2026年"
+    },
+    "tray": {
+        "trayOpen": "打开BloumeChat",
+        "trayAutoLaunch": "启动时启动",
+        "trayCheckUpdates": "检查更新（商店）",
+        "trayReload": "重新加载",
+        "trayQuit": "离开",
+        "trayNotice": "BloumeChat 继续在后台运行。单击该图标可重新打开。",
+        "trayMuteMic": "将麦克风静音",
+        "trayUnmuteMic": "激活麦克风",
+        "trayDeafen": "静音",
+        "trayUndeafen": "取消静音"
+    }
+}
