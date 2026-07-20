@@ -1,56 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-
-// Self-contained dictionary based on the main locales/fr/updates.ts
-const Dictionaries: any = {
-    fr: {
-        title: "Mise à jour | Bloumechat",
-        system_update: "Mise à jour du système",
-        checking: "Vérification...",
-        available: "Mise à jour !",
-        uptodate: "À jour",
-        downloading: "Téléchargement",
-        ready: "Prêt à installer",
-        error: "Oups !",
-        general_title: "Mises à jour",
-        checking_desc: "Nous recherchons la dernière version de Bloumechat sur nos serveurs.",
-        available_desc: "Une nouvelle version de Bloumechat ({{version}}) est disponible.",
-        uptodate_desc: "Félicitations ! Vous utilisez la version la plus récente de Bloumechat.",
-        downloading_desc: "Récupération des nouveaux fichiers... Ne fermez pas l'application.",
-        ready_desc: "Tout est prêt ! Cliquez sur le bouton ci-dessous pour installer la mise à jour.",
-        idle_desc: "Maintenez votre application à jour pour bénéficier des dernières fonctionnalités.",
-        restart_button: "Redémarrer et Installer",
-        check_button: "Vérifier maintenant",
-        download_button: "Télécharger la mise à jour",
-        recheck_button: "Re-vérifier",
-        ignore_button: "Ignorer pour l'instant",
-        footer: "BLOUME SAS • EST. 2026"
-    },
-    en: {
-        title: "Update | Bloumechat",
-        system_update: "System Update",
-        checking: "Checking...",
-        available: "Update available !",
-        uptodate: "Up to date",
-        downloading: "Downloading",
-        ready: "Ready to install",
-        error: "Oops !",
-        general_title: "Updates",
-        checking_desc: "We are looking for the latest version of Bloumechat on our servers.",
-        available_desc: "A new version of Bloumechat ({{version}}) is available.",
-        uptodate_desc: "Congratulations ! You are already using the most recent version of Bloumechat.",
-        downloading_desc: "Downloading new files... Please do not close the application.",
-        ready_desc: "Everything is ready ! Click the button below to install the update.",
-        idle_desc: "Keep your application up to date to enjoy the latest features.",
-        restart_button: "Restart and Install",
-        check_button: "Check now",
-        download_button: "Download update",
-        recheck_button: "Re-check",
-        ignore_button: "Ignore for now",
-        footer: "BLOUME SAS • EST. 2026"
-    }
-}
+import { detectLang, getDict, type SupportedLang } from '../lib/i18n'
 
 // Minimal self-contained UI components
 const cn = (...classes: any[]) => classes.filter(Boolean).join(' ')
@@ -107,7 +58,7 @@ const Icons = {
 }
 
 export default function UpdatePage() {
-    const [lang, setLang] = useState('fr')
+    const [lang, setLang] = useState<SupportedLang>('fr')
     const [updateInfo, setUpdateInfo] = useState<{
         status: 'checking' | 'available' | 'not-available' | 'downloading' | 'downloaded' | 'error' | 'idle',
         progress?: any,
@@ -115,7 +66,7 @@ export default function UpdatePage() {
         message?: string
     }>({ status: 'idle' })
 
-    const dict = Dictionaries[lang] || Dictionaries.fr
+    const dict: Record<string, string> = getDict(lang).update
 
     const t = (key: string, variables?: Record<string, any>) => {
         let text = dict[key] || key
@@ -128,6 +79,8 @@ export default function UpdatePage() {
     }
 
     useEffect(() => {
+        setLang(detectLang())
+
         // @ts-ignore
         if (typeof window !== 'undefined' && window.ipc) {
             // @ts-ignore
@@ -182,10 +135,10 @@ export default function UpdatePage() {
 
                 <div className="ml-auto flex items-center gap-2" style={{ WebkitAppRegion: 'no-drag' } as any}>
                     <button
-                        onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+                        onClick={() => setLang(lang === 'en' ? 'fr' : 'en')}
                         className="text-[9px] font-black opacity-30 hover:opacity-100 transition-opacity px-2 py-1 uppercase"
                     >
-                        {lang === 'fr' ? 'English' : 'Français'}
+                        {lang === 'en' ? 'Français' : 'English'}
                     </button>
                 </div>
             </div>
