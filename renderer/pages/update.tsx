@@ -356,7 +356,14 @@ export default function UpdatePage() {
         </p>
       </footer>
 
-      <style jsx global>{`
+      {/* Plain global <style>, not styled-jsx's `<style jsx global>` — the latter's
+          JSX prop typing depends on styled-jsx's ambient type augmentation being
+          resolved, which isn't reliable outside a real `next build` (broke `tsc`
+          in CI with a fresh install, even though it worked locally). This global
+          keyframe injection doesn't need styled-jsx's scoping anyway. */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes shake {
           0%,
           100% {
@@ -372,7 +379,9 @@ export default function UpdatePage() {
         .animate-shake {
           animation: shake 0.2s ease-in-out 0s 2;
         }
-      `}</style>
+      `,
+        }}
+      />
     </div>
   );
 }
