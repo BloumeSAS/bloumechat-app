@@ -37,6 +37,12 @@
         "ignore_button": "Şimdilik görmezden gelin",
         "footer": "BLOUME SAS • EST. 2026"
     },
+    "externalLink": {
+        "title": "Harici bir bağlantı açılsın mı?",
+        "message": "Bu bağlantı tarayıcınızda açılacaktır (varsayılan bağlantı veya zaten açık olan bir pencere).",
+        "openButton": "Açık",
+        "cancelButton": "İptal etmek"
+    },
     "tray": {
         "trayOpen": "BloumeChat'ı aç",
         "trayAutoLaunch": "Başlangıçta başlat",
