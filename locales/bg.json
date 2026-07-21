@@ -37,6 +37,12 @@
         "ignore_button": "Игнорирайте засега",
         "footer": "BLOUME SAS • EST. 2026 г"
     },
+    "externalLink": {
+        "title": "Отваряне на външна връзка?",
+        "message": "Тази връзка ще се отвори във вашия браузър (по подразбиране или във вече отворен прозорец).",
+        "openButton": "Отворете",
+        "cancelButton": "Отказ"
+    },
     "tray": {
         "trayOpen": "Отворете BloumeChat",
         "trayAutoLaunch": "Стартиране при стартиране",
