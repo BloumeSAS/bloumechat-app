@@ -37,6 +37,12 @@
         "ignore_button": "Ohita toistaiseksi",
         "footer": "BLOUME SAS • EST. 2026"
     },
+    "externalLink": {
+        "title": "Avataanko ulkoinen linkki?",
+        "message": "Tämä linkki avautuu selaimeesi (oletuslinkki tai jo auki oleva ikkuna).",
+        "openButton": "Avata",
+        "cancelButton": "Peruuttaa"
+    },
     "tray": {
         "trayOpen": "Avaa BloumeChat",
         "trayAutoLaunch": "Käynnistä käynnistyksen yhteydessä",
