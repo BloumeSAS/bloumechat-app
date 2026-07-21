@@ -37,6 +37,12 @@
         "ignore_button": "今のところ無視してください",
         "footer": "ブルームSAS •EST。 2026年"
     },
+    "externalLink": {
+        "title": "外部リンクを開きますか?",
+        "message": "このリンクはブラウザ (デフォルトのブラウザ、またはすでに開いているウィンドウ) で開きます。",
+        "openButton": "開ける",
+        "cancelButton": "キャンセル"
+    },
     "tray": {
         "trayOpen": "BloumeChat を開く",
         "trayAutoLaunch": "起動時に起動する",
