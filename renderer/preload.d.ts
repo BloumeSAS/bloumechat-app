@@ -96,6 +96,8 @@ interface WindowIpc {
   getRpcEnabledCategories(): Promise<string[]>;
   setRpcEnabledCategories(v: string[]): void;
   openExternal(url: string): void;
+  confirmExternalLink(): void;
+  cancelExternalLink(): void;
   getAccountLanguage(): Promise<string | null>;
   setAccountLanguage(lang: string): void;
 }
