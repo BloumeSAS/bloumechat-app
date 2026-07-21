@@ -19,7 +19,7 @@
         "system_update": "Systemuppdatering",
         "checking": "Kontroll...",
         "available": "Uppdatering!",
-        "uptodate": "Uppdaterad",
+        "uptodate": "Upp till datum",
         "downloading": "Ladda ner",
         "ready": "Klar att installera",
         "error": "Hoppsan!",
@@ -36,6 +36,12 @@
         "recheck_button": "Kontrollera igen",
         "ignore_button": "Ignorera för nu",
         "footer": "BLOUME SAS • EST. 2026"
+    },
+    "externalLink": {
+        "title": "Öppna en extern länk?",
+        "message": "Den här länken öppnas i din webbläsare (standarden, eller ett fönster som redan är öppet).",
+        "openButton": "Öppna",
+        "cancelButton": "Avboka"
     },
     "tray": {
         "trayOpen": "Öppna BloumeChat",
