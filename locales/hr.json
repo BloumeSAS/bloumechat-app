@@ -37,6 +37,12 @@
         "ignore_button": "Ignoriraj za sada",
         "footer": "BLOUME SAS • EST. 2026"
     },
+    "externalLink": {
+        "title": "Otvoriti vanjsku poveznicu?",
+        "message": "Ova poveznica će se otvoriti u vašem pregledniku (zadanom ili već otvorenom prozoru).",
+        "openButton": "Otvoriti",
+        "cancelButton": "Otkazati"
+    },
     "tray": {
         "trayOpen": "Otvori BloumeChat",
         "trayAutoLaunch": "Pokreni pri pokretanju",
