@@ -10,7 +10,7 @@
         "screens": "Képernyők",
         "windows": "Windows",
         "share": "Részesedés",
-        "cancel": "Mégse",
+        "cancel": "Mégsem",
         "loading": "Források betöltése...",
         "noSources": "Nincs elérhető forrás."
     },
@@ -36,6 +36,12 @@
         "recheck_button": "Ellenőrizze újra",
         "ignore_button": "Egyelőre figyelmen kívül hagyja",
         "footer": "BLOUME SAS • EST. 2026"
+    },
+    "externalLink": {
+        "title": "Megnyit egy külső hivatkozást?",
+        "message": "Ez a hivatkozás megnyílik a böngészőjében (az alapértelmezett, vagy egy már nyitva lévő ablak).",
+        "openButton": "Nyitott",
+        "cancelButton": "Mégsem"
     },
     "tray": {
         "trayOpen": "Megnyitás BloumeChat",
