@@ -37,6 +37,12 @@
         "ignore_button": "Ignorer pour l'instant",
         "footer": "BLOUME SAS • EST. 2026"
     },
+    "externalLink": {
+        "title": "Ouvrir un lien externe ?",
+        "message": "Ce lien va s'ouvrir dans votre navigateur (celui par défaut, ou une fenêtre déjà ouverte).",
+        "openButton": "Ouvrir",
+        "cancelButton": "Annuler"
+    },
     "tray": {
         "trayOpen": "Ouvrir BloumeChat",
         "trayAutoLaunch": "Lancer au démarrage",
