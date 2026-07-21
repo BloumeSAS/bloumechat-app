@@ -169,10 +169,12 @@ jobs:
 
   # ────────────────────────────────────────────────────────────────────────────
   # 5. Build — unsigned Nextron/electron-builder build, verification only.
-  #    Linux runner (`--dir` skips installer packaging — no code signing, no
-  #    publish) just proves `app/background.js` + the renderer bundle compile
-  #    cleanly, fast and on every push/PR/tag. The real signed installers are
-  #    built per-OS by the `release` job below (tag pushes only).
+  #    `--no-pack` is nextron's own flag (its CLI arg parser doesn't forward
+  #    unrecognized flags to electron-builder — `--dir` isn't one of nextron's
+  #    own options and throws ARG_UNKNOWN_OPTION) — skips installer packaging
+  #    (no code signing, no publish), just proves `app/background.js` + the
+  #    renderer bundle compile cleanly, fast and on every push/PR/tag. The real
+  #    signed installers are built per-OS by the `release` job below (tags only).
   # ────────────────────────────────────────────────────────────────────────────
   build:
     name: "CI — Build (verification)"
@@ -193,7 +195,7 @@ jobs:
         run: npm ci --prefer-offline --legacy-peer-deps
 
       - name: Build (unpacked, no installer/signing/publish)
-        run: npx nextron build --linux --dir
+        run: npx nextron build --linux --no-pack
 
       - name: Verify build output exists
         run: |
