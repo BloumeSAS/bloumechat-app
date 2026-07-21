@@ -23,6 +23,8 @@ export function registerIpcHandlers(
   appConfig: Record<string, unknown>,
   setAutoLaunch: (enable: boolean) => void,
   getAppIconPath: () => string,
+  getPort: () => number,
+  isPackaged: boolean,
 ) {
   const appIcon = nativeImage.createFromPath(getAppIconPath());
 
@@ -279,7 +281,13 @@ export function registerIpcHandlers(
   // never a second Electron window) ---
   ipcMain.on("open-external", (_event, url: unknown) => {
     if (typeof url !== "string") return;
-    void confirmAndOpenExternal(url, getMainWindow, settingsStore);
+    void confirmAndOpenExternal(
+      url,
+      getMainWindow,
+      settingsStore,
+      getPort,
+      isPackaged,
+    );
   });
 
   // --- Account language sync (webapp -> desktop shell) ---
