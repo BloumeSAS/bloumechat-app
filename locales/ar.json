@@ -37,6 +37,12 @@
         "ignore_button": "تجاهل في الوقت الراهن",
         "footer": "بلوم ساس • EST. 2026"
     },
+    "externalLink": {
+        "title": "فتح رابط خارجي؟",
+        "message": "سيتم فتح هذا الرابط في متصفحك (المتصفح الافتراضي، أو نافذة مفتوحة بالفعل).",
+        "openButton": "يفتح",
+        "cancelButton": "يلغي"
+    },
     "tray": {
         "trayOpen": "فتح BloumeChat",
         "trayAutoLaunch": "إطلاق عند بدء التشغيل",
