@@ -274,6 +274,8 @@ if (!isProd) {
     appConfig,
     setAutoLaunch,
     getAppIconPath,
+    () => (app.isPackaged ? prodPort : DEV_PORT),
+    app.isPackaged,
   );
 
   // Rich Presence — Windows (PowerShell) + macOS (osascript)
@@ -342,21 +344,39 @@ if (!isProd) {
     if (isAllowedUrl(url)) {
       mainWindow?.webContents.send("navigate-iframe", url);
     } else {
-      void confirmAndOpenExternal(url, getMainWindow, settingsStore);
+      void confirmAndOpenExternal(
+        url,
+        getMainWindow,
+        settingsStore,
+        () => (app.isPackaged ? prodPort : DEV_PORT),
+        app.isPackaged,
+      );
     }
   };
 
   mainWindow.webContents.on("will-navigate", (event, url) => {
     if (!isAllowedUrl(url)) {
       event.preventDefault();
-      void confirmAndOpenExternal(url, getMainWindow, settingsStore);
+      void confirmAndOpenExternal(
+        url,
+        getMainWindow,
+        settingsStore,
+        () => (app.isPackaged ? prodPort : DEV_PORT),
+        app.isPackaged,
+      );
     }
   });
   mainWindow.webContents.on("will-frame-navigate", (event) => {
     if (event.frame === mainWindow?.webContents.mainFrame) return;
     if (!isAllowedUrl(event.url)) {
       event.preventDefault();
-      void confirmAndOpenExternal(event.url, getMainWindow, settingsStore);
+      void confirmAndOpenExternal(
+        event.url,
+        getMainWindow,
+        settingsStore,
+        () => (app.isPackaged ? prodPort : DEV_PORT),
+        app.isPackaged,
+      );
     }
   });
   // Never `action: 'allow'` — that spawns a real second native window. Links that
