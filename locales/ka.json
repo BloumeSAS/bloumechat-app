@@ -37,6 +37,12 @@
         "ignore_button": "იგნორირება ჯერ",
         "footer": "BLOUME SAS • EST. 2026 წელი"
     },
+    "externalLink": {
+        "title": "გახსენი გარე ბმული?",
+        "message": "ეს ბმული გაიხსნება თქვენს ბრაუზერში (ნაგულისხმევი, ან უკვე გახსნილი ფანჯარა).",
+        "openButton": "გახსენით",
+        "cancelButton": "გაუქმება"
+    },
     "tray": {
         "trayOpen": "გახსნა BloumeChat",
         "trayAutoLaunch": "გაშვება გაშვებისთანავე",
