@@ -37,6 +37,12 @@
         "ignore_button": "Bỏ qua bây giờ",
         "footer": "HOA SAS • EST. 2026"
     },
+    "externalLink": {
+        "title": "Mở một liên kết bên ngoài?",
+        "message": "Liên kết này sẽ mở trong trình duyệt của bạn (liên kết mặc định hoặc một cửa sổ đã mở).",
+        "openButton": "Mở",
+        "cancelButton": "Hủy bỏ"
+    },
     "tray": {
         "trayOpen": "Mở BloumeChat",
         "trayAutoLaunch": "Khởi chạy khi khởi động",
