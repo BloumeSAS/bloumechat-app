@@ -45,6 +45,7 @@ export class BrowserWindow {
   };
   show = jest.fn();
   focus = jest.fn();
+  loadURL = jest.fn(async () => undefined);
   isDestroyed = jest.fn(() => false);
   close = jest.fn();
   on = jest.fn();
