@@ -5,85 +5,105 @@
  */
 
 interface RpcActivity {
-  type: 'using' | 'browsing' | 'listening' | 'playing' | 'none'
-  name: string
-  details?: string
-  startedAt?: number
-  icon?: string
+  type: "using" | "browsing" | "listening" | "playing" | "none";
+  name: string;
+  details?: string;
+  startedAt?: number;
+  icon?: string;
 }
 
 interface DeepLinkPayload {
-  action: string
-  id: string
-  queryParams?: Record<string, string>
+  action: string;
+  id: string;
+  queryParams?: Record<string, string>;
 }
 
 interface UpdateStatus {
-  status: 'checking' | 'available' | 'not-available' | 'downloading' | 'downloaded' | 'error'
-  info?: { version: string }
-  progress?: object
-  message?: string
+  status:
+    | "checking"
+    | "available"
+    | "not-available"
+    | "downloading"
+    | "downloaded"
+    | "error";
+  info?: { version: string };
+  progress?: object;
+  message?: string;
 }
 
 interface WindowIpc {
-  send(channel: string, value: unknown): void
-  on(channel: string, callback: (...args: unknown[]) => void): () => void
-  getEnv(key: string): Promise<unknown>
-  getPlatform(): Promise<string>
-  minimize(): void
-  maximize(): void
-  close(): void
+  send(channel: string, value: unknown): void;
+  on(channel: string, callback: (...args: unknown[]) => void): () => void;
+  getEnv(key: string): Promise<unknown>;
+  getPlatform(): Promise<string>;
+  getAppVersion(): Promise<string>;
+  minimize(): void;
+  maximize(): void;
+  close(): void;
   showNotification(data: {
-    title: string; body: string; icon?: string
-    channelPublicId?: string; serverPublicId?: string; authorPublicId?: string
-  }): void
-  onNotificationClick(callback: (data: {
-    channelPublicId?: string; serverPublicId?: string; authorPublicId?: string
-  }) => void): () => void
-  onUpdateStatus(callback: (data: UpdateStatus) => void): () => void
-  quitAndInstall(): void
-  startDownload(): void
-  checkForUpdates(): void
-  ignoreUpdate(): void
-  simulateUpdate(): void
-  setBadgeCount(count: number): void
-  getAutoLaunch(): Promise<boolean>
-  setAutoLaunch(enable: boolean): void
-  getZoomLevel(): Promise<number>
-  setZoomLevel(level: number): void
-  getMinimizeToTray(): Promise<boolean>
-  setMinimizeToTray(enable: boolean): void
-  onDeepLink(callback: (data: DeepLinkPayload) => void): () => void
-  writeToClipboard(text: string): void
-  readFromClipboard(): Promise<string>
-  copySelection(text: string): void
-  pasteText(text?: string): void
-  getScreenSources(): Promise<Array<{ id: string; name: string; thumbnail: string }>>
-  selectScreenSource(sourceId: string): void
-  cancelScreenSource(): void
-  setVoiceActive(active: boolean): void
-  setMuteState(isMuted: boolean, isDeafened: boolean): void
-  onThumbarToggleMute(cb: () => void): () => void
-  onThumbarToggleDeafen(cb: () => void): () => void
-  onRpcActivity(cb: (activity: RpcActivity) => void): () => void
-  getRpcEnabled(): Promise<boolean>
-  setRpcEnabled(enable: boolean): void
-  getRpcShowUsing(): Promise<boolean>
-  setRpcShowUsing(v: boolean): void
-  getRpcShowBrowsing(): Promise<boolean>
-  setRpcShowBrowsing(v: boolean): void
-  getRpcShowListening(): Promise<boolean>
-  setRpcShowListening(v: boolean): void
-  getRpcShowPlaying(): Promise<boolean>
-  setRpcShowPlaying(v: boolean): void
-  getRpcEnabledCategories(): Promise<string[]>
-  setRpcEnabledCategories(v: string[]): void
+    title: string;
+    body: string;
+    icon?: string;
+    channelPublicId?: string;
+    serverPublicId?: string;
+    authorPublicId?: string;
+  }): void;
+  onNotificationClick(
+    callback: (data: {
+      channelPublicId?: string;
+      serverPublicId?: string;
+      authorPublicId?: string;
+    }) => void,
+  ): () => void;
+  onUpdateStatus(callback: (data: UpdateStatus) => void): () => void;
+  quitAndInstall(): void;
+  startDownload(): void;
+  checkForUpdates(): void;
+  ignoreUpdate(): void;
+  simulateUpdate(): void;
+  setBadgeCount(count: number): void;
+  getAutoLaunch(): Promise<boolean>;
+  setAutoLaunch(enable: boolean): void;
+  getZoomLevel(): Promise<number>;
+  setZoomLevel(level: number): void;
+  getMinimizeToTray(): Promise<boolean>;
+  setMinimizeToTray(enable: boolean): void;
+  onDeepLink(callback: (data: DeepLinkPayload) => void): () => void;
+  writeToClipboard(text: string): void;
+  readFromClipboard(): Promise<string>;
+  copySelection(text: string): void;
+  pasteText(text?: string): void;
+  getScreenSources(): Promise<
+    Array<{ id: string; name: string; thumbnail: string }>
+  >;
+  selectScreenSource(sourceId: string): void;
+  cancelScreenSource(): void;
+  setVoiceActive(active: boolean): void;
+  setMuteState(isMuted: boolean, isDeafened: boolean): void;
+  onThumbarToggleMute(cb: () => void): () => void;
+  onThumbarToggleDeafen(cb: () => void): () => void;
+  onRpcActivity(cb: (activity: RpcActivity) => void): () => void;
+  getRpcEnabled(): Promise<boolean>;
+  setRpcEnabled(enable: boolean): void;
+  getRpcShowUsing(): Promise<boolean>;
+  setRpcShowUsing(v: boolean): void;
+  getRpcShowBrowsing(): Promise<boolean>;
+  setRpcShowBrowsing(v: boolean): void;
+  getRpcShowListening(): Promise<boolean>;
+  setRpcShowListening(v: boolean): void;
+  getRpcShowPlaying(): Promise<boolean>;
+  setRpcShowPlaying(v: boolean): void;
+  getRpcEnabledCategories(): Promise<string[]>;
+  setRpcEnabledCategories(v: string[]): void;
+  openExternal(url: string): void;
+  getAccountLanguage(): Promise<string | null>;
+  setAccountLanguage(lang: string): void;
 }
 
 declare global {
   interface Window {
-    ipc: WindowIpc
+    ipc: WindowIpc;
   }
 }
 
-export {}
+export {};
