@@ -128,6 +128,10 @@ const handler = {
   // --- External URL (opens in system browser, not Electron window) ---
   openExternal: (url: string) => ipcRenderer.send("open-external", url),
 
+  // --- External link confirm window (renderer/pages/external-link-confirm.tsx) ---
+  confirmExternalLink: () => ipcRenderer.send("confirm-external-link"),
+  cancelExternalLink: () => ipcRenderer.send("cancel-external-link"),
+
   // --- Account language sync (webapp -> desktop shell) ---
   getAccountLanguage: (): Promise<string | null> =>
     ipcRenderer.invoke("get-account-language"),
