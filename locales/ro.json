@@ -37,6 +37,12 @@
         "ignore_button": "Ignora deocamdata",
         "footer": "BLOUME SAS • EST. 2026"
     },
+    "externalLink": {
+        "title": "Deschideți un link extern?",
+        "message": "Acest link se va deschide în browserul dvs. (cel implicit sau o fereastră deja deschisă).",
+        "openButton": "Deschide",
+        "cancelButton": "Anula"
+    },
     "tray": {
         "trayOpen": "Deschide BloumeChat",
         "trayAutoLaunch": "Lansați la pornire",
