@@ -1,2 +1,7 @@
-export type { AppSettings } from './settings'
-export type { NotificationPayload, DeepLinkPayload, ScreenSource, UpdateStatus } from './ipc'
+export type { AppSettings } from "./settings";
+export type {
+  NotificationPayload,
+  DeepLinkPayload,
+  ScreenSource,
+  UpdateStatus,
+} from "./ipc";
