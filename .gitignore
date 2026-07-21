@@ -31,6 +31,10 @@ config.json
 next-env.d.ts
 tsbuildinfo
 
+# Test coverage
+coverage/
+junit/
+
 certf
 package-lock.json
 latest
