@@ -1,0 +1,333 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# BloumeChat — Windows (Electron/Nextron) CI/CD
+#
+# This workflow lives in its own repo (github.com/JulesZYTB/bloumechat-app —
+# `windows/` on disk is the checkout of that repo, not a monorepo subfolder),
+# so every path below is relative to ITS root, same as server-nest-ci-cd.yml
+# is relative to the server-nest repo's root.
+#
+# CI  : lint, format, type-check, unit tests (matrixed Node 20/22), an unsigned
+#       build-verification pass, a dependency security audit, CodeQL static
+#       analysis, and (PRs only) a dependency review — runs on every push/PR
+#       to main/master and on every `v*` tag push.
+# CD  : on a `v*` tag push, once every CI gate above has passed, builds and
+#       publishes the SIGNED installers (Windows NSIS, macOS universal, Linux)
+#       via electron-builder --publish always, uploaded to the matching
+#       GitHub Release.
+#
+# Required GitHub Secrets (Settings → Secrets → Actions):
+#   WINDOWS_CERTIFICATE          → code-signing cert (base64), Windows build only
+#   WINDOWS_CERTIFICATE_PASSWORD → cert password, Windows build only
+# ──────────────────────────────────────────────────────────────────────────────
+
+name: Windows (Electron) CI/CD
+
+on:
+  push:
+    branches: [main, master]
+    tags: ["v*"]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: windows-ci-cd-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────────
+  # 1. Lint — ESLint (main: Node globals, renderer: React/browser globals)
+  # ────────────────────────────────────────────────────────────────────────────
+  lint:
+    name: "CI — Lint"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Run ESLint
+        run: npm run lint
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # 2. Format — Prettier check (non-destructive, no --write in CI)
+  # ────────────────────────────────────────────────────────────────────────────
+  format:
+    name: "CI — Format Check"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Check Prettier formatting
+        run: npm run format:check
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # 3. Type Check — tsc --noEmit across main + renderer
+  # ────────────────────────────────────────────────────────────────────────────
+  type-check:
+    name: "CI — Type Check"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Check TypeScript syntax
+        run: npx tsc --noEmit -p tsconfig.json
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # 4. Unit tests — matrixed across Node 20 & 22 (main-process services +
+  #    renderer i18n, see jest "projects" in package.json), coverage published
+  #    as a build artifact + job summary table
+  # ────────────────────────────────────────────────────────────────────────────
+  unit-tests:
+    name: "CI — Unit Tests (Node ${{ matrix.node-version }})"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["20", "22"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Run unit tests with coverage
+        run: npm run test:cov -- --ci --reporters=default --reporters=jest-junit
+        env:
+          JEST_JUNIT_OUTPUT_DIR: ./junit
+          JEST_JUNIT_OUTPUT_NAME: unit-results.xml
+
+      - name: Upload coverage artifact
+        if: matrix.node-version == env.NODE_VERSION
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-coverage-report
+          path: coverage/
+          retention-days: 14
+
+      - name: Test summary
+        if: always() && matrix.node-version == env.NODE_VERSION
+        run: |
+          echo "## 🧪 Windows unit test results (Node ${{ matrix.node-version }})" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f coverage/coverage-summary.json ]; then
+            node -e "
+              const s = require('./coverage/coverage-summary.json').total;
+              const pct = (m) => s[m].pct + '%';
+              console.log('| Metric | Coverage |');
+              console.log('|---|---|');
+              console.log('| Statements | ' + pct('statements') + ' |');
+              console.log('| Branches | ' + pct('branches') + ' |');
+              console.log('| Functions | ' + pct('functions') + ' |');
+              console.log('| Lines | ' + pct('lines') + ' |');
+            " >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "_No coverage-summary.json found._" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # 5. Build — unsigned Nextron/electron-builder build, verification only.
+  #    Linux runner (`--dir` skips installer packaging — no code signing, no
+  #    publish) just proves `app/background.js` + the renderer bundle compile
+  #    cleanly, fast and on every push/PR/tag. The real signed installers are
+  #    built per-OS by the `release` job below (tag pushes only).
+  # ────────────────────────────────────────────────────────────────────────────
+  build:
+    name: "CI — Build (verification)"
+    runs-on: ubuntu-latest
+    needs: [type-check]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Build (unpacked, no installer/signing/publish)
+        run: npx nextron build --linux --dir
+
+      - name: Verify build output exists
+        run: |
+          test -f app/background.js || (echo "::error::app/background.js was not produced by the build" && exit 1)
+          echo "✓ app/background.js present ($(du -h app/background.js | cut -f1))"
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # 6. Security audit — npm audit (informational; blocks only on critical
+  #    severity in production dependencies)
+  # ────────────────────────────────────────────────────────────────────────────
+  security-audit:
+    name: "CI — Security Audit"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --prefer-offline
+
+      - name: Full audit report (informational, never fails the job)
+        run: npm audit --omit=dev || true
+
+      - name: Fail only on critical-severity production vulnerabilities
+        run: npm audit --omit=dev --audit-level=critical
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # 7. CodeQL — static security analysis. continue-on-error: true because code
+  #    scanning requires GitHub Advanced Security enabled for this repo (a
+  #    Settings toggle, not something this file controls) — same soft-fail
+  #    pattern as server-nest-ci-cd.yml so a plan/settings gap never paints
+  #    the whole pipeline red.
+  # ────────────────────────────────────────────────────────────────────────────
+  codeql:
+    name: "CI — CodeQL Analysis"
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript-typescript"
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # 8. Dependency review — flags newly introduced vulnerable/incompatible
+  #     dependencies, pull requests only
+  # ────────────────────────────────────────────────────────────────────────────
+  dependency-review:
+    name: "CI — Dependency Review"
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+  # ────────────────────────────────────────────────────────────────────────────
+  # CD — Build & publish the SIGNED installers (Windows NSIS, macOS universal,
+  # Linux) and upload them to the GitHub Release matching the pushed tag —
+  # only after every CI gate above has passed, and only on a `v*` tag push.
+  # ────────────────────────────────────────────────────────────────────────────
+  release:
+    name: "CD — Release (${{ matrix.os }})"
+    needs:
+      - lint
+      - format
+      - type-check
+      - unit-tests
+      - build
+      - security-audit
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm install
+
+      # Explicit `--publish always` guarantees the installer + latest.yml are
+      # uploaded to the GitHub release matching the pushed tag (vX.Y.Z).
+      - name: Build and Publish (Windows)
+        if: matrix.os == 'windows-latest'
+        run: npx nextron build --win nsis --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.WINDOWS_CERTIFICATE }}
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+
+      - name: Build and Publish (macOS)
+        if: matrix.os == 'macos-latest'
+        run: npx nextron build --mac --universal --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Publish (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: npx nextron build --linux --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
