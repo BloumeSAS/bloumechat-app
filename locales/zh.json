@@ -37,6 +37,12 @@
         "ignore_button": "暂时忽略",
         "footer": "布卢姆 SAS • EST。 2026年"
     },
+    "externalLink": {
+        "title": "打开外部链接？",
+        "message": "此链接将在您的浏览器中打开（默认浏览器或已打开的窗口）。",
+        "openButton": "打开",
+        "cancelButton": "取消"
+    },
     "tray": {
         "trayOpen": "打开BloumeChat",
         "trayAutoLaunch": "启动时启动",
