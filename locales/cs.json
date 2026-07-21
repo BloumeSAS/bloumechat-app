@@ -37,6 +37,12 @@
         "ignore_button": "Ignorovat prozatím",
         "footer": "BLOUME SAS • EST. 2026"
     },
+    "externalLink": {
+        "title": "Otevřít externí odkaz?",
+        "message": "Tento odkaz se otevře ve vašem prohlížeči (výchozím nebo již otevřeném okně).",
+        "openButton": "OTEVŘENO",
+        "cancelButton": "Zrušit"
+    },
     "tray": {
         "trayOpen": "Otevřít BloumeChat",
         "trayAutoLaunch": "Spusťte při spuštění",
