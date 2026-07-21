@@ -37,6 +37,12 @@
         "ignore_button": "Ignorer lige nu",
         "footer": "BLOUME SAS • EST. 2026"
     },
+    "externalLink": {
+        "title": "Vil du åbne et eksternt link?",
+        "message": "Dette link åbnes i din browser (standarden, eller et vindue, der allerede er åbent).",
+        "openButton": "Åben",
+        "cancelButton": "Ophæve"
+    },
     "tray": {
         "trayOpen": "Åbn BloumeChat",
         "trayAutoLaunch": "Start ved opstart",
