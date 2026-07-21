@@ -37,6 +37,12 @@
         "ignore_button": "Abaikan untuk saat ini",
         "footer": "BLOUME SAS • EST. 2026"
     },
+    "externalLink": {
+        "title": "Buka tautan eksternal?",
+        "message": "Tautan ini akan terbuka di browser Anda (yang default, atau jendela sudah terbuka).",
+        "openButton": "Membuka",
+        "cancelButton": "Membatalkan"
+    },
     "tray": {
         "trayOpen": "Buka BloumeChat",
         "trayAutoLaunch": "Luncurkan saat startup",
