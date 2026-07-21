@@ -37,6 +37,12 @@
         "ignore_button": "지금은 무시하세요",
         "footer": "블룸 SAS • EST. 2026년"
     },
+    "externalLink": {
+        "title": "외부 링크를 열까요?",
+        "message": "이 링크는 브라우저에서 열립니다(기본 링크 또는 이미 열려 있는 창이 있음).",
+        "openButton": "열려 있는",
+        "cancelButton": "취소"
+    },
     "tray": {
         "trayOpen": "BloumeChat 열기",
         "trayAutoLaunch": "시작 시 실행",
