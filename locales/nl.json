@@ -37,6 +37,12 @@
         "ignore_button": "Negeer voorlopig",
         "footer": "BLOUME SAS • GESCH. 2026"
     },
+    "externalLink": {
+        "title": "Een externe link openen?",
+        "message": "Deze link wordt geopend in uw browser (de standaardlink, of een venster dat al geopend is).",
+        "openButton": "Open",
+        "cancelButton": "Annuleren"
+    },
     "tray": {
         "trayOpen": "Open BloumeChat",
         "trayAutoLaunch": "Start bij het opstarten",
