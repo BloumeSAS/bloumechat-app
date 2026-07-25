@@ -308,4 +308,14 @@ export function registerIpcHandlers(
       return;
     settingsStore.set("accountLanguage", code);
   });
+
+  // --- Account accent color sync (webapp -> desktop shell) ---
+  const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
+  ipcMain.handle("get-account-accent-color", () =>
+    settingsStore.get("accountAccentColor", null),
+  );
+  ipcMain.on("set-account-accent-color", (_event, color: unknown) => {
+    if (typeof color !== "string" || !HEX_COLOR_RE.test(color)) return;
+    settingsStore.set("accountAccentColor", color);
+  });
 }
