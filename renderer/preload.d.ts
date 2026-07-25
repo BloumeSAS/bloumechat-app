@@ -100,6 +100,8 @@ interface WindowIpc {
   cancelExternalLink(): void;
   getAccountLanguage(): Promise<string | null>;
   setAccountLanguage(lang: string): void;
+  getAccountAccentColor(): Promise<string | null>;
+  setAccountAccentColor(color: string): void;
 }
 
 declare global {
