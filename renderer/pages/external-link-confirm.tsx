@@ -6,6 +6,7 @@ import {
   resolveLang,
   type SupportedLang,
 } from "../lib/i18n";
+import { applyAccentColor } from "../lib/color";
 
 /**
  * Frameless confirm modal shown before handing a link off to the system
@@ -31,6 +32,15 @@ export default function ExternalLinkConfirmPage() {
         })
         .catch(() => {
           /* keep OS-detected lang */
+        });
+    }
+
+    if (window.ipc?.getAccountAccentColor) {
+      window.ipc
+        .getAccountAccentColor()
+        .then((accentColor: string | null) => applyAccentColor(accentColor))
+        .catch(() => {
+          /* keep default Argon-blue palette */
         });
     }
   }, []);
