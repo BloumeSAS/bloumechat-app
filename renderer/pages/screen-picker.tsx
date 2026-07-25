@@ -6,6 +6,7 @@ import {
   resolveLang,
   type SupportedLang,
 } from "../lib/i18n";
+import { applyAccentColor } from "../lib/color";
 
 interface Source {
   id: string;
@@ -35,6 +36,15 @@ export default function ScreenPickerPage() {
         })
         .catch(() => {
           /* keep OS-detected lang */
+        });
+    }
+
+    if (window.ipc?.getAccountAccentColor) {
+      window.ipc
+        .getAccountAccentColor()
+        .then((accentColor: string | null) => applyAccentColor(accentColor))
+        .catch(() => {
+          /* keep default Argon-blue palette */
         });
     }
 
