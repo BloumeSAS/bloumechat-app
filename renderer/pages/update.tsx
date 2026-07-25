@@ -7,6 +7,7 @@ import {
   resolveLang,
   type SupportedLang,
 } from "../lib/i18n";
+import { applyAccentColor } from "../lib/color";
 
 // Minimal self-contained UI components
 const cn = (...classes: any[]) => classes.filter(Boolean).join(" ");
@@ -185,6 +186,15 @@ export default function UpdatePage() {
         })
         .catch(() => {
           /* keep OS-detected lang */
+        });
+    }
+
+    if (typeof window !== "undefined" && window.ipc?.getAccountAccentColor) {
+      window.ipc
+        .getAccountAccentColor()
+        .then((accentColor: string | null) => applyAccentColor(accentColor))
+        .catch(() => {
+          /* keep default Argon-blue palette */
         });
     }
 
