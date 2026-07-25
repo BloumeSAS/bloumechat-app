@@ -137,6 +137,15 @@ const handler = {
     ipcRenderer.invoke("get-account-language"),
   setAccountLanguage: (lang: string) =>
     ipcRenderer.send("set-account-language", lang),
+
+  // --- Account accent color sync (webapp -> desktop shell) ---
+  // Mirrors the account language pattern: lets secondary windows (screen
+  // picker, updater, external-link dialog) apply the account's accent color
+  // to the native title bar even before the webapp iframe has loaded.
+  getAccountAccentColor: (): Promise<string | null> =>
+    ipcRenderer.invoke("get-account-accent-color"),
+  setAccountAccentColor: (color: string) =>
+    ipcRenderer.send("set-account-accent-color", color),
 };
 
 contextBridge.exposeInMainWorld("ipc", handler);
