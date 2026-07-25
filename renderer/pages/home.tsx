@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import Head from "next/head";
 import { detectLang, getDict, resolveLang } from "../lib/i18n";
+import { applyAccentColor } from "../lib/color";
 
 export default function HomePage() {
   const [siteUrl, setSiteUrl] = useState("");
@@ -89,6 +90,17 @@ export default function HomePage() {
         /* keep OS-detected lang */
       });
 
+    // Same seeding for the accent color, so the title bar tints correctly
+    // before the iframe has loaded on this and future launches.
+    window.ipc
+      .getAccountAccentColor?.()
+      .then((accentColor: string | null) => {
+        applyAccentColor(accentColor);
+      })
+      .catch(() => {
+        /* keep default Argon-blue palette */
+      });
+
     // Listen for theme/language changes from the iframe (Bloumechat main site)
     const handleMessage = (event: MessageEvent) => {
       // Only the bloumechat.com iframe is a legitimate sender — without this check,
@@ -112,6 +124,14 @@ export default function HomePage() {
         if (typeof language === "string" && language) {
           setLang(resolveLang(language));
           window.ipc.setAccountLanguage?.(language);
+        }
+      } else if (event.data?.type === "ACCENT_COLOR_CHANGED") {
+        // Same caching rationale as LANGUAGE_CHANGED above, but for the
+        // account's accent color tinting the native title bar's --primary.
+        const accentColor = event.data.accentColor;
+        if (typeof accentColor === "string" && accentColor) {
+          applyAccentColor(accentColor);
+          window.ipc.setAccountAccentColor?.(accentColor);
         }
       } else if (event.data?.type === "SHOW_NOTIFICATION") {
         window.ipc.showNotification(event.data.notification);
