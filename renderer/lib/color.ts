@@ -37,7 +37,12 @@ function hexToHslTriplet(hex: string): string | null {
   return `${Math.round(h)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
 }
 
-const ACCENT_VARS = ["--primary", "--ring", "--secondary-foreground", "--accent-foreground"];
+const ACCENT_VARS = [
+  "--primary",
+  "--ring",
+  "--secondary-foreground",
+  "--accent-foreground",
+];
 
 /** Pass null to reset the shell back to its default Argon-blue palette. */
 export function applyAccentColor(hex: string | null | undefined): void {
