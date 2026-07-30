@@ -23,6 +23,7 @@ export interface RpcActivity {
   type: "using" | "browsing" | "listening" | "playing" | "none";
   name: string;
   details?: string;
+  url?: string; // active browser tab URL, only set for type "browsing" when readable
   startedAt?: number; // unix ms, set client-side in RpcProvider
   icon?: string; // data URL of the app/game .exe icon (auto-extracted via app.getFileIcon)
 }
