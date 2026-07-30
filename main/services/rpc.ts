@@ -636,7 +636,12 @@ function startHookProcess(
       hookStdoutBuffer = hookStdoutBuffer.slice(idx + 1);
       if (!line) continue;
       if (!isEnabled()) continue;
-      let parsed: { n: string; t: string; p?: string | null; u?: string | null };
+      let parsed: {
+        n: string;
+        t: string;
+        p?: string | null;
+        u?: string | null;
+      };
       try {
         parsed = JSON.parse(line);
       } catch {
@@ -753,7 +758,12 @@ function startPollingFallback(
             onPollSettled("unchanged");
             return;
           }
-          let parsed: { n: string; t: string; p?: string | null; u?: string | null };
+          let parsed: {
+            n: string;
+            t: string;
+            p?: string | null;
+            u?: string | null;
+          };
           try {
             parsed = JSON.parse(stdout.trim());
           } catch {
@@ -788,12 +798,20 @@ function startPollingFallback(
           const procName = raw.substring(0, firstPipe).trim();
           const remainder = raw.substring(firstPipe + 1);
           const lastPipe = remainder.lastIndexOf("|");
-          const winTitle = (lastPipe === -1 ? remainder : remainder.substring(0, lastPipe)).trim();
-          const browserUrl = (lastPipe === -1 ? "" : remainder.substring(lastPipe + 1)).trim();
+          const winTitle = (
+            lastPipe === -1 ? remainder : remainder.substring(0, lastPipe)
+          ).trim();
+          const browserUrl = (
+            lastPipe === -1 ? "" : remainder.substring(lastPipe + 1)
+          ).trim();
           // macOS: executable path not resolved here → icon falls back to brand/Lucide.
-          void handleReading(procName, winTitle, "", browserUrl, getWindow).then(
-            onPollSettled,
-          );
+          void handleReading(
+            procName,
+            winTitle,
+            "",
+            browserUrl,
+            getWindow,
+          ).then(onPollSettled);
         },
       );
     } else {
