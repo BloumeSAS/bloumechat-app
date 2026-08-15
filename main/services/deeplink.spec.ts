@@ -40,13 +40,23 @@ describe("handleDeepLink", () => {
     });
   });
 
-  it.each(["server", "gift"])("accepts the %s action", (action) => {
+  it.each(["server", "gift", "open"])("accepts the %s action", (action) => {
     const win = makeWindow();
     handleDeepLink(`bloumechat://${action}/xyz`, win);
     expect(win.webContents.send).toHaveBeenCalledWith(
       "deep-link",
       expect.objectContaining({ action }),
     );
+  });
+
+  it("forwards a bloume_session token via the open action (login handoff, e.g. after BloumeConnect completes in the system browser)", () => {
+    const win = makeWindow();
+    handleDeepLink("bloumechat://open?bloume_session=abc123", win);
+    expect(win.webContents.send).toHaveBeenCalledWith("deep-link", {
+      action: "open",
+      id: "",
+      queryParams: { bloume_session: "abc123" },
+    });
   });
 
   it("rejects an unknown protocol (not bloumechat:)", () => {
