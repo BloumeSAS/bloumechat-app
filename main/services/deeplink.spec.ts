@@ -40,14 +40,17 @@ describe("handleDeepLink", () => {
     });
   });
 
-  it.each(["server", "gift", "open", "invite"])("accepts the %s action", (action) => {
-    const win = makeWindow();
-    handleDeepLink(`bloumechat://${action}/xyz`, win);
-    expect(win.webContents.send).toHaveBeenCalledWith(
-      "deep-link",
-      expect.objectContaining({ action }),
-    );
-  });
+  it.each(["server", "gift", "open", "invite"])(
+    "accepts the %s action",
+    (action) => {
+      const win = makeWindow();
+      handleDeepLink(`bloumechat://${action}/xyz`, win);
+      expect(win.webContents.send).toHaveBeenCalledWith(
+        "deep-link",
+        expect.objectContaining({ action }),
+      );
+    },
+  );
 
   it("forwards a bloume_session token via the open action (login handoff, e.g. after BloumeConnect completes in the system browser)", () => {
     const win = makeWindow();
