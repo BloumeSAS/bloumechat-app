@@ -40,7 +40,7 @@ describe("handleDeepLink", () => {
     });
   });
 
-  it.each(["server", "gift", "open"])("accepts the %s action", (action) => {
+  it.each(["server", "gift", "open", "invite"])("accepts the %s action", (action) => {
     const win = makeWindow();
     handleDeepLink(`bloumechat://${action}/xyz`, win);
     expect(win.webContents.send).toHaveBeenCalledWith(
