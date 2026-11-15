@@ -54,6 +54,20 @@ export function initPermissions(
       }
     };
 
+    /** Resolves the request with the first screen (used when the custom picker cannot be shown). */
+    const shareFirstScreen = async () => {
+      try {
+        const screens = await desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { width: 0, height: 0 } });
+        if (screens[0]) {
+          smartCallback({ video: screens[0], audio: "loopback" as const });
+          return;
+        }
+      } catch (err) {
+        console.error("[ScreenShare] Fallback screen lookup failed:", err);
+      }
+      smartCallback({});
+    };
+
     const pickerWin = new BrowserWindow({
       width: 600,
       height: 500,
@@ -77,8 +91,11 @@ export function initPermissions(
     console.log("[ScreenShare] Loading picker URL:", url);
 
     pickerWin.loadURL(url).catch((err) => {
-      console.error("[ScreenShare] Failed to load picker URL:", err);
-      smartCallback({});
+      // The picker UI is served by the local app server; on some machines it fails to load
+      // (port taken, firewall, antivirus). Cancelling here left those users with a dead
+      // "share screen" button while the browser version worked — fall back to the primary screen.
+      console.error("[ScreenShare] Failed to load picker URL, falling back to the primary screen:", err);
+      void shareFirstScreen();
       if (!pickerWin.isDestroyed()) pickerWin.close();
     });
 
@@ -90,6 +107,10 @@ export function initPermissions(
       }
       desktopCapturer
         .getSources({ types: ["screen", "window"] })
+        .catch(async (err) => {
+          console.error("[ScreenShare] getSources(screen+window) failed, retrying screens only:", err);
+          return desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { width: 0, height: 0 } });
+        })
         .then((sources) => {
           const source = sources.find((s) => s.id === sourceId);
           if (source) {
