@@ -4,13 +4,12 @@ import {
   session,
   BrowserWindow,
   globalShortcut,
+  ipcMain,
   powerMonitor,
-  crashReporter,
 } from "electron";
-import { createWindow } from "./helpers";
 import Store from "electron-store";
-import fs from "fs";
 import log from "electron-log";
+import { createWindow } from "./helpers";
 import type { AppSettings } from "./types/settings";
 import {
   startLocalServer,
@@ -18,59 +17,49 @@ import {
   initPermissions,
   initTray,
   initUpdater,
-  prewarmBadgeCache,
   initBadge,
   registerIpcHandlers,
-  getAppLocale,
-  getI18n,
   startRpcPolling,
   stopRpcPolling,
-  reapplyThumbar,
-  confirmAndOpenExternal,
 } from "./services";
+import { setAppQuitting } from "./services/app-state";
+import { loadAppConfig, getSiteOrigin } from "./services/config";
+import {
+  startCrashReporter,
+  installProcessErrorHandlers,
+  attachRendererRecovery,
+} from "./services/crash";
+import {
+  installNavigationGuards,
+  getAllowedOrigins,
+  type NavigationContext,
+} from "./services/navigation";
+import { installZoomShortcuts } from "./services/zoom";
+import { installWindowLifecycle } from "./services/window-lifecycle";
+import { attachSiteHealth } from "./services/site-health";
+import {
+  registerProtocolClient,
+  applyJumpList,
+  findLaunchDeepLink,
+} from "./services/os-integration";
+import { isVoiceCallActive, prewarmBadgeCache } from "./services/badge";
 
 // Route console.* to electron-log — writes to %APPDATA%\BloumeChat\logs\main.log in production
 log.transports.file.level = "info";
 Object.assign(console, log.functions);
 
-// --- Config ---
-const configPath = path.join(__dirname, "../config.json");
-let appConfig: Record<string, unknown> = {};
-try {
-  appConfig = JSON.parse(fs.readFileSync(configPath, "utf8"));
-} catch {
-  console.error("[Config] No config.json found or invalid format.");
-}
-
-const isProd =
-  appConfig.IS_PROD !== undefined
-    ? appConfig.IS_PROD === true || appConfig.IS_PROD === "true"
-    : process.env.NODE_ENV === "production";
+const { appConfig, isProd } = loadAppConfig(__dirname);
 
 if (process.platform === "win32") {
   app.setAppUserModelId("com.bloumechat.app");
 }
+// Must precede everything that reads userData (single-instance lock, crash dumps, stores).
+if (!isProd) {
+  app.setPath("userData", `${app.getPath("userData")} (development)`);
+}
 
-// Crash reporter — writes native minidumps locally AND, when a collection
-// endpoint is configured, uploads them to the admin panel (server/routes/crash-reports.ts)
-// so a crash can be diagnosed from any user's machine without relying on their
-// bug report alone. Falls back to local-only if CRASH_REPORT_URL isn't set
-// (e.g. a dev build without config.json wired up).
-const crashReportUrl =
-  typeof appConfig.CRASH_REPORT_URL === "string"
-    ? appConfig.CRASH_REPORT_URL
-    : "";
-app.setPath("crashDumps", path.join(app.getPath("userData"), "CrashDumps"));
-crashReporter.start({
-  submitURL: crashReportUrl,
-  uploadToServer: Boolean(crashReportUrl),
-  compress: true,
-  ignoreSystemCrashHandler: false,
-  globalExtra: {
-    _version: app.getVersion(),
-    _platform: process.platform,
-  },
-});
+installProcessErrorHandlers();
+startCrashReporter(appConfig);
 
 // Allow cookies in iframes (SameSite workaround for embedded Cloudflare challenges)
 app.commandLine.appendSwitch(
@@ -78,53 +67,30 @@ app.commandLine.appendSwitch(
   "SameSiteByDefaultCookies,CookiesWithoutSameSiteMustBeSecure",
 );
 
-// --- Custom Protocol ---
-if (process.defaultApp) {
-  if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient("bloumechat", process.execPath, [
-      path.resolve(process.argv[1]),
-    ]);
-  }
-} else {
-  app.setAsDefaultProtocolClient("bloumechat");
-}
-
-// Single instance lock
-const gotTheLock = app.requestSingleInstanceLock();
-if (!gotTheLock) app.quit();
-
 const settingsStore = new Store<AppSettings>({ name: "bloumechat-settings" });
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Electron.Tray | null = null;
 let server: import("http").Server | null = null;
 let prodPort = 0;
-let isAppQuitting = false;
 
-function getMainWindow() {
-  return mainWindow;
-}
-function getTray() {
-  return tray;
-}
-function getProdPort() {
-  return prodPort;
-}
+const getMainWindow = () => mainWindow;
+const getTray = () => tray;
 
-function getDevPort() {
-  const args = process.argv.slice(1);
-  const portArg = args.find((arg) => /^\d+$/.test(arg));
+function getDevPort(): number {
+  const portArg = process.argv.slice(1).find((arg) => /^\d+$/.test(arg));
   const port = portArg ? parseInt(portArg, 10) : 8899;
   console.log(`[Startup] Detected dev port: ${port}`);
   return port;
 }
 const DEV_PORT = getDevPort();
+const getPort = () => (app.isPackaged ? prodPort : DEV_PORT);
 
-function getAppIconPath() {
-  return app.isPackaged
-    ? path.join(process.resourcesPath, "icon.png")
-    : path.join(app.getAppPath(), "resources", "icon.png");
-}
+const resourcePath = (file: string) =>
+  app.isPackaged
+    ? path.join(process.resourcesPath, file)
+    : path.join(app.getAppPath(), "resources", file);
+const getAppIconPath = () => resourcePath("icon.png");
 
 function setAutoLaunch(enable: boolean) {
   try {
@@ -141,19 +107,15 @@ function setAutoLaunch(enable: boolean) {
   }
 }
 
-if (!isProd) {
-  app.setPath("userData", `${app.getPath("userData")} (development)`);
-}
-
-(async () => {
+async function start() {
   await app.whenReady();
   app.userAgentFallback = "BloumeChat/App";
+  registerProtocolClient();
 
-  // Resolve tray icon path once — reused by initBadge + initTray
-  const trayIconFile = process.platform === "win32" ? "icon.ico" : "icon.png";
-  const trayIconPath = app.isPackaged
-    ? path.join(process.resourcesPath, trayIconFile)
-    : path.join(app.getAppPath(), "resources", trayIconFile);
+  const siteOrigin = getSiteOrigin(appConfig);
+  const trayIconPath = resourcePath(
+    process.platform === "win32" ? "icon.ico" : "icon.png",
+  );
   initBadge(trayIconPath);
   prewarmBadgeCache();
 
@@ -167,33 +129,34 @@ if (!isProd) {
     }
   }
 
-  const mainSession = session.fromPartition("persist:main");
-  initPermissions(
-    mainSession,
+  const navigationContext: NavigationContext = {
     getMainWindow,
-    () => (app.isPackaged ? prodPort : DEV_PORT),
-    app.isPackaged,
+    settingsStore,
+    getPort,
+    isPackaged: app.isPackaged,
+    siteOrigin,
+  };
+
+  const mainSession = session.fromPartition("persist:main");
+  initPermissions(mainSession, getMainWindow, getPort, app.isPackaged, () =>
+    getAllowedOrigins(navigationContext),
   );
 
-  // Cold start — the home shell (served locally) embeds an iframe pointing at the
-  // real remote site (bloumechat.com). DNS + TLS handshake for that origin is the
-  // actual network-bound cost, so warm it up while the window/local server spin up.
+  // The home shell embeds the remote site in an iframe: DNS + TLS for that origin is the
+  // real network-bound cost of a cold start, so warm it up while the window spins up.
   try {
-    const preconnectOrigin = String(
-      appConfig.NEXT_PUBLIC_SITE_URL || "https://bloumechat.com",
-    );
-    mainSession.preconnect({ url: preconnectOrigin, numSockets: 2 });
+    mainSession.preconnect({ url: siteOrigin, numSockets: 2 });
   } catch (e) {
     console.warn("[Startup] Preconnect failed:", e);
   }
 
+  const startHidden = process.argv.includes("--hidden");
   mainWindow = createWindow("main", {
     width: 1200,
     height: 800,
+    show: false, // revealed once painted: no white flash while the shell loads
     titleBarStyle: "hidden",
-    icon: app.isPackaged
-      ? path.join(process.resourcesPath, "icon.png")
-      : path.join(app.getAppPath(), "resources", "icon.png"),
+    icon: getAppIconPath(),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       partition: "persist:main",
@@ -202,71 +165,35 @@ if (!isProd) {
       spellcheck: true,
     },
   });
+  const win = mainWindow;
+
+  let revealed = false;
+  const reveal = () => {
+    if (revealed || win.isDestroyed()) return;
+    revealed = true;
+    if (settingsStore.get("wasMaximized", false)) win.maximize();
+    if (!startHidden) win.show();
+  };
+  win.once("ready-to-show", reveal);
+  setTimeout(reveal, 4000); // safety net: never leave the user without a window
 
   // Suppress native context menu so React onContextMenu handlers fire unobstructed
-  mainWindow.webContents.on("context-menu", (e) => e.preventDefault());
+  win.webContents.on("context-menu", (e) => e.preventDefault());
+  attachRendererRecovery(win);
+  attachSiteHealth(win, siteOrigin);
+  installZoomShortcuts(win, settingsStore);
+  installNavigationGuards(win, navigationContext);
+  installWindowLifecycle(win, settingsStore, getTray);
 
-  // Renderer crash/OOM — log with as much detail as electron-log can persist,
-  // then reload in place so the user isn't left staring at a blank window.
-  mainWindow.webContents.on("render-process-gone", (_event, details) => {
-    console.error("[Renderer] Process gone:", details.reason, details.exitCode);
-    if (details.reason !== "clean-exit" && !isAppQuitting) {
-      mainWindow?.webContents.reload();
-    }
-  });
-  mainWindow.webContents.on("unresponsive", () =>
-    console.warn("[Renderer] Became unresponsive"),
-  );
-  mainWindow.webContents.on("responsive", () =>
-    console.log("[Renderer] Responsive again"),
-  );
-
-  if (settingsStore.get("wasMaximized", false)) mainWindow.maximize();
-
-  const savedZoom = settingsStore.get("zoomLevel", 0);
-  mainWindow.webContents.setZoomLevel(savedZoom);
-
-  // Tray (reuses trayIconPath resolved above)
   tray = initTray(
     trayIconPath,
     settingsStore,
     getMainWindow,
     setAutoLaunch,
-    (v) => {
-      isAppQuitting = v;
-    },
+    setAppQuitting,
   );
+  applyJumpList();
 
-  // Jump List (taskbar right-click) — kept to a single safe "Open" task for now.
-  // Dynamic entries like "New message" / "Set status" need a matching deep-link
-  // route (only 'channel'/'server' exist today, see services/deeplink.ts) and a
-  // real webapp destination for them — adding those is a follow-up, not a main-
-  // process concern on its own.
-  if (process.platform === "win32") {
-    try {
-      const i18n = getI18n(getAppLocale());
-      app.setJumpList([
-        {
-          type: "tasks",
-          items: [
-            {
-              type: "task",
-              title: i18n.trayOpen,
-              description: i18n.trayOpen,
-              program: process.execPath,
-              args: app.isPackaged ? "" : `"${app.getAppPath()}"`,
-              iconPath: process.execPath,
-              iconIndex: 0,
-            },
-          ],
-        },
-      ]);
-    } catch (e) {
-      console.warn("[JumpList] Failed to set:", e);
-    }
-  }
-
-  // IPC
   registerIpcHandlers(
     getMainWindow,
     getTray,
@@ -274,16 +201,27 @@ if (!isProd) {
     appConfig,
     setAutoLaunch,
     getAppIconPath,
-    () => (app.isPackaged ? prodPort : DEV_PORT),
+    getPort,
     app.isPackaged,
   );
 
-  // Rich Presence — Windows (PowerShell) + macOS (osascript)
-  if (process.platform === "win32" || process.platform === "darwin") {
-    startRpcPolling(getMainWindow, () => settingsStore.get("rpcEnabled", true));
-  }
+  initUpdater({
+    getMainWindow,
+    getIconPath: getAppIconPath,
+    settingsStore,
+    isVoiceActive: isVoiceCallActive,
+    setQuitting: setAppQuitting,
+  });
 
-  // Lock / unlock screen — pause and resume RPC activity polling
+  // Rich Presence — started a few seconds after launch (it spawns a PowerShell process) and
+  // only when the user has it enabled.
+  const rpcEnabled = () => settingsStore.get("rpcEnabled", true);
+  const startRpc = () => startRpcPolling(getMainWindow, rpcEnabled);
+  if (process.platform === "win32" || process.platform === "darwin") {
+    setTimeout(() => {
+      if (rpcEnabled()) startRpc();
+    }, 5000);
+  }
   powerMonitor.on("lock-screen", () => {
     console.log("[RPC] Screen locked — pausing activity polling");
     stopRpcPolling();
@@ -294,188 +232,62 @@ if (!isProd) {
   });
   powerMonitor.on("unlock-screen", () => {
     console.log("[RPC] Screen unlocked — resuming activity polling");
-    if (settingsStore.get("rpcEnabled", true)) {
-      startRpcPolling(getMainWindow, () =>
-        settingsStore.get("rpcEnabled", true),
-      );
+    if (rpcEnabled()) startRpc();
+  });
+
+  globalShortcut.register("CommandOrControl+Shift+B", () => {
+    if (win.isVisible() && win.isFocused()) win.hide();
+    else {
+      win.show();
+      win.focus();
     }
   });
 
-  // Updater
-  initUpdater(getMainWindow, getAppIconPath, getProdPort, isProd);
+  // A bloumechat:// link that launched the app: handed to the site once the shell reports
+  // it is ready (the iframe can only act on it after it has loaded).
+  const launchDeepLink = findLaunchDeepLink(process.argv);
+  if (launchDeepLink) {
+    ipcMain.once("app-ready", () => handleDeepLink(launchDeepLink, win));
+  }
 
-  // Load app URL
   const homeUrl =
     app.isPackaged && isProd
-      ? `http://127.0.0.1:${prodPort}/home/`
+      ? prodPort
+        ? `http://127.0.0.1:${prodPort}/home/`
+        : `${siteOrigin}/app?platform=desktop` // local server unavailable: open the site itself
       : `http://localhost:${DEV_PORT}/home/`;
-
-  await mainWindow
+  await win
     .loadURL(homeUrl)
     .catch((err) => console.error("[Window] Failed to load URL:", err));
 
-  // Navigation whitelist
-  const remoteOrigin = String(
-    appConfig.NEXT_PUBLIC_SITE_URL || "https://bloumechat.com",
-  );
-  const remoteOriginWww = remoteOrigin
-    .replace("https://", "https://www.")
-    .replace("http://", "http://www.");
+  if (settingsStore.get("autoLaunch", false)) setAutoLaunch(true);
+}
 
-  const isAllowedUrl = (url: string): boolean => {
-    const port = isProd ? prodPort : DEV_PORT;
-    return (
-      url.startsWith(`http://127.0.0.1:${port}`) ||
-      url.startsWith(`http://localhost:${port}`) ||
-      url.startsWith(remoteOrigin) ||
-      url.startsWith(remoteOriginWww) ||
-      url.startsWith("https://challenges.cloudflare.com")
-    );
-  };
+if (!app.requestSingleInstanceLock()) {
+  // Another instance owns the profile: nothing else must run in this process.
+  app.quit();
+} else {
+  void start();
 
-  // Every "leave the current page" request funnels through here — never a second
-  // Electron BrowserWindow. Same-origin (allowed) targets are handed to the
-  // renderer (home.tsx) to navigate the visible iframe's `src` in place — Electron
-  // 34's setWindowOpenHandler doesn't expose the requesting frame, so we can't
-  // target it directly from main, but the app only ever shows one content iframe
-  // at a time, so redirecting that one is equivalent and popup-free. Anything else
-  // asks the user before handing it to the system/default browser.
-  const openInPlaceOrExternal = (url: string) => {
-    if (isAllowedUrl(url)) {
-      mainWindow?.webContents.send("navigate-iframe", url);
-    } else {
-      void confirmAndOpenExternal(
-        url,
-        getMainWindow,
-        settingsStore,
-        () => (app.isPackaged ? prodPort : DEV_PORT),
-        app.isPackaged,
-      );
+  // Second launch — focus the running window and pass on a bloumechat:// link
+  app.on("second-instance", (_event, commandLine) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore();
+      mainWindow.show();
+      mainWindow.focus();
     }
-  };
-
-  mainWindow.webContents.on("will-navigate", (event, url) => {
-    if (!isAllowedUrl(url)) {
-      event.preventDefault();
-      void confirmAndOpenExternal(
-        url,
-        getMainWindow,
-        settingsStore,
-        () => (app.isPackaged ? prodPort : DEV_PORT),
-        app.isPackaged,
-      );
-    }
+    const deepLinkUrl = findLaunchDeepLink(commandLine);
+    if (deepLinkUrl) handleDeepLink(deepLinkUrl, mainWindow);
   });
-  mainWindow.webContents.on("will-frame-navigate", (event) => {
-    if (event.frame === mainWindow?.webContents.mainFrame) return;
-    if (!isAllowedUrl(event.url)) {
-      event.preventDefault();
-      void confirmAndOpenExternal(
-        event.url,
-        getMainWindow,
-        settingsStore,
-        () => (app.isPackaged ? prodPort : DEV_PORT),
-        app.isPackaged,
-      );
-    }
-  });
-  // Never `action: 'allow'` — that spawns a real second native window. Links that
-  // ask for target="_blank"/window.open() are always denied here and instead
-  // routed through openInPlaceOrExternal (in-place iframe navigation, or a
-  // confirmed system-browser open), so the app never shows more than one window/page.
-  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    openInPlaceOrExternal(url);
-    return { action: "deny" };
-  });
-
-  // Global shortcuts
-  globalShortcut.register("CommandOrControl+Shift+B", () => {
-    if (mainWindow?.isVisible() && mainWindow.isFocused()) mainWindow.hide();
-    else {
-      mainWindow?.show();
-      mainWindow?.focus();
-    }
-  });
-
-  mainWindow.webContents.on("before-input-event", (event, input) => {
-    if (!input.control || input.alt || input.shift) return;
-    if (input.key === "=" || input.key === "+") {
-      event.preventDefault();
-      const newZoom = Math.min(
-        (mainWindow?.webContents.getZoomLevel() || 0) + 0.5,
-        5,
-      );
-      mainWindow?.webContents.setZoomLevel(newZoom);
-      settingsStore.set("zoomLevel", newZoom);
-    } else if (input.key === "-") {
-      event.preventDefault();
-      const newZoom = Math.max(
-        (mainWindow?.webContents.getZoomLevel() || 0) - 0.5,
-        -3,
-      );
-      mainWindow?.webContents.setZoomLevel(newZoom);
-      settingsStore.set("zoomLevel", newZoom);
-    } else if (input.key === "0") {
-      event.preventDefault();
-      mainWindow?.webContents.setZoomLevel(0);
-      settingsStore.set("zoomLevel", 0);
-    }
-  });
-
-  // Windows drops the taskbar thumbnail toolbar (mute/deafen buttons) whenever
-  // the window is hidden (minimize-to-tray) and shown again — re-apply it here
-  // instead of waiting for the next mute/deafen toggle to fix it incidentally.
-  mainWindow.on("show", () => reapplyThumbar(mainWindow));
-  mainWindow.on("restore", () => reapplyThumbar(mainWindow));
-
-  app.on("before-quit", () => {
-    isAppQuitting = true;
-  });
-
-  mainWindow.on("close", (event) => {
-    if (isAppQuitting) return;
-    const minimizeToTray = settingsStore.get("minimizeToTray", true);
-    if (!minimizeToTray) return;
-
-    event.preventDefault();
-    settingsStore.set("wasMaximized", mainWindow?.isMaximized() || false);
-    mainWindow?.hide();
-
-    if (!settingsStore.get("trayNoticeShown", false)) {
-      const i18n = getI18n(getAppLocale());
-      tray?.displayBalloon({
-        iconType: "info",
-        title: "BloumeChat",
-        content: i18n.trayNotice,
-      });
-      settingsStore.set("trayNoticeShown", true);
-    }
-  });
-
-  if (process.argv.includes("--hidden")) mainWindow.hide();
-
-  const storedAutoLaunch = settingsStore.get("autoLaunch", false);
-  if (storedAutoLaunch) setAutoLaunch(true);
-})();
-
-// Second instance — deep link + focus
-app.on("second-instance", (_event, commandLine) => {
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) mainWindow.restore();
-    mainWindow.show();
-    mainWindow.focus();
-  }
-  const deepLinkUrl = commandLine.find((arg) =>
-    arg.startsWith("bloumechat://"),
-  );
-  if (deepLinkUrl) handleDeepLink(deepLinkUrl, mainWindow);
-});
+}
 
 // macOS deep link
 app.on("open-url", (event, url) => {
   event.preventDefault();
   handleDeepLink(url, mainWindow);
 });
+
+app.on("before-quit", () => setAppQuitting(true));
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
@@ -488,8 +300,8 @@ app.on("will-quit", () => {
 });
 
 if (process.platform === "win32") {
-  (app as any).on("session-end", () => {
-    isAppQuitting = true;
+  (app as unknown as NodeJS.EventEmitter).on("session-end", () => {
+    setAppQuitting(true);
     app.quit();
   });
 }
