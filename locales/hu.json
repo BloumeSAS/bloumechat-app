@@ -2,7 +2,10 @@
     "home": {
         "loading": "BloumeChat betöltése...",
         "back": "Előző",
-        "forward": "Következő"
+        "forward": "Következő",
+        "offline_title": "A BloumeChat nem érhető el",
+        "offline_desc": "Ellenőrizd az internetkapcsolatot. Automatikusan újrapróbáljuk.",
+        "offline_retry": "Újra"
     },
     "screen_picker": {
         "title": "Képernyőmegosztás | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Töltse le a frissítést",
         "recheck_button": "Ellenőrizze újra",
         "ignore_button": "Egyelőre figyelmen kívül hagyja",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "A(z) {{version}} frissítés készen áll. Indítsd újra a telepítéshez."
     },
     "externalLink": {
         "title": "Megnyit egy külső hivatkozást?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Némítsa el a mikrofont",
         "trayUnmuteMic": "Aktiválja a mikrofont",
         "trayDeafen": "Elnémítja a hangot",
-        "trayUndeafen": "Némítás feloldása"
+        "trayUndeafen": "Némítás feloldása",
+        "trayInstallUpdate": "Újraindítás a frissítéshez ({{version}})"
     }
 }
