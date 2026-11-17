@@ -18,6 +18,14 @@ interface DeepLinkPayload {
   queryParams?: Record<string, string>;
 }
 
+interface UpdateStateSnapshot {
+  status: string;
+  version?: string;
+  percent?: number;
+  message?: string;
+  reason?: string;
+}
+
 interface UpdateStatus {
   status:
     | "checking"
@@ -56,6 +64,11 @@ interface WindowIpc {
     }) => void,
   ): () => void;
   onUpdateStatus(callback: (data: UpdateStatus) => void): () => void;
+  getUpdateState(): Promise<UpdateStateSnapshot>;
+  onSiteStatus(
+    cb: (status: { ok: boolean; code?: number }) => void,
+  ): () => void;
+  notifyAppReady(): void;
   quitAndInstall(): void;
   startDownload(): void;
   checkForUpdates(): void;
