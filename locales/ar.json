@@ -2,7 +2,10 @@
     "home": {
         "loading": "جارٍ التحميل BloumeChat...",
         "back": "سابق",
-        "forward": "التالي"
+        "forward": "التالي",
+        "offline_title": "تعذّر الوصول إلى BloumeChat",
+        "offline_desc": "تحقق من اتصالك بالإنترنت. تتم إعادة المحاولة تلقائيًا.",
+        "offline_retry": "إعادة المحاولة"
     },
     "screen_picker": {
         "title": "مشاركة الشاشة | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "قم بتنزيل التحديث",
         "recheck_button": "أعد الفحص",
         "ignore_button": "تجاهل في الوقت الراهن",
-        "footer": "بلوم ساس • EST. 2026"
+        "footer": "بلوم ساس • EST. 2026",
+        "bar_ready": "التحديث {{version}} جاهز. أعد التشغيل لتثبيته."
     },
     "externalLink": {
         "title": "فتح رابط خارجي؟",
@@ -53,6 +57,7 @@
         "trayMuteMic": "كتم صوت الميكروفون",
         "trayUnmuteMic": "تفعيل الميكروفون",
         "trayDeafen": "كتم الصوت",
-        "trayUndeafen": "إلغاء كتم الصوت"
+        "trayUndeafen": "إلغاء كتم الصوت",
+        "trayInstallUpdate": "إعادة التشغيل للتحديث ({{version}})"
     }
 }
