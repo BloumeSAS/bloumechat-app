@@ -48,7 +48,7 @@ Nous utilisons **GitHub Actions** pour compiler les versions pour toutes les pla
    git tag vX.X.X
    git push origin vX.X.X
    ```
-4. **GitHub Actions** lancera automatiquement 3 runners (Windows, Mac, Linux) pour compiler les binaires et les ajouter à une nouvelle **Release** sur GitHub.
+4. **GitHub Actions** lancera automatiquement 2 runners (macOS, Linux) pour compiler les binaires et les ajouter à une nouvelle **Release** sur GitHub. **Windows n'est pas construit par la CI** : l'installeur est signé en local (certificat sur YubiKey) avec `npm run release:win` — voir le Guide de Release.
 
 ---
 
