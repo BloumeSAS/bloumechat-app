@@ -2,7 +2,10 @@
     "home": {
         "loading": "Зарежда се BloumeChat...",
         "back": "Предишен",
-        "forward": "Следване"
+        "forward": "Следване",
+        "offline_title": "BloumeChat е недостъпен",
+        "offline_desc": "Проверете интернет връзката си. Опитваме отново автоматично.",
+        "offline_retry": "Опитай отново"
     },
     "screen_picker": {
         "title": "Споделяне на екрана | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Изтеглете актуализацията",
         "recheck_button": "Повторна проверка",
         "ignore_button": "Игнорирайте засега",
-        "footer": "BLOUME SAS • EST. 2026 г"
+        "footer": "BLOUME SAS • EST. 2026 г",
+        "bar_ready": "Актуализацията {{version}} е готова. Рестартирайте, за да я инсталирате."
     },
     "externalLink": {
         "title": "Отваряне на външна връзка?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Заглушете микрофона",
         "trayUnmuteMic": "Активирайте микрофона",
         "trayDeafen": "Заглушете звука",
-        "trayUndeafen": "Включване на звука"
+        "trayUndeafen": "Включване на звука",
+        "trayInstallUpdate": "Рестартиране за актуализация ({{version}})"
     }
 }
