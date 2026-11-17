@@ -3,6 +3,13 @@ import Store from "electron-store";
 import fs from "fs";
 import type { AppSettings } from "../types/settings";
 import { getAppLocale, getI18n, type SupportedLocale } from "./locales";
+import { setAppQuitting } from "./app-state";
+import {
+  checkForUpdatesNow,
+  getUpdateState,
+  installUpdateNow,
+  onUpdateStateChange,
+} from "./updater";
 
 // ─── Shared voice state (mirrors the thumbar) ──────────────────────────────────
 // Lets the tray menu expose mic / deafen toggles while in a call, so users always
@@ -31,6 +38,36 @@ export function setTrayMuteState(isMuted: boolean, isDeafened: boolean): void {
 }
 
 export type AppLocale = SupportedLocale;
+
+/** One menu entry whose meaning follows the updater: install, check, or open the Store. */
+function buildUpdateItem(
+  i18n: ReturnType<typeof getI18n>,
+): Electron.MenuItemConstructorOptions {
+  const update = getUpdateState();
+
+  if (update.status === "downloaded") {
+    return {
+      label: i18n.trayInstallUpdate.replace(
+        "{{version}}",
+        update.version ?? "",
+      ),
+      click: () => installUpdateNow(),
+    };
+  }
+  // Microsoft Store installs are updated by the Store itself.
+  if (update.status === "unsupported" && update.reason === "store") {
+    return {
+      label: i18n.trayCheckUpdates,
+      click: () =>
+        shell.openExternal("ms-windows-store://pdp/?productid=XPDBZMTB5GVG3L"),
+    };
+  }
+  return {
+    label: i18n.trayCheckUpdates,
+    enabled: update.status !== "checking" && update.status !== "downloading",
+    click: () => void checkForUpdatesNow(true),
+  };
+}
 
 export function buildTrayMenu(
   settingsStore: Store<AppSettings>,
@@ -87,18 +124,7 @@ export function buildTrayMenu(
       },
     },
     { type: "separator" },
-    // MS Store link only makes sense on Windows
-    ...(process.platform === "win32"
-      ? [
-          {
-            label: i18n.trayCheckUpdates,
-            click: () =>
-              shell.openExternal(
-                "ms-windows-store://pdp/?productid=XPDBZMTB5GVG3L",
-              ),
-          },
-        ]
-      : []),
+    buildUpdateItem(i18n),
     {
       label: i18n.trayReload,
       click: () => getMainWindow()?.webContents.reload(),
@@ -108,6 +134,7 @@ export function buildTrayMenu(
       label: i18n.trayQuit,
       click: () => {
         setIsAppQuitting(true);
+        setAppQuitting(true);
         app.quit();
       },
     },
@@ -146,6 +173,8 @@ export function initTray(
     );
   rebuildTrayMenu = rebuild;
   rebuild();
+  // The update entry changes with the updater (downloaded -> "restart to update").
+  onUpdateStateChange(() => rebuild());
 
   tray.on("click", () => {
     const win = getMainWindow();
