@@ -2,7 +2,10 @@
     "home": {
         "loading": "กำลังโหลด BloumeChat...",
         "back": "ก่อนหน้า",
-        "forward": "กำลังติดตาม"
+        "forward": "กำลังติดตาม",
+        "offline_title": "ไม่สามารถเชื่อมต่อ BloumeChat ได้",
+        "offline_desc": "ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตของคุณ กำลังลองใหม่โดยอัตโนมัติ",
+        "offline_retry": "ลองอีกครั้ง"
     },
     "screen_picker": {
         "title": "การแชร์หน้าจอ | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "ดาวน์โหลดการอัพเดต",
         "recheck_button": "ตรวจสอบอีกครั้ง",
         "ignore_button": "ละเว้นตอนนี้",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "อัปเดต {{version}} พร้อมแล้ว รีสตาร์ทเพื่อติดตั้ง"
     },
     "externalLink": {
         "title": "เปิดลิงก์ภายนอก?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "ปิดเสียงไมโครโฟน",
         "trayUnmuteMic": "เปิดใช้งานไมโครโฟน",
         "trayDeafen": "ปิดเสียง",
-        "trayUndeafen": "เปิดเสียง"
+        "trayUndeafen": "เปิดเสียง",
+        "trayInstallUpdate": "รีสตาร์ทเพื่ออัปเดต ({{version}})"
     }
 }
