@@ -2,7 +2,10 @@
     "home": {
         "loading": "Se încarcă BloumeChat...",
         "back": "Anterior",
-        "forward": "Urmând"
+        "forward": "Urmând",
+        "offline_title": "Nu se poate accesa BloumeChat",
+        "offline_desc": "Verifică conexiunea la internet. Se reîncearcă automat.",
+        "offline_retry": "Reîncearcă"
     },
     "screen_picker": {
         "title": "Partajarea ecranului | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Descărcați actualizarea",
         "recheck_button": "Verificați din nou",
         "ignore_button": "Ignora deocamdata",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "Actualizarea {{version}} este gata. Repornește pentru a o instala."
     },
     "externalLink": {
         "title": "Deschideți un link extern?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Dezactivați microfonul",
         "trayUnmuteMic": "Activați microfonul",
         "trayDeafen": "Dezactivați sunetul",
-        "trayUndeafen": "Activați sunetul"
+        "trayUndeafen": "Activați sunetul",
+        "trayInstallUpdate": "Repornește pentru actualizare ({{version}})"
     }
 }
