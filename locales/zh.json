@@ -2,7 +2,10 @@
     "home": {
         "loading": "正在加载 BloumeChat...",
         "back": "以前的",
-        "forward": "下列的"
+        "forward": "下列的",
+        "offline_title": "无法连接到 BloumeChat",
+        "offline_desc": "请检查网络连接。正在自动重试。",
+        "offline_retry": "重试"
     },
     "screen_picker": {
         "title": "屏幕共享 | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "下载更新",
         "recheck_button": "重新检查",
         "ignore_button": "暂时忽略",
-        "footer": "布卢姆 SAS • EST。 2026年"
+        "footer": "布卢姆 SAS • EST。 2026年",
+        "bar_ready": "更新 {{version}} 已准备就绪。重启即可安装。"
     },
     "externalLink": {
         "title": "打开外部链接？",
@@ -53,6 +57,7 @@
         "trayMuteMic": "将麦克风静音",
         "trayUnmuteMic": "激活麦克风",
         "trayDeafen": "静音",
-        "trayUndeafen": "取消静音"
+        "trayUndeafen": "取消静音",
+        "trayInstallUpdate": "重启以更新 ({{version}})"
     }
 }
