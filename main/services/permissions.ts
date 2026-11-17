@@ -12,15 +12,29 @@ const ALLOWED_PERMISSIONS = [
   "clipboard-sanitized-write",
 ];
 
+/** True when `urlOrOrigin` belongs to an origin the app itself loads (local shell, bloumechat.com). */
+function isTrusted(urlOrOrigin: string, trusted: Set<string>): boolean {
+  try {
+    return trusted.has(new URL(urlOrOrigin).origin);
+  } catch {
+    return false;
+  }
+}
+
 export function initPermissions(
   mainSession: Session,
   getMainWindow: () => BrowserWindow | null,
   getPort: () => number,
   isPackaged: boolean,
+  getTrustedOrigins: () => Set<string>,
 ) {
+  // Camera, microphone, screen capture, notifications and clipboard are granted only to
+  // the pages the app embeds — never to whatever origin a frame happens to navigate to.
   mainSession.setPermissionRequestHandler(
-    (_webContents, permission, callback) => {
-      const isAllowed = ALLOWED_PERMISSIONS.includes(permission);
+    (_webContents, permission, callback, details) => {
+      const isAllowed =
+        ALLOWED_PERMISSIONS.includes(permission) &&
+        isTrusted(details.requestingUrl, getTrustedOrigins());
       console.log(
         `[Permissions] Request for: ${permission} -> ${isAllowed ? "GRANTED" : "DENIED"}`,
       );
@@ -28,13 +42,21 @@ export function initPermissions(
     },
   );
 
-  mainSession.setPermissionCheckHandler((_webContents, permission) =>
-    ALLOWED_PERMISSIONS.includes(permission),
+  mainSession.setPermissionCheckHandler(
+    (_webContents, permission, requestingOrigin) =>
+      ALLOWED_PERMISSIONS.includes(permission) &&
+      isTrusted(requestingOrigin, getTrustedOrigins()),
   );
 
   mainSession.setDisplayMediaRequestHandler((request, callback) => {
     const mainWindow = getMainWindow();
     let callbackCalled = false;
+
+    if (!isTrusted(request.securityOrigin, getTrustedOrigins())) {
+      console.warn("[ScreenShare] Refused for untrusted origin");
+      (callback as () => void)();
+      return;
+    }
 
     const smartCallback = (
       cfg?: { video?: Electron.DesktopCapturerSource; audio?: string } | object,
@@ -57,7 +79,10 @@ export function initPermissions(
     /** Resolves the request with the first screen (used when the custom picker cannot be shown). */
     const shareFirstScreen = async () => {
       try {
-        const screens = await desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { width: 0, height: 0 } });
+        const screens = await desktopCapturer.getSources({
+          types: ["screen"],
+          thumbnailSize: { width: 0, height: 0 },
+        });
         if (screens[0]) {
           smartCallback({ video: screens[0], audio: "loopback" as const });
           return;
@@ -94,7 +119,10 @@ export function initPermissions(
       // The picker UI is served by the local app server; on some machines it fails to load
       // (port taken, firewall, antivirus). Cancelling here left those users with a dead
       // "share screen" button while the browser version worked — fall back to the primary screen.
-      console.error("[ScreenShare] Failed to load picker URL, falling back to the primary screen:", err);
+      console.error(
+        "[ScreenShare] Failed to load picker URL, falling back to the primary screen:",
+        err,
+      );
       void shareFirstScreen();
       if (!pickerWin.isDestroyed()) pickerWin.close();
     });
@@ -108,8 +136,14 @@ export function initPermissions(
       desktopCapturer
         .getSources({ types: ["screen", "window"] })
         .catch(async (err) => {
-          console.error("[ScreenShare] getSources(screen+window) failed, retrying screens only:", err);
-          return desktopCapturer.getSources({ types: ["screen"], thumbnailSize: { width: 0, height: 0 } });
+          console.error(
+            "[ScreenShare] getSources(screen+window) failed, retrying screens only:",
+            err,
+          );
+          return desktopCapturer.getSources({
+            types: ["screen"],
+            thumbnailSize: { width: 0, height: 0 },
+          });
         })
         .then((sources) => {
           const source = sources.find((s) => s.id === sourceId);
