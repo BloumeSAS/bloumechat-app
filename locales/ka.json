@@ -2,7 +2,10 @@
     "home": {
         "loading": "იტვირთება BloumeChat...",
         "back": "წინა",
-        "forward": "მიჰყვება"
+        "forward": "მიჰყვება",
+        "offline_title": "BloumeChat-ს ვერ ვუკავშირდებით",
+        "offline_desc": "შეამოწმეთ ინტერნეტ-კავშირი. ხდება ავტომატური განმეორება.",
+        "offline_retry": "ხელახლა ცდა"
     },
     "screen_picker": {
         "title": "ეკრანის გაზიარება | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "ჩამოტვირთეთ განახლება",
         "recheck_button": "ხელახლა შეამოწმეთ",
         "ignore_button": "იგნორირება ჯერ",
-        "footer": "BLOUME SAS • EST. 2026 წელი"
+        "footer": "BLOUME SAS • EST. 2026 წელი",
+        "bar_ready": "განახლება {{version}} მზადაა. გადატვირთეთ დასაინსტალირებლად."
     },
     "externalLink": {
         "title": "გახსენი გარე ბმული?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "მიკროფონის დადუმება",
         "trayUnmuteMic": "მიკროფონის გააქტიურება",
         "trayDeafen": "დადუმეთ ხმა",
-        "trayUndeafen": "დადუმების მოხსნა"
+        "trayUndeafen": "დადუმების მოხსნა",
+        "trayInstallUpdate": "გადატვირთვა განახლებისთვის ({{version}})"
     }
 }
