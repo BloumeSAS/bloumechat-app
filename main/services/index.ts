@@ -9,7 +9,14 @@ export {
   resolveMainProcessLocale,
 } from "./locales";
 export { confirmAndOpenExternal } from "./external-link";
-export { initUpdater } from "./updater";
+export {
+  initUpdater,
+  checkForUpdatesNow,
+  installUpdateNow,
+  getUpdateState,
+  getUpdateSupport,
+  onUpdateStateChange,
+} from "./updater";
 export {
   prewarmBadgeCache,
   initBadge,
