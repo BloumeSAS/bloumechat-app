@@ -2,7 +2,10 @@
     "home": {
         "loading": "BloumeChat laden...",
         "back": "Vorig",
-        "forward": "Volgende"
+        "forward": "Volgende",
+        "offline_title": "BloumeChat is niet bereikbaar",
+        "offline_desc": "Controleer je internetverbinding. Er wordt automatisch opnieuw geprobeerd.",
+        "offline_retry": "Opnieuw proberen"
     },
     "screen_picker": {
         "title": "Scherm delen | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Download de update",
         "recheck_button": "Controleer opnieuw",
         "ignore_button": "Negeer voorlopig",
-        "footer": "BLOUME SAS • GESCH. 2026"
+        "footer": "BLOUME SAS • GESCH. 2026",
+        "bar_ready": "Update {{version}} is klaar. Start opnieuw op om te installeren."
     },
     "externalLink": {
         "title": "Een externe link openen?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Demp de microfoon",
         "trayUnmuteMic": "Activeer microfoon",
         "trayDeafen": "Demp het geluid",
-        "trayUndeafen": "Dempen opheffen"
+        "trayUndeafen": "Dempen opheffen",
+        "trayInstallUpdate": "Opnieuw starten om bij te werken ({{version}})"
     }
 }
