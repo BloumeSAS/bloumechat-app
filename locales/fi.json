@@ -2,7 +2,10 @@
     "home": {
         "loading": "Ladataan BloumeChat...",
         "back": "Edellinen",
-        "forward": "Jälkeen"
+        "forward": "Jälkeen",
+        "offline_title": "BloumeChatiin ei saada yhteyttä",
+        "offline_desc": "Tarkista internetyhteytesi. Yritetään automaattisesti uudelleen.",
+        "offline_retry": "Yritä uudelleen"
     },
     "screen_picker": {
         "title": "Näytön jakaminen | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Lataa päivitys",
         "recheck_button": "Tarkista uudelleen",
         "ignore_button": "Ohita toistaiseksi",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "Päivitys {{version}} on valmis. Käynnistä uudelleen asentaaksesi sen."
     },
     "externalLink": {
         "title": "Avataanko ulkoinen linkki?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Mykistä mikrofoni",
         "trayUnmuteMic": "Aktivoi mikrofoni",
         "trayDeafen": "Mykistä ääni",
-        "trayUndeafen": "Poista mykistys"
+        "trayUndeafen": "Poista mykistys",
+        "trayInstallUpdate": "Käynnistä uudelleen ja päivitä ({{version}})"
     }
 }
