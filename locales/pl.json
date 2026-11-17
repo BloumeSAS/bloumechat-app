@@ -2,7 +2,10 @@
     "home": {
         "loading": "Ładowanie BloumeChat...",
         "back": "Poprzedni",
-        "forward": "Następny"
+        "forward": "Następny",
+        "offline_title": "Nie można połączyć z BloumeChat",
+        "offline_desc": "Sprawdź połączenie z internetem. Ponawiamy próbę automatycznie.",
+        "offline_retry": "Spróbuj ponownie"
     },
     "screen_picker": {
         "title": "Udostępnianie ekranu | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Pobierz aktualizację",
         "recheck_button": "Sprawdź ponownie",
         "ignore_button": "Ignoruj ​​na razie",
-        "footer": "BLUME SAS • EST. 2026"
+        "footer": "BLUME SAS • EST. 2026",
+        "bar_ready": "Aktualizacja {{version}} jest gotowa. Uruchom ponownie, aby ją zainstalować."
     },
     "externalLink": {
         "title": "Otworzyć link zewnętrzny?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Wycisz mikrofon",
         "trayUnmuteMic": "Aktywuj mikrofon",
         "trayDeafen": "Wycisz dźwięk",
-        "trayUndeafen": "Wyłącz wyciszenie"
+        "trayUndeafen": "Wyłącz wyciszenie",
+        "trayInstallUpdate": "Uruchom ponownie i zaktualizuj ({{version}})"
     }
 }
