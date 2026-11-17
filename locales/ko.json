@@ -2,7 +2,10 @@
     "home": {
         "loading": "BloumeChat 로드 중...",
         "back": "이전의",
-        "forward": "수행원"
+        "forward": "수행원",
+        "offline_title": "BloumeChat에 연결할 수 없습니다",
+        "offline_desc": "인터넷 연결을 확인하세요. 자동으로 다시 시도합니다.",
+        "offline_retry": "다시 시도"
     },
     "screen_picker": {
         "title": "화면 공유 | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "업데이트 다운로드",
         "recheck_button": "재확인",
         "ignore_button": "지금은 무시하세요",
-        "footer": "블룸 SAS • EST. 2026년"
+        "footer": "블룸 SAS • EST. 2026년",
+        "bar_ready": "업데이트 {{version}} 준비가 완료되었습니다. 다시 시작하여 설치하세요."
     },
     "externalLink": {
         "title": "외부 링크를 열까요?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "마이크 음소거",
         "trayUnmuteMic": "마이크 활성화",
         "trayDeafen": "소리를 음소거",
-        "trayUndeafen": "음소거 해제"
+        "trayUndeafen": "음소거 해제",
+        "trayInstallUpdate": "다시 시작하여 업데이트 ({{version}})"
     }
 }
