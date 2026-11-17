@@ -2,7 +2,10 @@
     "home": {
         "loading": "Chargement de BloumeChat...",
         "back": "Précédent",
-        "forward": "Suivant"
+        "forward": "Suivant",
+        "offline_title": "Impossible de joindre BloumeChat",
+        "offline_desc": "Vérifiez votre connexion internet. Nouvelle tentative automatique en cours.",
+        "offline_retry": "Réessayer"
     },
     "screen_picker": {
         "title": "Partage d'écran | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Télécharger la mise à jour",
         "recheck_button": "Re-vérifier",
         "ignore_button": "Ignorer pour l'instant",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "La mise à jour {{version}} est prête. Redémarrez pour l'installer."
     },
     "externalLink": {
         "title": "Ouvrir un lien externe ?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Couper le micro",
         "trayUnmuteMic": "Activer le micro",
         "trayDeafen": "Couper le son",
-        "trayUndeafen": "Réactiver le son"
+        "trayUndeafen": "Réactiver le son",
+        "trayInstallUpdate": "Redémarrer pour mettre à jour ({{version}})"
     }
 }
