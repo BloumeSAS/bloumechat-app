@@ -13,8 +13,12 @@ import { handleSetBadgeCount, handleSetVoiceActive } from "./badge";
 import { startRpcPolling, stopRpcPolling } from "./rpc";
 import { handleThumbarVoiceActive, handleSetMuteState } from "./thumbar";
 import { setTrayVoiceActive, setTrayMuteState } from "./tray";
+import { setVoicePowerMode } from "./voice-power";
 import { confirmAndOpenExternal } from "./external-link";
 import { SUPPORTED_LOCALE_CODES } from "./locales";
+
+/** A notification icon is a small avatar; anything bigger is refused rather than decoded. */
+const MAX_NOTIFICATION_ICON_CHARS = 300_000;
 
 export function registerIpcHandlers(
   getMainWindow: () => BrowserWindow | null,
@@ -35,13 +39,17 @@ export function registerIpcHandlers(
     if (typeof data.title !== "string" || typeof data.body !== "string") return;
     if (data.title.length > 256 || data.body.length > 1024) return;
 
+    const customIcon =
+      typeof data.icon === "string" &&
+      data.icon.startsWith("data:image/") &&
+      data.icon.length <= MAX_NOTIFICATION_ICON_CHARS
+        ? nativeImage.createFromDataURL(data.icon)
+        : null;
+
     const notification = new Notification({
       title: data.title,
       body: data.body,
-      icon:
-        typeof data.icon === "string"
-          ? nativeImage.createFromDataURL(data.icon)
-          : appIcon,
+      icon: customIcon && !customIcon.isEmpty() ? customIcon : appIcon,
     });
 
     const mainWindow = getMainWindow();
@@ -84,6 +92,7 @@ export function registerIpcHandlers(
     if (typeof active === "boolean") {
       handleThumbarVoiceActive(active, getMainWindow());
       setTrayVoiceActive(active);
+      setVoicePowerMode(active, getMainWindow());
     }
   });
   ipcMain.on("set-mute-state", (_event, raw: unknown) => {
