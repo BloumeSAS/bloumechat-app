@@ -2,7 +2,10 @@
     "home": {
         "loading": "लोड हो रहा है BloumeChat...",
         "back": "पहले का",
-        "forward": "अगले"
+        "forward": "अगले",
+        "offline_title": "BloumeChat तक नहीं पहुँच पा रहे",
+        "offline_desc": "अपना इंटरनेट कनेक्शन जाँचें। अपने आप दोबारा कोशिश की जा रही है।",
+        "offline_retry": "फिर कोशिश करें"
     },
     "screen_picker": {
         "title": "स्क्रीन शेयरिंग | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "अद्यतन डाउनलोड करें",
         "recheck_button": "री-चेक",
         "ignore_button": "अभी के लिए नजरअंदाज करें",
-        "footer": "ब्लूम एसएएस • ईएसटी। 2026"
+        "footer": "ब्लूम एसएएस • ईएसटी। 2026",
+        "bar_ready": "अपडेट {{version}} तैयार है। इंस्टॉल करने के लिए रीस्टार्ट करें।"
     },
     "externalLink": {
         "title": "कोई बाहरी लिंक खोलें?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "माइक्रोफ़ोन म्यूट करें",
         "trayUnmuteMic": "माइक्रोफ़ोन सक्रिय करें",
         "trayDeafen": "ध्वनि म्यूट करें",
-        "trayUndeafen": "अनम्यूट"
+        "trayUndeafen": "अनम्यूट",
+        "trayInstallUpdate": "अपडेट के लिए रीस्टार्ट करें ({{version}})"
     }
 }
