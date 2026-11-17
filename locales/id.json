@@ -2,7 +2,10 @@
     "home": {
         "loading": "Memuat BloumeChat...",
         "back": "Sebelumnya",
-        "forward": "Mengikuti"
+        "forward": "Mengikuti",
+        "offline_title": "Tidak dapat menjangkau BloumeChat",
+        "offline_desc": "Periksa koneksi internet Anda. Mencoba lagi secara otomatis.",
+        "offline_retry": "Coba lagi"
     },
     "screen_picker": {
         "title": "Berbagi Layar | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Unduh pembaruan",
         "recheck_button": "Periksa kembali",
         "ignore_button": "Abaikan untuk saat ini",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "Pembaruan {{version}} sudah siap. Mulai ulang untuk menginstalnya."
     },
     "externalLink": {
         "title": "Buka tautan eksternal?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Matikan mikrofon",
         "trayUnmuteMic": "Aktifkan mikrofon",
         "trayDeafen": "Matikan suaranya",
-        "trayUndeafen": "Membunyikan"
+        "trayUndeafen": "Membunyikan",
+        "trayInstallUpdate": "Mulai ulang untuk memperbarui ({{version}})"
     }
 }
