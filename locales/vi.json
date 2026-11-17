@@ -2,7 +2,10 @@
     "home": {
         "loading": "Đang tải BloumeChat...",
         "back": "Trước",
-        "forward": "Tiếp theo"
+        "forward": "Tiếp theo",
+        "offline_title": "Không thể kết nối tới BloumeChat",
+        "offline_desc": "Hãy kiểm tra kết nối internet. Đang tự động thử lại.",
+        "offline_retry": "Thử lại"
     },
     "screen_picker": {
         "title": "Chia sẻ màn hình | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Tải xuống bản cập nhật",
         "recheck_button": "Kiểm tra lại",
         "ignore_button": "Bỏ qua bây giờ",
-        "footer": "HOA SAS • EST. 2026"
+        "footer": "HOA SAS • EST. 2026",
+        "bar_ready": "Bản cập nhật {{version}} đã sẵn sàng. Hãy khởi động lại để cài đặt."
     },
     "externalLink": {
         "title": "Mở một liên kết bên ngoài?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Tắt tiếng micrô",
         "trayUnmuteMic": "Kích hoạt micrô",
         "trayDeafen": "Tắt âm thanh",
-        "trayUndeafen": "Bật tiếng"
+        "trayUndeafen": "Bật tiếng",
+        "trayInstallUpdate": "Khởi động lại để cập nhật ({{version}})"
     }
 }
