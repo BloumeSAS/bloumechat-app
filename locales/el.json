@@ -2,7 +2,10 @@
     "home": {
         "loading": "Φόρτωση BloumeChat...",
         "back": "Προηγούμενος",
-        "forward": "Εξής"
+        "forward": "Εξής",
+        "offline_title": "Δεν είναι δυνατή η σύνδεση με το BloumeChat",
+        "offline_desc": "Ελέγξτε τη σύνδεσή σας στο διαδίκτυο. Γίνεται αυτόματη επανάληψη.",
+        "offline_retry": "Δοκιμάστε ξανά"
     },
     "screen_picker": {
         "title": "Κοινή χρήση οθόνης | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Κατεβάστε την ενημέρωση",
         "recheck_button": "επανέλεγχο",
         "ignore_button": "Αγνοήστε προς το παρόν",
-        "footer": "ΜΠΛΟΥΜΕ ΣΑΣ • ΕΣΤ. 2026"
+        "footer": "ΜΠΛΟΥΜΕ ΣΑΣ • ΕΣΤ. 2026",
+        "bar_ready": "Η ενημέρωση {{version}} είναι έτοιμη. Κάντε επανεκκίνηση για να την εγκαταστήσετε."
     },
     "externalLink": {
         "title": "Άνοιγμα εξωτερικού συνδέσμου;",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Σίγαση του μικροφώνου",
         "trayUnmuteMic": "Ενεργοποίηση μικροφώνου",
         "trayDeafen": "Σίγασε τον ήχο",
-        "trayUndeafen": "Κατάργηση σίγασης"
+        "trayUndeafen": "Κατάργηση σίγασης",
+        "trayInstallUpdate": "Επανεκκίνηση για ενημέρωση ({{version}})"
     }
 }
