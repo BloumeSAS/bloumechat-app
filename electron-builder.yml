@@ -27,13 +27,25 @@ extraResources:
       - "**/*.png"
 publish:
   provider: github
-  owner: JulesZYTB
+  owner: BloumeSAS
   repo: bloumechat-app
   releaseType: release
 win:
-  publisherName: ["Bloume SAS", "CN=Bloume SAS, O=Bloume SAS, L=Paris, C=FR"]
+  # Exact Distinguished Name of the OV code-signing certificate (SSL.com, on the YubiKey).
+  # electron-updater compares this CASE-SENSITIVELY with the signer of every downloaded
+  # update ("BLOUME SAS", all caps, not "Bloume SAS") — a mismatch rejects every update.
+  # It is also what makes electron-updater verify signatures at all (no publisherName = no check).
+  publisherName:
+    - "CN=BLOUME SAS, O=BLOUME SAS, L=Paris, C=FR"
+  # SHA-1 thumbprint of that certificate — never `certificateSubjectName`: the Personal store
+  # also holds old self-signed "Bloume SAS" certificates that a name match could pick instead.
+  # The certificate must be visible in the user store (YubiKey inserted + minidriver +
+  # Certificate Propagation service); signtool then asks for the PIN in a Windows prompt.
+  certificateSha1: 88FF0E7BE94A7BEBDA3F73A93A7B5767ECB202C9
   signingHashAlgorithms:
     - sha256
+  # RFC 3161 timestamp: keeps the signature valid after the certificate expires (Nov 2027).
+  rfc3161TimeStampServer: http://ts.ssl.com
   target:
     - nsis
   artifactName: "${productName}-Setup-${version}.${ext}"
