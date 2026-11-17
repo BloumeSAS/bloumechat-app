@@ -2,7 +2,10 @@
     "home": {
         "loading": "BloumeChatを読み込んでいます...",
         "back": "前の",
-        "forward": "続く"
+        "forward": "続く",
+        "offline_title": "BloumeChat に接続できません",
+        "offline_desc": "インターネット接続を確認してください。自動的に再試行しています。",
+        "offline_retry": "再試行"
     },
     "screen_picker": {
         "title": "画面共有 | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "アップデートをダウンロードする",
         "recheck_button": "再確認",
         "ignore_button": "今のところ無視してください",
-        "footer": "ブルームSAS •EST。 2026年"
+        "footer": "ブルームSAS •EST。 2026年",
+        "bar_ready": "アップデート {{version}} の準備ができました。再起動してインストールします。"
     },
     "externalLink": {
         "title": "外部リンクを開きますか?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "マイクをミュートにする",
         "trayUnmuteMic": "マイクをアクティブにする",
         "trayDeafen": "音を消します",
-        "trayUndeafen": "ミュートを解除する"
+        "trayUndeafen": "ミュートを解除する",
+        "trayInstallUpdate": "再起動して更新 ({{version}})"
     }
 }
