@@ -11,13 +11,15 @@
 #       analysis, and (PRs only) a dependency review — runs on every push/PR
 #       to main/master and on every `v*` tag push.
 # CD  : on a `v*` tag push, once every CI gate above has passed, builds and
-#       publishes the SIGNED installers (Windows NSIS, macOS universal, Linux)
-#       via electron-builder --publish always, uploaded to the matching
-#       GitHub Release.
+#       publishes the macOS and Linux installers via electron-builder
+#       --publish always, uploaded to the matching GitHub Release.
 #
-# Required GitHub Secrets (Settings → Secrets → Actions):
-#   WINDOWS_CERTIFICATE          → code-signing cert (base64), Windows build only
-#   WINDOWS_CERTIFICATE_PASSWORD → cert password, Windows build only
+# WINDOWS IS NOT BUILT HERE. The OV code-signing certificate lives on a YubiKey (its private
+# key never leaves the token), so a cloud runner cannot sign. The Windows installer is built
+# and signed on the maintainer's PC with `npm run release:win` (tools/release-windows.ps1),
+# which uploads it, `latest.yml` and the blockmap to the same GitHub Release. Publishing an
+# UNSIGNED Windows build from here would be fatal: the in-app updater refuses any installer
+# not signed by "BLOUME SAS", and `latest.yml` would point every client at it.
 # ──────────────────────────────────────────────────────────────────────────────
 
 name: Windows (Electron) CI/CD
@@ -278,8 +280,8 @@ jobs:
           fail-on-severity: high
 
   # ────────────────────────────────────────────────────────────────────────────
-  # CD — Build & publish the SIGNED installers (Windows NSIS, macOS universal,
-  # Linux) and upload them to the GitHub Release matching the pushed tag —
+  # CD — Build & publish the macOS (universal) and Linux installers and upload them
+  # to the GitHub Release matching the pushed tag (Windows: signed locally, see above) —
   # only after every CI gate above has passed, and only on a `v*` tag push.
   # ────────────────────────────────────────────────────────────────────────────
   release:
@@ -298,7 +300,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+        os: [macos-latest, ubuntu-latest]
 
     steps:
       - name: Check out Git repository
@@ -314,14 +316,6 @@ jobs:
 
       # Explicit `--publish always` guarantees the installer + latest.yml are
       # uploaded to the GitHub release matching the pushed tag (vX.Y.Z).
-      - name: Build and Publish (Windows)
-        if: matrix.os == 'windows-latest'
-        run: npx nextron build --win nsis --publish always
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CSC_LINK: ${{ secrets.WINDOWS_CERTIFICATE }}
-          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
-
       - name: Build and Publish (macOS)
         if: matrix.os == 'macos-latest'
         run: npx nextron build --mac --universal --publish always
