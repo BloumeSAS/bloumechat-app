@@ -2,7 +2,10 @@
     "home": {
         "loading": "Indlæser BloumeChat...",
         "back": "Tidligere",
-        "forward": "Følge"
+        "forward": "Følge",
+        "offline_title": "Kan ikke nå BloumeChat",
+        "offline_desc": "Tjek din internetforbindelse. Prøver igen automatisk.",
+        "offline_retry": "Prøv igen"
     },
     "screen_picker": {
         "title": "Skærmdeling | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Download opdateringen",
         "recheck_button": "Tjek igen",
         "ignore_button": "Ignorer lige nu",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "Opdatering {{version}} er klar. Genstart for at installere den."
     },
     "externalLink": {
         "title": "Vil du åbne et eksternt link?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Slå mikrofonen fra",
         "trayUnmuteMic": "Aktiver mikrofon",
         "trayDeafen": "Slå lyden fra",
-        "trayUndeafen": "Slå lyden til"
+        "trayUndeafen": "Slå lyden til",
+        "trayInstallUpdate": "Genstart for at opdatere ({{version}})"
     }
 }
