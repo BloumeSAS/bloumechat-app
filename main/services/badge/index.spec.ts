@@ -3,7 +3,7 @@ import {
   handleSetBadgeCount,
   getCurrentBadgeCount,
   createBadgeIcon,
-} from "./badge";
+} from "./index";
 
 function makeWindow() {
   return { setOverlayIcon: jest.fn() } as any;
