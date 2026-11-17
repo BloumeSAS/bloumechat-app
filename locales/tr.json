@@ -2,7 +2,10 @@
     "home": {
         "loading": "BloumeChat yükleniyor...",
         "back": "Öncesi",
-        "forward": "Takip etme"
+        "forward": "Takip etme",
+        "offline_title": "BloumeChat'e ulaşılamıyor",
+        "offline_desc": "İnternet bağlantınızı kontrol edin. Otomatik olarak yeniden deneniyor.",
+        "offline_retry": "Yeniden dene"
     },
     "screen_picker": {
         "title": "Ekran Paylaşımı | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Güncellemeyi indirin",
         "recheck_button": "Tekrar kontrol et",
         "ignore_button": "Şimdilik görmezden gelin",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "{{version}} güncellemesi hazır. Yüklemek için yeniden başlatın."
     },
     "externalLink": {
         "title": "Harici bir bağlantı açılsın mı?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Mikrofonun sesini kapat",
         "trayUnmuteMic": "Mikrofonu etkinleştir",
         "trayDeafen": "Sesi kapat",
-        "trayUndeafen": "Sesini açmak"
+        "trayUndeafen": "Sesini açmak",
+        "trayInstallUpdate": "Güncellemek için yeniden başlat ({{version}})"
     }
 }
