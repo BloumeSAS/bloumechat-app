@@ -30,11 +30,30 @@ const handler = {
     ipcRenderer.on("update-status", listener);
     return () => ipcRenderer.removeListener("update-status", listener);
   },
+  getUpdateState: (): Promise<{
+    status: string;
+    version?: string;
+    percent?: number;
+    message?: string;
+    reason?: string;
+  }> => ipcRenderer.invoke("get-update-state"),
   quitAndInstall: () => ipcRenderer.send("quit-and-install"),
   startDownload: () => ipcRenderer.send("start-download"),
   checkForUpdates: () => ipcRenderer.send("check-for-updates"),
   ignoreUpdate: () => ipcRenderer.send("ignore-update"),
   simulateUpdate: () => ipcRenderer.send("simulate-update"),
+
+  // --- Site load status (the remote site inside the shell) ---
+  onSiteStatus: (cb: (status: { ok: boolean; code?: number }) => void) => {
+    const listener = (
+      _event: IpcRendererEvent,
+      status: { ok: boolean; code?: number },
+    ) => cb(status);
+    ipcRenderer.on("site-status", listener);
+    return () => ipcRenderer.removeListener("site-status", listener);
+  },
+  // The shell finished loading: lets the main process hand over a launch deep link.
+  notifyAppReady: () => ipcRenderer.send("app-ready"),
 
   // --- New features ---
   setBadgeCount: (count: number) => ipcRenderer.send("set-badge-count", count),
