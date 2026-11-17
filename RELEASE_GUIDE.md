@@ -49,6 +49,14 @@ Le certificat expire le **17/11/2027**. Au renouvellement : nouvelle empreinte S
 | Les apps ne se mettent pas à jour | `latest.yml` absent de la release, ou installeur non signé / signé par un autre sujet (voir `%APPDATA%\BloumeChat\logs\main.log`) |
 | Rapport de crash jamais reçu | Le serveur doit être déployé avant l'app (il décompresse les rapports gzip) |
 
-## Version Microsoft Store (MSIX)
+## Microsoft Store (fiche « application EXE »)
 
-`npm run build:msix` produit le paquet. Le Store exige que `identityName` et `publisher` de `electron-builder.yml` (section `appx`) soient **exactement** ceux de *Partner Center → Identité du produit*. Le paquet est signé par Microsoft à la soumission.
+La fiche Store pointe vers l'installeur `.exe` hébergé sur GitHub (pas de paquet MSIX : `identityName` / `publisher` de la section `appx` ne servent à rien et `build:msix` n'est pas utilisé).
+
+Après chaque release signée, dans Espace partenaires → la soumission → **Packages** :
+1. URL de l'installeur **de cette version** (pas « latest ») : `https://github.com/BloumeSAS/bloumechat-app/releases/download/vX.Y.Z/BloumeChat-Setup-X.Y.Z.exe`
+2. Paramètres d'installation silencieuse : `/S` (NSIS) ; architecture x64.
+3. **Package validation** : le Store télécharge l'installeur et exige une signature d'une autorité reconnue (le certificat SSL.com l'est) — c'est la première version signée qui doit être soumise. Si la validation refuse l'URL parce que GitHub répond par une redirection, héberger le fichier sur un lien direct (ex. le CDN du site).
+4. Notes de version : voir le texte FR/EN de la soumission.
+
+Une installation faite depuis le Store est un installeur NSIS normal : l'app se met à jour seule (elle ne dépend pas d'une nouvelle soumission pour les mises à jour suivantes).
