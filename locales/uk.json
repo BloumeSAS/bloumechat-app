@@ -2,7 +2,10 @@
     "home": {
         "loading": "Завантаження BloumeChat...",
         "back": "Попередній",
-        "forward": "Слідую"
+        "forward": "Слідую",
+        "offline_title": "Не вдається під'єднатися до BloumeChat",
+        "offline_desc": "Перевірте підключення до інтернету. Повторна спроба виконується автоматично.",
+        "offline_retry": "Повторити"
     },
     "screen_picker": {
         "title": "Спільний доступ до екрана | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Завантажте оновлення",
         "recheck_button": "Повторна перевірка",
         "ignore_button": "Поки що ігнорувати",
-        "footer": "BLOUME SAS • EST. 2026 рік"
+        "footer": "BLOUME SAS • EST. 2026 рік",
+        "bar_ready": "Оновлення {{version}} готове. Перезапустіть, щоб встановити його."
     },
     "externalLink": {
         "title": "Відкрити зовнішнє посилання?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Вимкніть мікрофон",
         "trayUnmuteMic": "Увімкніть мікрофон",
         "trayDeafen": "Вимкніть звук",
-        "trayUndeafen": "Увімкнути звук"
+        "trayUndeafen": "Увімкнути звук",
+        "trayInstallUpdate": "Перезапустити для оновлення ({{version}})"
     }
 }
