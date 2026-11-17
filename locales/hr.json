@@ -2,7 +2,10 @@
     "home": {
         "loading": "Učitavanje BloumeChat...",
         "back": "Prethodno",
-        "forward": "Praćenje"
+        "forward": "Praćenje",
+        "offline_title": "BloumeChat nije dostupan",
+        "offline_desc": "Provjerite internetsku vezu. Automatski ponovno pokušavamo.",
+        "offline_retry": "Pokušaj ponovno"
     },
     "screen_picker": {
         "title": "Dijeljenje zaslona | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Preuzmite ažuriranje",
         "recheck_button": "Ponovo provjerite",
         "ignore_button": "Ignoriraj za sada",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "Ažuriranje {{version}} je spremno. Ponovno pokrenite za instalaciju."
     },
     "externalLink": {
         "title": "Otvoriti vanjsku poveznicu?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Isključite mikrofon",
         "trayUnmuteMic": "Aktiviraj mikrofon",
         "trayDeafen": "Isključite zvuk",
-        "trayUndeafen": "Uključi zvuk"
+        "trayUndeafen": "Uključi zvuk",
+        "trayInstallUpdate": "Ponovno pokreni i ažuriraj ({{version}})"
     }
 }
