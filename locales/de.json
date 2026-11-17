@@ -2,7 +2,10 @@
     "home": {
         "loading": "Laden BloumeChat...",
         "back": "Vorherige",
-        "forward": "Nachfolgend"
+        "forward": "Nachfolgend",
+        "offline_title": "BloumeChat ist nicht erreichbar",
+        "offline_desc": "Prüfe deine Internetverbindung. Es wird automatisch erneut versucht.",
+        "offline_retry": "Erneut versuchen"
     },
     "screen_picker": {
         "title": "Bildschirmfreigabe | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Laden Sie das Update herunter",
         "recheck_button": "Überprüfen Sie es noch einmal",
         "ignore_button": "Vorerst ignorieren",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "Update {{version}} ist bereit. Starte neu, um es zu installieren."
     },
     "externalLink": {
         "title": "Einen externen Link öffnen?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Schalten Sie das Mikrofon stumm",
         "trayUnmuteMic": "Mikrofon aktivieren",
         "trayDeafen": "Schalten Sie den Ton stumm",
-        "trayUndeafen": "Stummschaltung aufheben"
+        "trayUndeafen": "Stummschaltung aufheben",
+        "trayInstallUpdate": "Neu starten und aktualisieren ({{version}})"
     }
 }
