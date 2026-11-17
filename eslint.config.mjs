@@ -12,6 +12,7 @@ export default tseslint.config(
       "eslint.config.mjs",
       "app/**",
       "dist/**",
+      "tools/**", // release / test helpers (PowerShell, plain Node scripts)
       "renderer/.next/**",
       "renderer/out/**",
       "node_modules/**",
