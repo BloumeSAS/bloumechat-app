@@ -2,7 +2,10 @@
     "home": {
         "loading": "Načítání BloumeChat...",
         "back": "Předchozí",
-        "forward": "Následující"
+        "forward": "Následující",
+        "offline_title": "BloumeChat není dostupný",
+        "offline_desc": "Zkontrolujte připojení k internetu. Automaticky to zkusíme znovu.",
+        "offline_retry": "Zkusit znovu"
     },
     "screen_picker": {
         "title": "Sdílení obrazovky | BloumeChat",
@@ -35,7 +38,8 @@
         "download_button": "Stáhněte si aktualizaci",
         "recheck_button": "Znovu zkontrolujte",
         "ignore_button": "Ignorovat prozatím",
-        "footer": "BLOUME SAS • EST. 2026"
+        "footer": "BLOUME SAS • EST. 2026",
+        "bar_ready": "Aktualizace {{version}} je připravena. Restartujte pro instalaci."
     },
     "externalLink": {
         "title": "Otevřít externí odkaz?",
@@ -53,6 +57,7 @@
         "trayMuteMic": "Ztlumit mikrofon",
         "trayUnmuteMic": "Aktivujte mikrofon",
         "trayDeafen": "Ztlumit zvuk",
-        "trayUndeafen": "Zapnout zvuk"
+        "trayUndeafen": "Zapnout zvuk",
+        "trayInstallUpdate": "Restartovat a aktualizovat ({{version}})"
     }
 }
