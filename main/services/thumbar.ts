@@ -1,5 +1,6 @@
 import { app, BrowserWindow, nativeImage } from "electron";
 import path from "path";
+import { getAppLocale, getI18n } from "./locales";
 
 // ─── State ───────────────────────────────────────────────────────────────────
 let isVoiceActive = false;
@@ -42,14 +43,15 @@ function applyThumbar(win: BrowserWindow) {
       win.setThumbarButtons([]);
       return;
     }
+    const i18n = getI18n(getAppLocale());
     win.setThumbarButtons([
       {
-        tooltip: isMuted ? "Activer le micro" : "Couper le micro",
+        tooltip: isMuted ? i18n.trayUnmuteMic : i18n.trayMuteMic,
         icon: micIcon(isMuted),
         click: () => win.webContents.send("thumbar:toggle-mute"),
       },
       {
-        tooltip: isDeafened ? "Réactiver le son" : "Couper le son",
+        tooltip: isDeafened ? i18n.trayUndeafen : i18n.trayDeafen,
         icon: deafenIcon(isDeafened),
         click: () => win.webContents.send("thumbar:toggle-deafen"),
       },
